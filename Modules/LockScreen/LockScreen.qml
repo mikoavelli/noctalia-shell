@@ -109,18 +109,6 @@ Loader {
               Item {
                 anchors.fill: parent
 
-                // Mouse area to trigger focus on cursor movement (workaround for Hyprland focus issues)
-                MouseArea {
-                  anchors.fill: parent
-                  hoverEnabled: true
-                  acceptedButtons: Qt.NoButton
-                  onPositionChanged: {
-                    if (passwordInput) {
-                      passwordInput.forceActiveFocus();
-                    }
-                  }
-                }
-
                 // Header with avatar, welcome, time, date
                 LockScreenHeader {
                   id: headerComponent

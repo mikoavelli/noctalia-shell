@@ -53,13 +53,6 @@ PanelWindow {
     }
     // Panel open on THIS screen: use panel's preferred focus mode
     if (root.isPanelOpen) {
-      // Hyprland's Exclusive captures ALL input globally (including pointer),
-      // preventing click-to-close from working on other monitors.
-      // Workaround: briefly use Exclusive when panel opens (for text input focus),
-      // then switch to OnDemand (for click-to-close on other screens).
-      if (CompositorService.isHyprland) {
-        return PanelService.isInitializingKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
-      }
       return PanelService.openedPanel.exclusiveKeyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand;
     }
     // Panel open on ANOTHER screen: OnDemand allows receiving pointer events for click-to-close
