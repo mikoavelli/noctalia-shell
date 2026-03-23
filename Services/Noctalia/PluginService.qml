@@ -714,38 +714,6 @@ Singleton {
     return changed;
   }
 
-  // Remove plugin desktop widgets from all monitors' saved settings
-  function removePluginDesktopWidgetsFromSettings(pluginId) {
-    var widgetId = "plugin:" + pluginId;
-    var monitorWidgets = Settings.data.desktopWidgets.monitorWidgets || [];
-    var changed = false;
-
-    for (var m = 0; m < monitorWidgets.length; m++) {
-      var monitor = monitorWidgets[m];
-      var widgets = monitor.widgets || [];
-      var newWidgets = [];
-
-      for (var i = 0; i < widgets.length; i++) {
-        if (widgets[i].id !== widgetId) {
-          newWidgets.push(widgets[i]);
-        } else {
-          changed = true;
-          Logger.i("PluginService", "Removed desktop widget", widgetId, "from monitor:", monitor.name);
-        }
-      }
-
-      if (newWidgets.length !== widgets.length) {
-        monitorWidgets[m].widgets = newWidgets;
-      }
-    }
-
-    if (changed) {
-      Settings.data.desktopWidgets.monitorWidgets = monitorWidgets;
-    }
-
-    return changed;
-  }
-
   // Load plugin settings and translations before instantiating components
   // This ensures pluginApi is fully populated before being passed to createObject()
   function loadPluginData(pluginId, manifest, callback) {
@@ -790,7 +758,6 @@ Singleton {
       // Initialize plugin entry with API and manifest
       root.loadedPlugins[pluginId] = {
         barWidget: null,
-        desktopWidget: null,
         launcherProvider: null,
         mainInstance: null,
         api: pluginApi,
@@ -851,24 +818,6 @@ Singleton {
         }
       }
 
-      // Load desktop widget component if provided (don't instantiate - DesktopWidgetRegistry will do that)
-      if (manifest.entryPoints && manifest.entryPoints.desktopWidget) {
-        var desktopWidgetPath = pluginDir + "/" + manifest.entryPoints.desktopWidget;
-        var desktopWidgetLoadVersion = PluginRegistry.pluginLoadVersions[pluginId] || 0;
-        var desktopWidgetComponent = Qt.createComponent("file://" + desktopWidgetPath + "?v=" + desktopWidgetLoadVersion);
-
-        if (desktopWidgetComponent.status === Component.Ready) {
-          root.loadedPlugins[pluginId].desktopWidget = desktopWidgetComponent;
-          pluginApi.desktopWidget = desktopWidgetComponent;
-
-          // Register with DesktopWidgetRegistry
-          DesktopWidgetRegistry.registerPluginWidget(pluginId, desktopWidgetComponent, manifest.metadata);
-          Logger.i("PluginService", "Loaded desktop widget for plugin:", pluginId);
-        } else if (desktopWidgetComponent.status === Component.Error) {
-          root.recordPluginError(pluginId, "desktopWidget", desktopWidgetComponent.errorString());
-        }
-      }
-
       // Load launcher provider component if provided (don't instantiate - Launcher will do that)
       if (manifest.entryPoints && manifest.entryPoints.launcherProvider) {
         var launcherProviderPath = pluginDir + "/" + manifest.entryPoints.launcherProvider;
@@ -917,8 +866,7 @@ Singleton {
   }
 
   // Unload a plugin
-  // preserveSettings: if true, don't remove desktop widget settings (used for hot reload)
-  function unloadPlugin(pluginId, preserveSettings) {
+  function unloadPlugin(pluginId) {
     var plugin = root.loadedPlugins[pluginId];
     if (!plugin) {
       Logger.w("PluginService", "Plugin not loaded:", pluginId);
@@ -933,15 +881,6 @@ Singleton {
     // Unregister from BarWidgetRegistry
     if (plugin.manifest.entryPoints && plugin.manifest.entryPoints.barWidget) {
       BarWidgetRegistry.unregisterPluginWidget(pluginId);
-    }
-
-    // Unregister from DesktopWidgetRegistry
-    if (plugin.manifest.entryPoints && plugin.manifest.entryPoints.desktopWidget) {
-      // Only remove settings when uninstalling, not during hot reload
-      if (!preserveSettings) {
-        removePluginDesktopWidgetsFromSettings(pluginId);
-      }
-      DesktopWidgetRegistry.unregisterPluginWidget(pluginId);
     }
 
     // Unregister from LauncherProviderRegistry
@@ -981,7 +920,6 @@ Singleton {
         // Instance references (set after loading)
         property var mainInstance: null
         property var barWidget: null
-        property var desktopWidget: null
         property var launcherProvider: null
         property var controlCenterWidget: null
 
@@ -1555,10 +1493,6 @@ Singleton {
     var screenOverridesBackup = JSON.parse(JSON.stringify(Settings.data.bar.screenOverrides || []));
     Logger.d("PluginService", "Backed up bar layout (global + screen overrides)");
 
-    // Backup desktop widget settings (includes this plugin's widgets)
-    var desktopWidgetsBackup = JSON.parse(JSON.stringify(Settings.data.desktopWidgets.monitorWidgets || []));
-    Logger.d("PluginService", "Backed up desktop widget settings");
-
     // Close any open panels for this plugin before update
     for (var slotNum = 1; slotNum <= 2; slotNum++) {
       var panelName = "pluginPanel" + slotNum;
@@ -1596,10 +1530,6 @@ Singleton {
         Settings.data.bar.screenOverrides = screenOverridesBackup;
         Logger.d("PluginService", "Restored bar layout (global + screen overrides)");
 
-        // Restore desktop widget settings
-        Settings.data.desktopWidgets.monitorWidgets = desktopWidgetsBackup;
-        Logger.d("PluginService", "Restored desktop widget settings");
-
         // Remove from updates list
         var updates = Object.assign({}, root.pluginUpdates);
         delete updates[pluginId];
@@ -1615,9 +1545,6 @@ Singleton {
         Settings.data.bar.widgets.center = barBackup.center;
         Settings.data.bar.widgets.right = barBackup.right;
         Settings.data.bar.screenOverrides = screenOverridesBackup;
-
-        // Restore desktop widget settings even on failure
-        Settings.data.desktopWidgets.monitorWidgets = desktopWidgetsBackup;
 
         if (callback)
           callback(false, error);
@@ -1981,8 +1908,7 @@ Singleton {
     BarService.destroyPluginWidgetInstances(pluginId);
 
     // Unload the plugin (destroys components and instances)
-    // Pass true to preserve desktop widget settings during hot reload
-    unloadPlugin(pluginId, true);
+    unloadPlugin(pluginId);
 
     // Increment load version to invalidate Qt's component cache
     PluginRegistry.incrementPluginLoadVersion(pluginId);

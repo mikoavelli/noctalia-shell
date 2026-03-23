@@ -22,7 +22,7 @@ PanelWindow {
   // Expose the trayMenu Loader directly (for backward compatibility)
   readonly property alias trayMenuLoader: trayMenuLoader
 
-  // Dynamic context menu callback for items in other windows (e.g., desktop widgets)
+  // Dynamic context menu callback for items in other windows
   property var dynamicMenuCallback: null
 
   anchors.top: true
@@ -64,7 +64,7 @@ PanelWindow {
   }
 
   // Dynamic context menu - created as child of this window (Top layer) so input works correctly
-  // Used for items in other windows like desktop widgets (bottom layer)
+  // Used for items in other windows (bottom layer)
   NPopupContextMenu {
     id: dynamicMenu
     visible: false
@@ -98,7 +98,7 @@ PanelWindow {
   }
 
   // Show a dynamic context menu with model and callback at screen coordinates
-  // Used for items in other window layers (e.g., desktop widgets in bottom layer)
+  // Used for items in other window layers (bottom layer)
   function showDynamicContextMenu(model, screenX, screenY, callback) {
     dynamicMenu.model = model;
     dynamicMenuCallback = callback;

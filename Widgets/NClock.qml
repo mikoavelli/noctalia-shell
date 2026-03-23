@@ -58,7 +58,7 @@ Item {
   property int hoursFontWeight: Style.fontWeightBold
   property int minutesFontWeight: Style.fontWeightBold
 
-  // Scale ratio for canvas line widths (used by desktop widget scaling)
+  // Scale ratio for canvas line widths
   property real scaleRatio: Style.uiScaleRatio
 
   height: Math.round((Style.fontSizeXXXL * 1.9) / 2 * Style.uiScaleRatio) * 2

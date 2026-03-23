@@ -71,7 +71,6 @@ Singleton {
                                             "colorscheme": SettingsPanel.Tab.ColorScheme,
                                             "lockscreen": SettingsPanel.Tab.LockScreen,
                                             "controlcenter": SettingsPanel.Tab.ControlCenter,
-                                            "desktopwidgets": SettingsPanel.Tab.DesktopWidgets,
                                             "osd": SettingsPanel.Tab.OSD,
                                             "display": SettingsPanel.Tab.Display,
                                             "dock": SettingsPanel.Tab.Dock,
@@ -690,22 +689,6 @@ Singleton {
                                 "error": "Failed to serialize state: " + error
                               }, null, 2);
       }
-    }
-  }
-
-  IpcHandler {
-    target: "desktopWidgets"
-    function toggle() {
-      Settings.data.desktopWidgets.enabled = !Settings.data.desktopWidgets.enabled;
-    }
-    function disable() {
-      Settings.data.desktopWidgets.enabled = false;
-    }
-    function enable() {
-      Settings.data.desktopWidgets.enabled = true;
-    }
-    function edit() {
-      DesktopWidgetRegistry.editMode = !DesktopWidgetRegistry.editMode;
     }
   }
 

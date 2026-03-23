@@ -478,10 +478,6 @@ Item {
     id: pluginsTab
     PluginsTab {}
   }
-  Component {
-    id: desktopWidgetsTab
-    DesktopWidgetsTab {}
-  }
 
   function updateTabsModel() {
     let newTabs = [
@@ -520,12 +516,6 @@ Item {
             "label": "panels.dock.title",
             "icon": "settings-dock",
             "source": dockTab
-          },
-          {
-            "id": SettingsPanel.Tab.DesktopWidgets,
-            "label": "panels.desktop-widgets.title",
-            "icon": "clock",
-            "source": desktopWidgetsTab
           },
           {
             "id": SettingsPanel.Tab.ControlCenter,
