@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent
 SETTINGS_DIR = ROOT / "Modules" / "Panels" / "Settings"
 TABS_DIR = SETTINGS_DIR / "Tabs"
 OUTPUT = ROOT / "Assets" / "settings-search-index.json"
