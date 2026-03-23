@@ -772,14 +772,6 @@ Item {
               radius: Style.radiusS
               color: toggleMouseArea.containsMouse ? Color.mHover : "transparent"
 
-              Behavior on color {
-                enabled: !Color.isTransitioning
-                ColorAnimation {
-                  duration: Style.animationFast
-                  easing.type: Easing.InOutQuad
-                }
-              }
-
               RowLayout {
                 id: toggleRow
                 anchors.verticalCenter: parent.verticalCenter
@@ -869,14 +861,6 @@ Item {
                 radius: Style.radiusS
                 color: searchCollapsedMouseArea.containsMouse ? Color.mHover : "transparent"
 
-                Behavior on color {
-                  enabled: !Color.isTransitioning
-                  ColorAnimation {
-                    duration: Style.animationFast
-                    easing.type: Easing.InOutQuad
-                  }
-                }
-
                 RowLayout {
                   id: searchCollapsedRow
                   anchors.verticalCenter: parent.verticalCenter
@@ -956,14 +940,6 @@ Item {
                 readonly property bool effectiveHover: !root.ignoreMouseHover && resultMouseArea.containsMouse
                 color: (effectiveHover || selected) ? Color.mHover : "transparent"
 
-                Behavior on color {
-                  enabled: !Color.isTransitioning
-                  ColorAnimation {
-                    duration: Style.animationFast
-                    easing.type: Easing.InOutQuad
-                  }
-                }
-
                 ColumnLayout {
                   id: resultColumn
                   anchors.fill: parent
@@ -1038,22 +1014,6 @@ Item {
                 readonly property bool selected: index === root.currentTabIndex
                 property bool hovering: false
                 property color tabTextColor: selected ? Color.mOnPrimary : (tabItem.hovering ? Color.mOnHover : Color.mOnSurface)
-
-                Behavior on color {
-                  enabled: !Color.isTransitioning
-                  ColorAnimation {
-                    duration: Style.animationFast
-                    easing.type: Easing.InOutQuad
-                  }
-                }
-
-                Behavior on tabTextColor {
-                  enabled: !Color.isTransitioning
-                  ColorAnimation {
-                    duration: Style.animationFast
-                    easing.type: Easing.InOutQuad
-                  }
-                }
 
                 RowLayout {
                   id: tabEntryRow

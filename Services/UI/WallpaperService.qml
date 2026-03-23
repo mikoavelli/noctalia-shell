@@ -1043,27 +1043,6 @@ Singleton {
   signal favoritesChanged(string path)
   signal favoriteDataUpdated(string path)
 
-  // Auto-update favorite palette colors when theme colors finish transitioning
-  Connections {
-    target: Color
-    function onIsTransitioningChanged() {
-      if (!Color.isTransitioning) {
-        _updateCurrentWallpaperFavorites();
-      }
-    }
-  }
-
-  function _updateCurrentWallpaperFavorites() {
-    var effectiveMonitor = Settings.data.colorSchemes.monitorForColors;
-    if (effectiveMonitor === "" || effectiveMonitor === undefined) {
-      effectiveMonitor = Quickshell.screens.length > 0 ? Quickshell.screens[0].name : "";
-    }
-    var wp = getWallpaper(effectiveMonitor);
-    if (wp && isFavorite(wp)) {
-      updateFavoriteColorScheme(wp);
-    }
-  }
-
   // -------------------------------------------------------------------
   // -------------------------------------------------------------------
   // -------------------------------------------------------------------

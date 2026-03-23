@@ -820,14 +820,6 @@ Item {
               easing.type: Easing.OutBack
             }
           }
-
-          Behavior on color {
-            enabled: !Color.isTransitioning
-            ColorAnimation {
-              duration: Style.animationFast
-              easing.type: Easing.InOutCubic
-            }
-          }
         }
 
         // Burst effect overlay for focused workspace number

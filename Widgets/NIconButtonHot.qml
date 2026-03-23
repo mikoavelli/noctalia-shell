@@ -60,14 +60,6 @@ Rectangle {
   border.color: root.enabled && root.hovering ? colorBorderHover : colorBorder
   border.width: Style.borderS
 
-  Behavior on color {
-    enabled: !Color.isTransitioning
-    ColorAnimation {
-      duration: Style.animationFast
-      easing.type: Easing.InOutQuad
-    }
-  }
-
   // Icon
   NIcon {
     icon: root.icon
@@ -86,14 +78,6 @@ Rectangle {
     x: (root.width - width) / 2
     // Center vertically accounting for font metrics
     y: (root.height - height) / 2 + (height - contentHeight) / 2
-
-    Behavior on color {
-      enabled: !Color.isTransitioning
-      ColorAnimation {
-        duration: Style.animationFast
-        easing.type: Easing.InOutQuad
-      }
-    }
   }
 
   MouseArea {

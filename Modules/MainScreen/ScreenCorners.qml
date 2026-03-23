@@ -52,14 +52,6 @@ Item {
         strokeWidth: -1 // No stroke, fill only
         fillColor: shouldShow ? cornerColor : "transparent"
 
-        // Smooth color animation (disabled during theme transitions to sync with Color.qml)
-        Behavior on fillColor {
-          enabled: !Color.isTransitioning
-          ColorAnimation {
-            duration: Style.animationFast
-          }
-        }
-
         // ========== PATH DEFINITION ==========
         // Draws 4 separate corner squares at screen edges
         // Each corner square has a concave arc on the inner diagonal

@@ -36,14 +36,6 @@ Rectangle {
   border.color: Color.mOutline
   border.width: Style.borderS
 
-  Behavior on color {
-    enabled: !Color.isTransitioning
-    ColorAnimation {
-      duration: Style.animationFast
-      easing.type: Easing.OutCubic
-    }
-  }
-
   // Content
   RowLayout {
     id: contentLayout
@@ -57,14 +49,6 @@ Rectangle {
       icon: root.icon
       pointSize: root.pointSize * 1.2
       color: root.isHovered ? Color.mOnHover : (root.checked ? Color.mOnPrimary : Color.mOnSurface)
-
-      Behavior on color {
-        enabled: !Color.isTransitioning
-        ColorAnimation {
-          duration: Style.animationFast
-          easing.type: Easing.OutCubic
-        }
-      }
     }
 
     NText {
@@ -77,14 +61,6 @@ Rectangle {
       color: root.isHovered ? Color.mOnHover : (root.checked ? Color.mOnPrimary : Color.mOnSurface)
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
-
-      Behavior on color {
-        enabled: !Color.isTransitioning
-        ColorAnimation {
-          duration: Style.animationFast
-          easing.type: Easing.OutCubic
-        }
-      }
     }
   }
 

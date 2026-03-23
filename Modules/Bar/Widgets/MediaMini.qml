@@ -460,13 +460,6 @@ Item {
     onProgressChanged: requestPaint()
     Component.onCompleted: requestPaint()
 
-    Connections {
-      target: Color
-      function onMPrimaryChanged() {
-        requestPaint();
-      }
-    }
-
     onPaint: {
       if (width <= 0 || height <= 0)
         return;

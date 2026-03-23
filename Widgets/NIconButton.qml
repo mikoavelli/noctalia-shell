@@ -58,14 +58,6 @@ Item {
     border.color: root.enabled && root.hovering ? colorBorderHover : colorBorder
     border.width: Style.borderS
 
-    Behavior on color {
-      enabled: !Color.isTransitioning
-      ColorAnimation {
-        duration: Style.animationFast
-        easing.type: Easing.InOutQuad
-      }
-    }
-
     NIcon {
       icon: root.icon
       pointSize: Style.toOdd(visualButton.width * 0.48)
@@ -74,14 +66,6 @@ Item {
       // Pixel-perfect centering
       x: Style.pixelAlignCenter(visualButton.width, width)
       y: Style.pixelAlignCenter(visualButton.height, contentHeight)
-
-      Behavior on color {
-        enabled: !Color.isTransitioning
-        ColorAnimation {
-          duration: Style.animationFast
-          easing.type: Easing.InOutQuad
-        }
-      }
     }
   }
 

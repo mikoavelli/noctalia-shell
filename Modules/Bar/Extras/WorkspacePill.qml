@@ -151,14 +151,6 @@ Item {
               return getColorPair(occupiedColor)[1];
             return getColorPair(emptyColor)[1];
           }
-
-          Behavior on color {
-            enabled: !Color.isTransitioning
-            ColorAnimation {
-              duration: Style.animationFast
-              easing.type: Easing.InOutQuad
-            }
-          }
         }
       }
     }
@@ -168,13 +160,6 @@ Item {
       NumberAnimation {
         duration: Style.animationNormal
         easing.type: Easing.OutBack
-      }
-    }
-    Behavior on color {
-      enabled: !Color.isTransitioning
-      ColorAnimation {
-        duration: Style.animationFast
-        easing.type: Easing.InOutQuad
       }
     }
     Behavior on opacity {

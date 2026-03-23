@@ -69,22 +69,6 @@ Rectangle {
 
   opacity: enabled ? 1.0 : 0.6
 
-  Behavior on color {
-    enabled: !Color.isTransitioning
-    ColorAnimation {
-      duration: Style.animationFast
-      easing.type: Easing.OutCubic
-    }
-  }
-
-  Behavior on border.color {
-    enabled: !Color.isTransitioning
-    ColorAnimation {
-      duration: Style.animationFast
-      easing.type: Easing.OutCubic
-    }
-  }
-
   // Content
   RowLayout {
     id: contentRow
@@ -101,14 +85,6 @@ Rectangle {
       icon: root.icon
       pointSize: root.iconSize
       color: contentColor
-
-      Behavior on color {
-        enabled: !Color.isTransitioning
-        ColorAnimation {
-          duration: Style.animationFast
-          easing.type: Easing.OutCubic
-        }
-      }
     }
 
     // Text
@@ -119,14 +95,6 @@ Rectangle {
       pointSize: root.fontSize
       font.weight: root.fontWeight
       color: contentColor
-
-      Behavior on color {
-        enabled: !Color.isTransitioning
-        ColorAnimation {
-          duration: Style.animationFast
-          easing.type: Easing.OutCubic
-        }
-      }
     }
   }
 
