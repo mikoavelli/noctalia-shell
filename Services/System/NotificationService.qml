@@ -665,7 +665,6 @@ Singleton {
       const notifState = ShellState.getNotificationsState();
       root.lastSeenTs = notifState.lastSeenTs || 0;
 
-      // Migration is now handled in Settings.qml
       Logger.d("Notifications", "Loaded state from ShellState");
     } catch (e) {
       Logger.e("Notifications", "Load state failed:", e);

@@ -142,7 +142,6 @@ Singleton {
         displayScalesLoaded = true;
         Logger.d("CompositorService", "Loaded display scales from ShellState");
       } else {
-        // Migration is now handled in Settings.qml
         displayScalesLoaded = true;
       }
     } catch (error) {

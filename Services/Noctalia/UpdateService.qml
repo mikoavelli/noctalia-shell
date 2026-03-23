@@ -366,7 +366,6 @@ Singleton {
       const changelog = ShellState.getChangelogState();
       changelogLastSeenVersion = changelog.lastSeenVersion || "";
 
-      // Migration is now handled in Settings.qml
       Logger.d("UpdateService", "Loaded changelog state from ShellState");
     } catch (error) {
       Logger.e("UpdateService", "Failed to load changelog state:", error);

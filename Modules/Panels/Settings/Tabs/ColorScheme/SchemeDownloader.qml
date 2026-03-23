@@ -92,8 +92,6 @@ Popup {
 
       // Check if cache is expired or missing
       if (!cachedTimestamp || (now >= cachedTimestamp + schemesCacheUpdateFrequency)) {
-        // Migration is now handled in Settings.qml
-
         // Only fetch from API if we haven't fetched recently (prevent rapid repeated calls)
         const timeSinceLastFetch = now - lastApiFetchTime;
         if (timeSinceLastFetch >= minApiFetchInterval) {
