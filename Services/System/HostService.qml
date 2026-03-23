@@ -11,7 +11,6 @@ Singleton {
   // Public properties
   property string osPretty: ""
   property string osLogo: ""
-  property bool isNixOS: false
   property bool isReady: false
 
   // User info
@@ -69,14 +68,6 @@ Singleton {
     for (const s of sizes) {
       for (const ext of exts) {
         candidates.push(`/usr/share/icons/hicolor/${s}/apps/${n}.${ext}`);
-      }
-    }
-
-    // NixOS hicolor paths
-    candidates.push(`/run/current-system/sw/share/icons/hicolor/scalable/apps/${n}.svg`);
-    for (const s of sizes) {
-      for (const ext of exts) {
-        candidates.push(`/run/current-system/sw/share/icons/hicolor/${s}/apps/${n}.${ext}`);
       }
     }
 
@@ -139,7 +130,6 @@ Singleton {
         Logger.i("HostService", "Detected", root.osPretty);
 
         const osId = (val("ID") || "").toLowerCase();
-        root.isNixOS = osId === "nixos" || (root.osPretty || "").toLowerCase().includes("nixos");
         const logoName = val("LOGO");
         Logger.i("HostService", "Looking for logo icon:", logoName);
         if (logoName) {
