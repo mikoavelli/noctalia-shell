@@ -38,6 +38,9 @@ Singleton {
   signal settingsLoaded
   signal settingsSaved
 
+  // Cached default settings object (captured from adapter before user settings load)
+  property var _defaultSettings: null
+
   // -----------------------------------------------------
   // -----------------------------------------------------
   // Ensure directories exist before FileView tries to read files
@@ -49,19 +52,14 @@ Singleton {
     // Mark directories as created and trigger file loading
     directoriesCreated = true;
 
-    // This should only be activated once when the settings structure has changed
-    // Then it should be commented out again, regular users don't need to generate
-    // default settings on every start
-    if (isDebug) {
-      generateDefaultSettings();
-      generateWidgetDefaultSettings();
-    }
-
-    // Patch-in the local default, resolved to user's home
+    // Patch-in the local defaults, resolved to user's home
     adapter.general.avatarImage = defaultAvatar;
     adapter.wallpaper.directory = defaultWallpapersDirectory;
     adapter.ui.fontDefault = Qt.application.font.family;
     adapter.ui.fontFixed = "monospace";
+
+    // Capture default settings snapshot from adapter before user overrides
+    root._defaultSettings = QtObj2JS.qtObjectToPlainObject(adapter);
 
     // Set the adapter to the settingsFileView to trigger the real settings load
     settingsFileView.adapter = adapter;
@@ -119,30 +117,6 @@ Singleton {
 
         // We started without settings, we should open the setupWizard
         root.shouldOpenSetupWizard = true;
-      }
-    }
-  }
-
-  // FileView to load default settings for comparison
-  FileView {
-    id: defaultSettingsFileView
-    path: Quickshell.shellDir + "/Assets/settings-default.json"
-    printErrors: false
-    watchChanges: false
-  }
-
-  // Cached default settings object
-  property var _defaultSettings: null
-
-  // Load default settings when file is loaded
-  Connections {
-    target: defaultSettingsFileView
-    function onLoaded() {
-      try {
-        root._defaultSettings = JSON.parse(defaultSettingsFileView.text());
-      } catch (e) {
-        Logger.w("Settings", "Failed to parse default settings file: " + e);
-        root._defaultSettings = null;
       }
     }
   }
@@ -752,31 +726,6 @@ Singleton {
   }
 
   // -----------------------------------------------------
-  // Format default value for tooltip display
-  // Returns a human-readable string representation of the default value
-  function formatDefaultValueForTooltip(path) {
-    var defaultValue = getDefaultValue(path);
-    if (defaultValue === undefined) {
-      return "";
-    }
-
-    // Format based on type
-    if (typeof defaultValue === "boolean") {
-      return defaultValue ? "true" : "false";
-    } else if (typeof defaultValue === "number") {
-      return defaultValue.toString();
-    } else if (typeof defaultValue === "string") {
-      return defaultValue === "" ? "(empty)" : defaultValue;
-    } else if (Array.isArray(defaultValue)) {
-      return defaultValue.length === 0 ? "(empty)" : "[" + defaultValue.length + " items]";
-    } else if (typeof defaultValue === "object") {
-      return "(object)";
-    }
-
-    return String(defaultValue);
-  }
-
-  // -----------------------------------------------------
   // Helper to find a screen override entry by name in the array
   // Format: [{ "name": "HDMI-A-1", "position": "left" }, ...]
   // Note: QML's list<var> is not a true JS array, so we check for .length instead of Array.isArray()
@@ -962,48 +911,6 @@ Singleton {
   function saveImmediate() {
     settingsFileView.writeAdapter();
     root.settingsSaved(); // Emit signal after saving
-  }
-
-  // -----------------------------------------------------
-  // Generate default settings: for reference only, not used by the shell
-  function generateDefaultSettings() {
-    try {
-      Logger.d("Settings", "Generating settings-default.json");
-
-      // Prepare a clean JSON
-      var plainAdapter = QtObj2JS.qtObjectToPlainObject(adapter);
-      var jsonData = JSON.stringify(plainAdapter, null, 2);
-
-      var defaultPath = Quickshell.shellDir + "/Assets/settings-default.json";
-
-      // Encode transfer it has base64 to avoid any escaping issue
-      var base64Data = Qt.btoa(jsonData);
-      Quickshell.execDetached(["sh", "-c", `echo "${base64Data}" | base64 -d > "${defaultPath}"`]);
-    } catch (error) {
-      Logger.e("Settings", "Failed to generate default settings file: " + error);
-    }
-  }
-
-  // -----------------------------------------------------
-  // Generate default widget settings: for reference only, not used by the shell
-  function generateWidgetDefaultSettings() {
-    try {
-      Logger.d("Settings", "Generating settings-widgets-default.json");
-
-      var output = {
-        "bar": QtObj2JS.qtObjectToPlainObject(BarWidgetRegistry.widgetMetadata),
-        "controlCenter": QtObj2JS.qtObjectToPlainObject(ControlCenterWidgetRegistry.widgetMetadata),
-        "desktop": QtObj2JS.qtObjectToPlainObject(DesktopWidgetRegistry.widgetMetadata)
-      };
-      var jsonData = JSON.stringify(output, null, 2);
-
-      var defaultPath = Quickshell.shellDir + "/Assets/settings-widgets-default.json";
-
-      var base64Data = Qt.btoa(jsonData);
-      Quickshell.execDetached(["sh", "-c", `echo "${base64Data}" | base64 -d > "${defaultPath}"`]);
-    } catch (error) {
-      Logger.e("Settings", "Failed to generate widget default settings file: " + error);
-    }
   }
 
   // -----------------------------------------------------
