@@ -32,7 +32,6 @@ WIDGET_TYPES = (
     "NTextInput",
     "NCheckbox",
     "NLabel",
-    "HookRow",
 )
 
 # Regex patterns

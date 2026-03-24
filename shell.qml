@@ -105,7 +105,6 @@ ShellRoot {
         Qt.callLater(function () {
           LocationService.init();
           NightLightService.apply();
-          HooksService.init();
           BluetoothService.init();
           IdleInhibitorService.init();
           PowerProfileService.init();

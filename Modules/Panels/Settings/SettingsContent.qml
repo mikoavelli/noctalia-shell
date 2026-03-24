@@ -13,7 +13,6 @@ import qs.Modules.Panels.Settings.Tabs.Connections
 import qs.Modules.Panels.Settings.Tabs.ControlCenter
 import qs.Modules.Panels.Settings.Tabs.Display
 import qs.Modules.Panels.Settings.Tabs.Dock
-import qs.Modules.Panels.Settings.Tabs.Hooks
 import qs.Modules.Panels.Settings.Tabs.Launcher
 import qs.Modules.Panels.Settings.Tabs.LockScreen
 import qs.Modules.Panels.Settings.Tabs.Notifications
@@ -443,10 +442,6 @@ Item {
     AboutTab {}
   }
   Component {
-    id: hooksTab
-    HooksTab {}
-  }
-  Component {
     id: dockTab
     DockTab {}
   }
@@ -588,12 +583,6 @@ Item {
             "label": "panels.plugins.title",
             "icon": "plugin",
             "source": pluginsTab
-          },
-          {
-            "id": SettingsPanel.Tab.Hooks,
-            "label": "panels.hooks.title",
-            "icon": "settings-hooks",
-            "source": hooksTab
           },
           {
             "id": SettingsPanel.Tab.About,

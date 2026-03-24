@@ -642,19 +642,6 @@ Singleton {
       property string manualSunset: "18:30"
     }
 
-    // hooks
-    property JsonObject hooks: JsonObject {
-      property bool enabled: false
-      property string wallpaperChange: ""
-      property string darkModeChange: ""
-      property string screenLock: ""
-      property string screenUnlock: ""
-      property string performanceModeEnabled: ""
-      property string performanceModeDisabled: ""
-      property string startup: ""
-      property string session: ""
-    }
-
     // plugins
     property JsonObject plugins: JsonObject {
       property bool autoUpdate: false

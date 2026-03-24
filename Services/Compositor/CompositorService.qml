@@ -373,9 +373,7 @@ Singleton {
     if (executeSessionAction("shutdown"))
       return;
 
-    HooksService.executeSessionHook("shutdown", () => {
-                                      Quickshell.execDetached(["sh", "-c", "systemctl poweroff || loginctl poweroff"]);
-                                    });
+    Quickshell.execDetached(["sh", "-c", "systemctl poweroff || loginctl poweroff"]);
   }
 
   function reboot() {
@@ -383,9 +381,7 @@ Singleton {
     if (executeSessionAction("reboot"))
       return;
 
-    HooksService.executeSessionHook("reboot", () => {
-                                      Quickshell.execDetached(["sh", "-c", "systemctl reboot || loginctl reboot"]);
-                                    });
+    Quickshell.execDetached(["sh", "-c", "systemctl reboot || loginctl reboot"]);
   }
 
   function rebootToUefi() {
@@ -393,9 +389,7 @@ Singleton {
     if (executeSessionAction("rebootToUefi"))
       return;
 
-    HooksService.executeSessionHook("rebootToUefi", () => {
-                                      Quickshell.execDetached(["sh", "-c", "systemctl reboot --firmware-setup"]);
-                                    });
+    Quickshell.execDetached(["sh", "-c", "systemctl reboot --firmware-setup"]);
   }
 
   function suspend() {

@@ -80,7 +80,6 @@ SmartPanel {
     Display,
     Dock,
     General,
-    Hooks,
     Launcher,
     Location,
     Connections,

@@ -3,7 +3,7 @@
     "labelKey": "panels.about.telemetry-enabled",
     "descriptionKey": "panels.about.telemetry-desc",
     "widget": "NToggle",
-    "tab": 19,
+    "tab": 18,
     "tabLabel": "panels.about.title",
     "subTab": 0,
     "subTabLabel": "common.info"
@@ -738,96 +738,6 @@
     "tab": 0,
     "tabLabel": "common.general",
     "subTab": null
-  },
-  {
-    "labelKey": "panels.hooks.system-hooks-enable-label",
-    "descriptionKey": "panels.hooks.system-hooks-enable-description",
-    "widget": "NToggle",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 0,
-    "subTabLabel": "common.general"
-  },
-  {
-    "labelKey": "panels.hooks.info-parameters-label",
-    "descriptionKey": "panels.hooks.info-parameters-description",
-    "widget": "NLabel",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 0,
-    "subTabLabel": "common.general"
-  },
-  {
-    "labelKey": "panels.hooks.noctalia-started-label",
-    "descriptionKey": "panels.hooks.noctalia-started-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.wallpaper-changed-label",
-    "descriptionKey": "panels.hooks.wallpaper-changed-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.theme-changed-label",
-    "descriptionKey": "panels.hooks.theme-changed-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.screen-lock-label",
-    "descriptionKey": "panels.hooks.screen-lock-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.screen-unlock-label",
-    "descriptionKey": "panels.hooks.screen-unlock-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.performance-mode-enabled-label",
-    "descriptionKey": "panels.hooks.performance-mode-enabled-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.performance-mode-disabled-label",
-    "descriptionKey": "panels.hooks.performance-mode-disabled-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
-  },
-  {
-    "labelKey": "panels.hooks.session-label",
-    "descriptionKey": "panels.hooks.session-description",
-    "widget": "HookRow",
-    "tab": 18,
-    "tabLabel": "panels.hooks.title",
-    "subTab": 1,
-    "subTabLabel": "panels.hooks.title"
   },
   {
     "labelKey": "panels.launcher.settings-clipboard-history-label",
