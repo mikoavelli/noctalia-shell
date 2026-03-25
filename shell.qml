@@ -109,7 +109,6 @@ ShellRoot {
           IdleInhibitorService.init();
           PowerProfileService.init();
           HostService.init();
-          GitHubService.init();
           CustomButtonIPCService.init();
           IPCService.init(screenDetector);
         });

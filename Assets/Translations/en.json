@@ -393,7 +393,6 @@
     "connected": "Connected",
     "connecting": "Connecting...",
     "continue": "Continue",
-    "contributors": "Contributors",
     "copied-to-clipboard": "Copied to clipboard",
     "countdown": "Countdown",
     "date": "Date",
@@ -689,8 +688,6 @@
   "panels": {
     "about": {
       "changelog": "View changelog",
-      "contributors-description": "Shout-out to our {count} <b>awesome</b> contributor!",
-      "contributors-description-plural": "Shout-out to our {count} <b>awesome</b> contributors!",
       "copy-info": "Copy info",
       "debug-disabled": "Debug mode disabled",
       "debug-enabled": "Debug mode enabled",

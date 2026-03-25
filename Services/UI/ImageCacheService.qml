@@ -20,9 +20,7 @@ Singleton {
   readonly property string baseDir: Settings.cacheDir + "images/"
   readonly property string wpThumbDir: baseDir + "wallpapers/thumbnails/"
   readonly property string wpLargeDir: baseDir + "wallpapers/large/"
-  readonly property string wpOverviewDir: baseDir + "wallpapers/overview/"
   readonly property string notificationsDir: baseDir + "notifications/"
-  readonly property string contributorsDir: baseDir + "contributors/"
 
   // Supported image formats - extended list when ImageMagick is available
   readonly property var basicImageFilters: ["*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp"]
@@ -73,13 +71,11 @@ Singleton {
   function createDirectories() {
     Quickshell.execDetached(["mkdir", "-p", wpThumbDir]);
     Quickshell.execDetached(["mkdir", "-p", wpLargeDir]);
-    Quickshell.execDetached(["mkdir", "-p", wpOverviewDir]);
     Quickshell.execDetached(["mkdir", "-p", notificationsDir]);
-    Quickshell.execDetached(["mkdir", "-p", contributorsDir]);
   }
 
   function cleanupOldCache() {
-    const dirs = [wpThumbDir, wpLargeDir, wpOverviewDir, notificationsDir, contributorsDir];
+    const dirs = [wpThumbDir, wpLargeDir, notificationsDir];
     dirs.forEach(function (dir) {
       Quickshell.execDetached(["find", dir, "-type", "f", "-mtime", "+30", "-delete"]);
     });
@@ -178,54 +174,6 @@ Singleton {
   }
 
   // -------------------------------------------------
-  // Public API: Get Circular Avatar (256x256)
-  // -------------------------------------------------
-  function getCircularAvatar(url, username, callback) {
-    if (!url || !username) {
-      callback("", false);
-      return;
-    }
-
-    const cacheKey = username;
-    const cachedPath = contributorsDir + username + "_circular.png";
-
-    processRequest(cacheKey, cachedPath, url, callback, function () {
-      if (imageMagickAvailable) {
-        downloadAndProcessAvatar(url, username, cachedPath, cacheKey);
-      } else {
-        // No fallback for circular avatars without ImageMagick
-        Logger.w("ImageCache", "Circular avatars require ImageMagick");
-        notifyCallbacks(cacheKey, "", false);
-      }
-    });
-  }
-
-  // -------------------------------------------------
-  // Public API: Get Blurred Overview (for Niri overview background)
-  // -------------------------------------------------
-  function getBlurredOverview(sourcePath, width, height, tintColor, isDarkMode, callback) {
-    if (!sourcePath || sourcePath === "") {
-      callback("", false);
-      return;
-    }
-
-    if (!imageMagickAvailable) {
-      Logger.d("ImageCache", "ImageMagick not available for overview blur, using original:", sourcePath);
-      callback(sourcePath, false);
-      return;
-    }
-
-    getMtime(sourcePath, function (mtime) {
-      const cacheKey = generateOverviewKey(sourcePath, width, height, tintColor, isDarkMode, mtime);
-      const cachedPath = wpOverviewDir + cacheKey + ".png";
-
-      processRequest(cacheKey, cachedPath, sourcePath, callback, function () {
-        startOverviewProcessing(sourcePath, cachedPath, width, height, tintColor, isDarkMode, cacheKey);
-      });
-    });
-  }
-
-  // -------------------------------------------------
   // Cache Key Generation
   // -------------------------------------------------
   function generateThumbnailKey(sourcePath, mtime) {
@@ -243,11 +191,6 @@ Singleton {
       return Checksum.sha256(appName + "|" + summary);
     }
     return Checksum.sha256(imageUri);
-  }
-
-  function generateOverviewKey(sourcePath, width, height, tintColor, isDarkMode, mtime) {
-    const keyString = sourcePath + "@" + width + "x" + height + "@" + tintColor + "@" + (isDarkMode ? "dark" : "light") + "@" + (mtime || "unknown");
-    return Checksum.sha256(keyString);
   }
 
   // -------------------------------------------------
@@ -328,87 +271,6 @@ Singleton {
     const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '${width}x${height}^' -unsharp 0x0.5 '${dstEsc}'`;
 
     runProcess(command, cacheKey, outputPath, sourcePath);
-  }
-
-  // -------------------------------------------------
-  // ImageMagick Processing: Blurred Overview
-  // -------------------------------------------------
-  function startOverviewProcessing(sourcePath, outputPath, width, height, tintColor, isDarkMode, cacheKey) {
-    const srcEsc = sourcePath.replace(/'/g, "'\\''");
-    const dstEsc = outputPath.replace(/'/g, "'\\''");
-
-    // Resize, blur, then tint overlay
-    const command = `magick '${srcEsc}' -auto-orient -resize '${width}x${height}^' -gravity center -extent ${width}x${height} -gaussian-blur 0x5 \\( +clone -fill '${tintColor}' -colorize 100 -alpha set -channel A -evaluate set 50% +channel \\) -composite '${dstEsc}'`;
-
-    runProcess(command, cacheKey, outputPath, sourcePath);
-  }
-
-  // -------------------------------------------------
-  // ImageMagick Processing: Circular Avatar
-  // -------------------------------------------------
-  function downloadAndProcessAvatar(url, username, outputPath, cacheKey) {
-    const tempPath = contributorsDir + username + "_temp.png";
-    const tempEsc = tempPath.replace(/'/g, "'\\''");
-    const urlEsc = url.replace(/'/g, "'\\''");
-
-    // Download first (uses utility queue since curl/wget are lightweight)
-    const downloadCmd = `curl -L -s -o '${tempEsc}' '${urlEsc}' || wget -q -O '${tempEsc}' '${urlEsc}'`;
-
-    const processString = `
-      import QtQuick
-      import Quickshell.Io
-      Process {
-        command: ["sh", "-c", "${downloadCmd.replace(/"/g, '\\"')}"]
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-      }
-    `;
-
-    queueUtilityProcess({
-                          name: "DownloadProcess_" + cacheKey,
-                          processString: processString,
-                          onComplete: function (exitCode) {
-                            if (exitCode !== 0) {
-                              Logger.e("ImageCache", "Failed to download avatar for", username);
-                              notifyCallbacks(cacheKey, "", false);
-                              return;
-                            }
-                            // Now process with ImageMagick
-                            processCircularAvatar(tempPath, outputPath, cacheKey);
-                          },
-                          onError: function () {
-                            notifyCallbacks(cacheKey, "", false);
-                          }
-                        });
-  }
-
-  function processCircularAvatar(inputPath, outputPath, cacheKey) {
-    const srcEsc = inputPath.replace(/'/g, "'\\''");
-    const dstEsc = outputPath.replace(/'/g, "'\\''");
-
-    // ImageMagick command for circular crop with alpha
-    const command = `magick '${srcEsc}' -resize 256x256^ -gravity center -extent 256x256 -alpha set \\( +clone -channel A -evaluate set 0 +channel -fill white -draw 'circle 128,128 128,0' \\) -compose DstIn -composite '${dstEsc}'`;
-
-    queueImageMagickProcess({
-                              command: command,
-                              cacheKey: cacheKey,
-                              onComplete: function (exitCode) {
-                                // Clean up temp file
-                                Quickshell.execDetached(["rm", "-f", inputPath]);
-
-                                if (exitCode !== 0) {
-                                  Logger.e("ImageCache", "Failed to create circular avatar");
-                                  notifyCallbacks(cacheKey, "", false);
-                                } else {
-                                  Logger.d("ImageCache", "Circular avatar created:", outputPath);
-                                  notifyCallbacks(cacheKey, outputPath, true);
-                                }
-                              },
-                              onError: function () {
-                                Quickshell.execDetached(["rm", "-f", inputPath]);
-                                notifyCallbacks(cacheKey, "", false);
-                              }
-                            });
   }
 
   // -------------------------------------------------
@@ -691,31 +553,6 @@ Singleton {
   }
 
   // -------------------------------------------------
-  // Cache Invalidation
-  // -------------------------------------------------
-  function invalidateThumbnail(sourcePath) {
-    Logger.i("ImageCache", "Invalidating thumbnail for:", sourcePath);
-    // Since cache keys include hash, we'd need to track mappings
-    // For simplicity, clear all thumbnails
-    clearThumbnails();
-  }
-
-  function invalidateLarge(sourcePath) {
-    Logger.i("ImageCache", "Invalidating large for:", sourcePath);
-    clearLarge();
-  }
-
-  function invalidateNotification(imageId) {
-    const path = notificationsDir + imageId + ".png";
-    Quickshell.execDetached(["rm", "-f", path]);
-  }
-
-  function invalidateAvatar(username) {
-    const path = contributorsDir + username + "_circular.png";
-    Quickshell.execDetached(["rm", "-f", path]);
-  }
-
-  // -------------------------------------------------
   // Clear Cache Functions
   // -------------------------------------------------
   function clearAll() {
@@ -723,7 +560,6 @@ Singleton {
     clearThumbnails();
     clearLarge();
     clearNotifications();
-    clearContributors();
   }
 
   function clearThumbnails() {
@@ -742,12 +578,6 @@ Singleton {
     Logger.i("ImageCache", "Clearing notifications cache");
     Quickshell.execDetached(["rm", "-rf", notificationsDir]);
     Quickshell.execDetached(["mkdir", "-p", notificationsDir]);
-  }
-
-  function clearContributors() {
-    Logger.i("ImageCache", "Clearing contributors cache");
-    Quickshell.execDetached(["rm", "-rf", contributorsDir]);
-    Quickshell.execDetached(["mkdir", "-p", contributorsDir]);
   }
 
   // -------------------------------------------------
