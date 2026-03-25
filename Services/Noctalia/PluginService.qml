@@ -36,7 +36,7 @@ Singleton {
   // Plugin updates available: { pluginId: { currentVersion, availableVersion } }
   property var pluginUpdates: ({})
 
-  // Plugin updates that require a newer Noctalia version: { pluginId: { currentVersion, availableVersion, minNoctaliaVersion } }
+  // Plugin updates that require a newer Noctalia version: { pluginId: { currentVersion, availableVersion } }
   property var pluginUpdatesPending: ({})
 
   // Plugin load errors: { pluginId: { error: string, entryPoint: string, timestamp: date } }
@@ -407,21 +407,6 @@ Singleton {
         if (callback)
           callback(false, collision.message);
         return;
-      }
-
-      // Check Noctalia version compatibility (skip when updating - that's handled in performUpdateCheck)
-      if (pluginMetadata.minNoctaliaVersion) {
-        var noctaliaVersion = UpdateService.baseVersion;
-        if (compareVersions(pluginMetadata.minNoctaliaVersion, noctaliaVersion) > 0) {
-          var incompatibleMsg = I18n.tr("panels.plugins.install-incompatible", {
-                                          "plugin": pluginMetadata.name,
-                                          "version": pluginMetadata.minNoctaliaVersion
-                                        });
-          Logger.w("PluginService", "Plugin incompatible:", incompatibleMsg);
-          if (callback)
-            callback(false, incompatibleMsg);
-          return;
-        }
       }
     }
 
@@ -1348,20 +1333,6 @@ Singleton {
 
         // Compare versions
         if (compareVersions(availableVersion, currentVersion) > 0) {
-          // Check if the available version requires a higher Noctalia version
-          if (availablePlugin.minNoctaliaVersion) {
-            var noctaliaVersion = UpdateService.baseVersion;
-            if (compareVersions(availablePlugin.minNoctaliaVersion, noctaliaVersion) > 0) {
-              Logger.d("PluginService", "Pending update for", pluginId + ": requires Noctalia v" + availablePlugin.minNoctaliaVersion + " (current: v" + noctaliaVersion + ")");
-              pendingUpdates[pluginId] = {
-                currentVersion: currentVersion,
-                availableVersion: availableVersion,
-                minNoctaliaVersion: availablePlugin.minNoctaliaVersion
-              };
-              continue;
-            }
-          }
-
           updates[pluginId] = {
             currentVersion: currentVersion,
             availableVersion: availableVersion
@@ -1476,12 +1447,6 @@ Singleton {
       if (callback)
         callback(false, "Plugin not found");
       return;
-    }
-
-    // Check Noctalia compatibility
-    if (availablePlugin.minNoctaliaVersion) {
-      // Simple check: just warn, don't block (UpdateService would have more sophisticated logic)
-      Logger.d("PluginService", "Plugin requires Noctalia v" + availablePlugin.minNoctaliaVersion);
     }
 
     // Backup entire bar layout (global + screen overrides)

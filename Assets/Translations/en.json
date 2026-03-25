@@ -346,25 +346,6 @@
       "signal-text-very-poor": "Signal: Very poor"
     }
   },
-  "changelog": {
-    "error": {
-      "fetch-failed": "Unable to load changelog data. Please try again later.",
-      "rate-limit": "GitHub rate limit exceeded. Please try again in a few minutes."
-    },
-    "panel": {
-      "buttons-discord": "Join our Discord",
-      "buttons-dismiss": "OK",
-      "buttons-feedback": "Give feedback",
-      "empty": "Release notes are not available yet.",
-      "highlight-title": "Highlights",
-      "released": "Released on {date}",
-      "subtitle-fresh": "Thanks for installing Noctalia! Here is what’s included in this build.",
-      "subtitle-updated": "Updated from {previousVersion}",
-      "title": "What's new in {version}",
-      "version": "Version {version}",
-      "version-new-user": "Fresh install"
-    }
-  },
   "common": {
     "actions": "Actions",
     "add": "Add",
@@ -686,45 +667,6 @@
     }
   },
   "panels": {
-    "about": {
-      "changelog": "View changelog",
-      "copy-info": "Copy info",
-      "debug-disabled": "Debug mode disabled",
-      "debug-enabled": "Debug mode enabled",
-      "info-copied": "Info copied to clipboard",
-      "noctalia-desc": "A sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell.",
-      "noctalia-git-commit": "Git commit:",
-      "noctalia-installed-version": "Installed version:",
-      "noctalia-latest-version": "Latest version:",
-      "noctalia-title": "Noctalia shell",
-      "privacy-policy": "Privacy policy",
-      "support": "Support us",
-      "system-cpu": "CPU:",
-      "system-disk": "Disk:",
-      "system-gpu": "GPU:",
-      "system-host": "Host:",
-      "system-install-hint": "Install fastfetch to view system information",
-      "system-kernel": "Kernel:",
-      "system-loading": "Loading system info...",
-      "system-memory": "Memory:",
-      "system-monitor": "Monitor:",
-      "system-not-installed": "fastfetch is not installed",
-      "system-os": "OS:",
-      "system-packages": "Packages:",
-      "system-product": "Product:",
-      "system-title": "System Information",
-      "system-uptime": "Uptime:",
-      "system-wm": "WM:",
-      "telemetry-data-copied": "Telemetry data copied to clipboard",
-      "telemetry-desc": "Help improve Noctalia by sharing anonymous system info (screen resolution, compositor, distro). Sent once at startup, no tracking, data auto-deleted after 30 days.",
-      "telemetry-enabled": "Send anonymous system information",
-      "telemetry-show-data": "View data",
-      "telemetry-title": "Privacy",
-      "title": "About",
-      "up-to-date": "You're up to date!",
-      "update-available": "Update available",
-      "view-commit": "View commit on GitHub"
-    },
     "audio": {
       "devices-desc": "Configure available audio input and output devices.",
       "devices-input-device-description": "Select the desired audio input device.",
@@ -1560,10 +1502,6 @@
       "subheader": "Adjust bar position, density, scaling and more."
     },
     "skip-setup": "Skip Setup",
-    "telemetry-wizard-done": "Got it!",
-    "telemetry-wizard-note": "You're in control — enable or disable this anytime in settings",
-    "telemetry-wizard-subtitle": "We've added anonymous analytics to help improve Noctalia",
-    "telemetry-wizard-title": "Privacy Update",
     "wallpaper": {
       "choose-dir": "Choose a directory containing your wallpaper images",
       "dir-browse": "Browse for wallpaper folder",

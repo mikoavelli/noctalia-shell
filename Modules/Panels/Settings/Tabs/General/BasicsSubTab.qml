@@ -199,31 +199,6 @@ ColumnLayout {
     Layout.fillWidth: true
 
     NButton {
-      icon: "wand"
-      text: I18n.tr("panels.general.launch-setup-wizard")
-      outlined: true
-      onClicked: {
-        var targetScreen = PanelService.openedPanel ? PanelService.openedPanel.screen : (Quickshell.screens.length > 0 ? Quickshell.screens[0] : null);
-        if (!targetScreen) {
-          return;
-        }
-        var setupPanel = PanelService.getPanel("setupWizardPanel", targetScreen);
-        if (setupPanel) {
-          setupPanel.telemetryOnlyMode = false;
-          setupPanel.open();
-        } else {
-          Qt.callLater(() => {
-                         var sp = PanelService.getPanel("setupWizardPanel", targetScreen);
-                         if (sp) {
-                           sp.telemetryOnlyMode = false;
-                           sp.open();
-                         }
-                       });
-        }
-      }
-    }
-
-    NButton {
       icon: "json"
       text: I18n.tr("panels.general.copy-settings")
       outlined: true

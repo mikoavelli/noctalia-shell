@@ -326,8 +326,7 @@ ColumnLayout {
                 } else if (modelData.pendingUpdateInfo) {
                   return I18n.tr("panels.plugins.update-pending", {
                                    "current": modelData.version,
-                                   "new": modelData.pendingUpdateInfo.availableVersion,
-                                   "required": modelData.pendingUpdateInfo.minNoctaliaVersion
+                                   "new": modelData.pendingUpdateInfo.availableVersion
                                  });
                 }
                 return "v" + modelData.version;

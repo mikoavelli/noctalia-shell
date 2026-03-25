@@ -5,7 +5,6 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Modules.Panels.Settings.Tabs
-import qs.Modules.Panels.Settings.Tabs.About
 import qs.Modules.Panels.Settings.Tabs.Audio
 import qs.Modules.Panels.Settings.Tabs.Bar
 import qs.Modules.Panels.Settings.Tabs.ColorScheme
@@ -438,10 +437,6 @@ Item {
     WallpaperTab {}
   }
   Component {
-    id: aboutTab
-    AboutTab {}
-  }
-  Component {
     id: dockTab
     DockTab {}
   }
@@ -583,12 +578,6 @@ Item {
             "label": "panels.plugins.title",
             "icon": "plugin",
             "source": pluginsTab
-          },
-          {
-            "id": SettingsPanel.Tab.About,
-            "label": "panels.about.title",
-            "icon": "settings-about",
-            "source": aboutTab
           }
         ];
 

@@ -15,7 +15,6 @@ Singleton {
   property bool isLoaded: false
   property bool reloadSettings: false
   property bool directoriesCreated: false
-  property bool shouldOpenSetupWizard: false
   property bool isFreshInstall: false
 
   /*
@@ -114,9 +113,6 @@ Singleton {
         // File doesn't exist, create it with default values
         root.isFreshInstall = true;
         writeAdapter();
-
-        // We started without settings, we should open the setupWizard
-        root.shouldOpenSetupWizard = true;
       }
     }
   }
@@ -235,8 +231,6 @@ Singleton {
       property int shadowOffsetY: 3
       property string language: ""
       property bool allowPanelsOnScreenWithoutBar: true
-      property bool showChangelogOnStartup: true
-      property bool telemetryEnabled: false
       property bool enableLockScreenCountdown: true
       property int lockScreenCountdownDuration: 10000
       property bool autoStartAuth: false

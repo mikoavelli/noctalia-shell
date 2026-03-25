@@ -21,7 +21,6 @@ Singleton {
   // Signals for state changes
   signal displayStateChanged
   signal notificationsStateChanged
-  signal changelogStateChanged
   signal colorSchemesListChanged
 
   Component.onCompleted: {
@@ -51,11 +50,6 @@ Singleton {
                                           lastSeenTs: 0
                                         })
 
-      // UpdateService: changelog state
-      property var changelogState: ({
-                                      lastSeenVersion: ""
-                                    })
-
       // SchemeDownloader: color schemes list
       property var colorSchemesList: ({
                                         schemes: [],
@@ -66,11 +60,6 @@ Singleton {
       property var ui: ({
                           settingsSidebarExpanded: true
                         })
-
-      // Telemetry state
-      property var telemetry: ({
-                                 instanceId: ""
-                               })
 
       // Launcher app usage counts
       property var launcherUsage: ({})
@@ -173,19 +162,6 @@ Singleton {
     };
   }
 
-  // Changelog state (UpdateService)
-  function setChangelogState(stateData) {
-    adapter.changelogState = stateData;
-    save();
-    changelogStateChanged();
-  }
-
-  function getChangelogState() {
-    return adapter.changelogState || {
-      lastSeenVersion: ""
-    };
-  }
-
   // Color schemes list (SchemeDownloader)
   function setColorSchemesList(listData) {
     adapter.colorSchemesList = listData;
@@ -222,28 +198,6 @@ Singleton {
     return getUiState().settingsSidebarExpanded !== false; // default to true
   }
 
-  // Telemetry state
-  function setTelemetryState(stateData) {
-    adapter.telemetry = stateData;
-    save();
-  }
-
-  function getTelemetryState() {
-    return adapter.telemetry || {
-      instanceId: ""
-    };
-  }
-
-  function getTelemetryInstanceId() {
-    return getTelemetryState().instanceId || "";
-  }
-
-  function setTelemetryInstanceId(instanceId) {
-    let state = getTelemetryState();
-    state.instanceId = instanceId;
-    setTelemetryState(state);
-  }
-
   // -----------------------------------------------------
   function buildStateSnapshot() {
     try {
@@ -262,7 +216,6 @@ Singleton {
           // -------------
           display: shellStateData.display || {},
           notificationsState: shellStateData.notificationsState || {},
-          changelogState: shellStateData.changelogState || {},
           colorSchemesList: shellStateData.colorSchemesList || {},
           ui: shellStateData.ui || {}
         }
