@@ -496,7 +496,6 @@
     "sources": "Sources",
     "start": "Start",
     "stop": "Stop",
-    "supporters": "Supporters",
     "suspend": "Suspend",
     "templates": "Templates",
     "tertiary": "Tertiary",
@@ -689,7 +688,6 @@
   },
   "panels": {
     "about": {
-      "become-supporter": "Become a supporter",
       "changelog": "View changelog",
       "contributors-description": "Shout-out to our {count} <b>awesome</b> contributor!",
       "contributors-description-plural": "Shout-out to our {count} <b>awesome</b> contributors!",
@@ -704,10 +702,6 @@
       "noctalia-title": "Noctalia shell",
       "privacy-policy": "Privacy policy",
       "support": "Support us",
-      "supporter-badge": "Supporter",
-      "supporters-desc": "A huge thank you to our amazing supporter!",
-      "supporters-desc-plural": "A huge thank you to our <b>{count} amazing</b> supporters!",
-      "supporters-loading": "Loading supporters...",
       "system-cpu": "CPU:",
       "system-disk": "Disk:",
       "system-gpu": "GPU:",

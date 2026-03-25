@@ -110,7 +110,6 @@ ShellRoot {
           PowerProfileService.init();
           HostService.init();
           GitHubService.init();
-          SupporterService.init();
           CustomButtonIPCService.init();
           IPCService.init(screenDetector);
         });
