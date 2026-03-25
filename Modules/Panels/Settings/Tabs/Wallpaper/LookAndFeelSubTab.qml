@@ -22,20 +22,6 @@ ColumnLayout {
     defaultValue: Settings.getDefaultValue("wallpaper.fillMode")
   }
 
-  RowLayout {
-    NLabel {
-      label: I18n.tr("bar.audio-visualizer.color-name-label")
-      description: I18n.tr("panels.wallpaper.look-feel-fill-color-description")
-      Layout.alignment: Qt.AlignTop
-    }
-
-    NColorPicker {
-      screen: root.screen
-      selectedColor: Settings.data.wallpaper.fillColor
-      onColorSelected: color => Settings.data.wallpaper.fillColor = color
-    }
-  }
-
   NComboBox {
     label: I18n.tr("panels.wallpaper.look-feel-transition-type-label")
     description: I18n.tr("panels.wallpaper.look-feel-transition-type-description")

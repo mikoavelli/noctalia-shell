@@ -1487,15 +1487,6 @@
     "subTabLabel": "common.general"
   },
   {
-    "labelKey": "panels.system-monitor.use-custom-highlight-colors-label",
-    "descriptionKey": "panels.system-monitor.use-custom-highlight-colors-description",
-    "widget": "NToggle",
-    "tab": 16,
-    "tabLabel": "system-monitor.title",
-    "subTab": 0,
-    "subTabLabel": "common.general"
-  },
-  {
     "labelKey": "panels.system-monitor.external-monitor-label",
     "descriptionKey": "panels.system-monitor.external-monitor-description",
     "widget": "NTextInput",
@@ -1769,15 +1760,6 @@
     "labelKey": "panels.wallpaper.look-feel-fill-mode-label",
     "descriptionKey": "panels.wallpaper.look-feel-fill-mode-description",
     "widget": "NComboBox",
-    "tab": 3,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
-  },
-  {
-    "labelKey": "bar.audio-visualizer.color-name-label",
-    "descriptionKey": "panels.wallpaper.look-feel-fill-color-description",
-    "widget": "NLabel",
     "tab": 3,
     "tabLabel": "common.wallpaper",
     "subTab": 1,

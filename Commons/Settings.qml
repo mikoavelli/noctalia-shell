@@ -462,7 +462,6 @@ Singleton {
       property int batteryWarningThreshold: 20
       property int batteryCriticalThreshold: 5
       property bool enableDgpuMonitoring: false // Opt-in: reading dGPU sysfs/nvidia-smi wakes it from D3cold, draining battery
-      property bool useCustomColors: false
       property string warningColor: ""
       property string criticalColor: ""
       property string externalMonitor: "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"

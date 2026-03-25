@@ -1335,7 +1335,6 @@
       "show-keybinds-label": "Show keybinds"
     },
     "system-monitor": {
-      "critical-color-label": "Critical color",
       "custom-highlight-colors-title-label": "Custom highlight colors",
       "disk-available-label": "Disk available",
       "disk-section-label": "Disk usage",
@@ -1352,10 +1351,7 @@
       "polling-section-label": "Polling intervals",
       "threshold-critical": "Critical threshold",
       "threshold-warning": "Warning threshold",
-      "thresholds-section-description": "Adjust warning/critical thresholds for each system metric.",
-      "use-custom-highlight-colors-description": "When disabled, theme default highlight colors are used.",
-      "use-custom-highlight-colors-label": "Use custom highlight colors",
-      "warning-color-label": "Warning color"
+      "thresholds-section-description": "Adjust warning/critical thresholds for each system metric."
     },
     "user-interface": {
       "allow-panels-without-bar-description": "When enabled, panels can open on any screen. When disabled, panels will only open on screens that have a bar, which can reduce memory usage.",
@@ -1412,7 +1408,6 @@
       "automation-scheduled-change-label": "Scheduled change",
       "look-feel-edge-smoothness-description": "Applies a soft, feathered effect to the edge of transitions.",
       "look-feel-edge-smoothness-label": "Soften transition edge",
-      "look-feel-fill-color-description": "Choose a fill color that may appear behind the wallpaper.",
       "look-feel-fill-mode-description": "Select how the image should scale to match your monitor's resolution.",
       "look-feel-fill-mode-label": "Fill mode",
       "look-feel-skip-startup-transition-description": "Skip the wallpaper animation when the shell starts.",
@@ -1723,7 +1718,6 @@
       "resolution-exact": "Exact",
       "resolution-label": "Resolution",
       "resolution-mode-label": "Mode",
-      "solid-color-tooltip": "Solid color background",
       "sorting-date-added": "Date added",
       "sorting-favorites": "Favorites",
       "sorting-label": "Sort by",

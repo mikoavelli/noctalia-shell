@@ -192,14 +192,6 @@ SmartPanel {
       }
     }
 
-    // Solid color picker dialog
-    NColorPickerDialog {
-      id: solidColorPicker
-      screen: root.screen
-      selectedColor: Settings.data.wallpaper.solidColor
-      onColorSelected: color => WallpaperService.setSolidColor(color.toString())
-    }
-
     // Focus management
     Connections {
       target: root
@@ -289,15 +281,6 @@ SmartPanel {
               font.weight: Style.fontWeightBold
               color: Color.mOnSurface
               Layout.fillWidth: true
-            }
-
-            NIconButton {
-              icon: "palette"
-              tooltipText: I18n.tr("wallpaper.panel.solid-color-tooltip")
-              baseSize: Style.baseWidgetSize * 0.8
-              colorBg: Settings.data.wallpaper.useSolidColor ? Color.mPrimary : Color.mSurfaceVariant
-              colorFg: Settings.data.wallpaper.useSolidColor ? Color.mOnPrimary : Color.mPrimary
-              onClicked: solidColorPicker.open()
             }
 
             NIconButton {
