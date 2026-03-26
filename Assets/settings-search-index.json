@@ -504,36 +504,9 @@
     "subTabLabel": "common.night-light"
   },
   {
-    "labelKey": "panels.display.night-light-temperature-night",
-    "descriptionKey": "panels.display.night-light-temperature-night-description",
+    "labelKey": "panels.display.night-light-temperature-label",
+    "descriptionKey": "panels.display.night-light-temperature-description",
     "widget": "NLabel",
-    "tab": 13,
-    "tabLabel": "panels.display.title",
-    "subTab": 1,
-    "subTabLabel": "common.night-light"
-  },
-  {
-    "labelKey": "panels.display.night-light-temperature-day",
-    "descriptionKey": "panels.display.night-light-temperature-day-description",
-    "widget": "NLabel",
-    "tab": 13,
-    "tabLabel": "panels.display.title",
-    "subTab": 1,
-    "subTabLabel": "common.night-light"
-  },
-  {
-    "labelKey": "panels.display.night-light-auto-schedule-label",
-    "descriptionKey": "panels.display.night-light-auto-schedule-description",
-    "widget": "NToggle",
-    "tab": 13,
-    "tabLabel": "panels.display.title",
-    "subTab": 1,
-    "subTabLabel": "common.night-light"
-  },
-  {
-    "labelKey": "panels.display.night-light-force-activation-label",
-    "descriptionKey": "panels.display.night-light-force-activation-description",
-    "widget": "NToggle",
     "tab": 13,
     "tabLabel": "panels.display.title",
     "subTab": 1,

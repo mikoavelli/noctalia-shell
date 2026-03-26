@@ -353,17 +353,7 @@ Singleton {
         Logger.w("IPC", "wlsunset not available, cannot toggle night light");
         return;
       }
-
-      if (Settings.data.nightLight.forced) {
-        Settings.data.nightLight.forced = false;
-      } else {
-        if (Settings.data.nightLight.enabled) {
-          Settings.data.nightLight.enabled = false;
-        } else {
-          Settings.data.nightLight.forced = true;
-          Settings.data.nightLight.enabled = true;
-        }
-      }
+      Settings.data.nightLight.enabled = !Settings.data.nightLight.enabled;
     }
   }
 

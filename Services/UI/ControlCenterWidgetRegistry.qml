@@ -15,7 +15,6 @@ Singleton {
                            "CustomButton": customButtonComponent,
                            "DarkMode": darkModeComponent,
                            "KeepAwake": keepAwakeComponent,
-                           "NightLight": nightLightComponent,
                            "Notifications": notificationsComponent,
                            "PowerProfile": powerProfileComponent,
                            "WiFi": networkComponent,
@@ -52,9 +51,6 @@ Singleton {
   }
   property Component keepAwakeComponent: Component {
     KeepAwake {}
-  }
-  property Component nightLightComponent: Component {
-    NightLight {}
   }
   property Component notificationsComponent: Component {
     Notifications {}

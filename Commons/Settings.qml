@@ -409,9 +409,6 @@ Singleton {
           },
           {
             "id": "KeepAwake"
-          },
-          {
-            "id": "NightLight"
           }
         ]
       }
@@ -627,12 +624,7 @@ Singleton {
     // night light
     property JsonObject nightLight: JsonObject {
       property bool enabled: false
-      property bool forced: false
-      property bool autoSchedule: true
-      property string nightTemp: "4000"
-      property string dayTemp: "6500"
-      property string manualSunrise: "06:30"
-      property string manualSunset: "18:30"
+      property string temperature: "4500"
     }
 
     // plugins
