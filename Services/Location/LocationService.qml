@@ -283,9 +283,4 @@ Singleton {
       return "Thunderstorm";
     return "Unknown";
   }
-
-  // --------------------------------
-  function celsiusToFahrenheit(celsius) {
-    return 32 + celsius * 1.8;
-  }
 }

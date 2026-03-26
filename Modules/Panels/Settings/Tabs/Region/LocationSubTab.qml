@@ -97,14 +97,6 @@ ColumnLayout {
     }
 
     NToggle {
-      label: I18n.tr("panels.location.weather-fahrenheit-label")
-      description: I18n.tr("panels.location.weather-fahrenheit-description")
-      checked: Settings.data.location.useFahrenheit
-      onToggled: checked => Settings.data.location.useFahrenheit = checked
-      enabled: Settings.data.location.weatherEnabled
-    }
-
-    NToggle {
       label: I18n.tr("panels.location.weather-show-effects-label")
       description: I18n.tr("panels.location.weather-show-effects-description")
       checked: Settings.data.location.weatherShowEffects

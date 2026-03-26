@@ -134,11 +134,6 @@ NBox {
       Layout.fillWidth: true
       spacing: 0
 
-      Item {
-        visible: Settings.data.location.showWeekNumberInCalendar
-        Layout.preferredWidth: visible ? Style.baseWidgetSize * 0.7 : 0
-      }
-
       GridLayout {
         Layout.fillWidth: true
         columns: 7
@@ -215,54 +210,6 @@ NBox {
           return isToday ? Color.mOnSecondary : Color.mSecondary;
         } else {
           return isToday ? Color.mOnSecondary : Color.mPrimary;
-        }
-      }
-
-      // Week numbers column
-      ColumnLayout {
-        visible: Settings.data.location.showWeekNumberInCalendar
-        Layout.preferredWidth: visible ? Style.baseWidgetSize * 0.7 : 0
-        Layout.alignment: Qt.AlignTop
-        spacing: Style.marginXXS
-
-        property var weekNumbers: {
-          if (!grid.daysModel || grid.daysModel.length === 0)
-            return [];
-          const weeks = [];
-          const numWeeks = Math.ceil(grid.daysModel.length / 7);
-          for (var i = 0; i < numWeeks; i++) {
-            const dayIndex = i * 7;
-            if (dayIndex < grid.daysModel.length) {
-              const weekDay = grid.daysModel[dayIndex];
-              const date = new Date(weekDay.year, weekDay.month, weekDay.day);
-              let thursday = new Date(date);
-              if (root.firstDayOfWeek === 0) {
-                thursday.setDate(date.getDate() + 4);
-              } else if (root.firstDayOfWeek === 1) {
-                thursday.setDate(date.getDate() + 3);
-              } else {
-                let daysToThursday = (4 - root.firstDayOfWeek + 7) % 7;
-                thursday.setDate(date.getDate() + daysToThursday);
-              }
-              weeks.push(root.getISOWeekNumber(thursday));
-            }
-          }
-          return weeks;
-        }
-
-        Repeater {
-          model: parent.weekNumbers
-          Item {
-            Layout.preferredWidth: Style.baseWidgetSize * 0.7
-            Layout.preferredHeight: Style.baseWidgetSize * 0.9
-
-            NText {
-              anchors.centerIn: parent
-              color: Qt.alpha(Color.mPrimary, 0.7)
-              pointSize: Style.fontSizeXXS
-              text: modelData
-            }
-          }
         }
       }
 

@@ -351,10 +351,6 @@ Item {
                 text: {
                   var temp = LocationService.data.weather.current_weather.temperature;
                   var suffix = "C";
-                  if (Settings.data.location.useFahrenheit) {
-                    temp = LocationService.celsiusToFahrenheit(temp);
-                    suffix = "F";
-                  }
                   temp = Math.round(temp);
                   return temp + "°" + suffix;
                 }
@@ -367,10 +363,6 @@ Item {
                 text: {
                   var wind = LocationService.data.weather.current_weather.windspeed;
                   var unit = "km/h";
-                  if (Settings.data.location.useFahrenheit) {
-                    wind = wind * 0.621371; // Convert km/h to mph
-                    unit = "mph";
-                  }
                   wind = Math.round(wind);
                   return wind + " " + unit;
                 }
@@ -434,10 +426,6 @@ Item {
                 text: {
                   var max = LocationService.data.weather.daily.temperature_2m_max[index];
                   var min = LocationService.data.weather.daily.temperature_2m_min[index];
-                  if (Settings.data.location.useFahrenheit) {
-                    max = LocationService.celsiusToFahrenheit(max);
-                    min = LocationService.celsiusToFahrenheit(min);
-                  }
                   max = Math.round(max);
                   min = Math.round(min);
                   return max + "°/" + min + "°";

@@ -17,7 +17,7 @@ SmartPanel {
     id: panelContent
     anchors.fill: parent
 
-    readonly property real contentPreferredWidth: Math.round((Settings.data.location.showWeekNumberInCalendar ? 440 : 420) * Style.uiScaleRatio)
+    readonly property real contentPreferredWidth: Math.round(420 * Style.uiScaleRatio)
     readonly property real contentPreferredHeight: content.implicitHeight + (Style.marginL * 2)
 
     ColumnLayout {

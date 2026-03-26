@@ -136,10 +136,6 @@ NBox {
                 }
                 var temp = LocationService.data.weather.current_weather.temperature;
                 var suffix = "C";
-                if (Settings.data.location.useFahrenheit) {
-                  temp = LocationService.celsiusToFahrenheit(temp);
-                  var suffix = "F";
-                }
                 temp = Math.round(temp);
                 return `${temp}°${suffix}`;
               }
@@ -196,10 +192,6 @@ NBox {
             text: {
               var max = LocationService.data.weather.daily.temperature_2m_max[index];
               var min = LocationService.data.weather.daily.temperature_2m_min[index];
-              if (Settings.data.location.useFahrenheit) {
-                max = LocationService.celsiusToFahrenheit(max);
-                min = LocationService.celsiusToFahrenheit(min);
-              }
               max = Math.round(max);
               min = Math.round(min);
               return `${max}°/${min}°`;

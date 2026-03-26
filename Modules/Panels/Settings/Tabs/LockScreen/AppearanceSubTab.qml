@@ -25,10 +25,6 @@ ColumnLayout {
     description: I18n.tr("panels.lock-screen.clock-style-description")
     model: [
       {
-        "key": "analog",
-        "name": I18n.tr("panels.lock-screen.clock-style-analog")
-      },
-      {
         "key": "digital",
         "name": I18n.tr("panels.lock-screen.clock-style-digital")
       },

@@ -118,13 +118,13 @@ Rectangle {
     }
   }
 
-  // Analog/Digital clock
+  // Digital clock
   NClock {
     id: clockLoader
     anchors.right: parent.right
     anchors.rightMargin: Style.marginXL
     anchors.verticalCenter: parent.verticalCenter
-    clockStyle: Settings.data.location.analogClockInCalendar ? "analog" : "digital"
+    clockStyle: "digital"
     progressColor: Color.mOnPrimary
     Layout.alignment: Qt.AlignVCenter
     now: root.now

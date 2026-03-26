@@ -92,20 +92,6 @@ ColumnLayout {
     Layout.fillWidth: true
 
     NToggle {
-      label: I18n.tr("panels.location.date-time-use-analog-label")
-      description: I18n.tr("panels.location.date-time-use-analog-description")
-      checked: Settings.data.location.analogClockInCalendar
-      onToggled: checked => Settings.data.location.analogClockInCalendar = checked
-    }
-
-    NToggle {
-      label: I18n.tr("panels.location.date-time-week-numbers-label")
-      description: I18n.tr("panels.location.date-time-week-numbers-description")
-      checked: Settings.data.location.showWeekNumberInCalendar
-      onToggled: checked => Settings.data.location.showWeekNumberInCalendar = checked
-    }
-
-    NToggle {
       label: I18n.tr("panels.location.date-time-show-events-label")
       description: I18n.tr("panels.location.date-time-show-events-description")
       checked: Settings.data.location.showCalendarEvents
