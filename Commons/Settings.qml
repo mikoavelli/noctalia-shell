@@ -554,15 +554,6 @@ Singleton {
         property bool normal: true
         property bool critical: true
       }
-      property JsonObject sounds: JsonObject {
-        property bool enabled: false
-        property real volume: 0.5
-        property bool separateSounds: false
-        property string criticalSoundFile: ""
-        property string normalSoundFile: ""
-        property string lowSoundFile: ""
-        property string excludedApps: "discord,firefox,chrome,chromium,edge"
-      }
       property bool enableMediaToast: false
       property bool enableKeyboardLayoutToast: true
       property bool enableBatteryToast: true

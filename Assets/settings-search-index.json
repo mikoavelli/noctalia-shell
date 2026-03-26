@@ -1127,93 +1127,12 @@
     "subTabLabel": "common.history"
   },
   {
-    "labelKey": "panels.notifications.sounds-unavailable-label",
-    "descriptionKey": "panels.notifications.sounds-unavailable-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-enabled-label",
-    "descriptionKey": "panels.notifications.sounds-enabled-description",
-    "widget": "NToggle",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-volume-label",
-    "descriptionKey": "panels.notifications.sounds-volume-description",
-    "widget": "NValueSlider",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-separate-label",
-    "descriptionKey": "panels.notifications.sounds-separate-description",
-    "widget": "NToggle",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-files-unified-label",
-    "descriptionKey": "panels.notifications.sounds-files-unified-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-files-low-label",
-    "descriptionKey": "panels.notifications.sounds-files-low-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-files-normal-label",
-    "descriptionKey": "panels.notifications.sounds-files-normal-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-files-critical-label",
-    "descriptionKey": "panels.notifications.sounds-files-critical-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
-    "labelKey": "panels.notifications.sounds-excluded-apps-label",
-    "descriptionKey": "panels.notifications.sounds-excluded-apps-description",
-    "widget": "NLabel",
-    "tab": 8,
-    "tabLabel": "common.notifications",
-    "subTab": 3,
-    "subTabLabel": "common.sound"
-  },
-  {
     "labelKey": "panels.notifications.toast-media-label",
     "descriptionKey": "panels.notifications.toast-media-description",
     "widget": "NCheckbox",
     "tab": 8,
     "tabLabel": "common.notifications",
-    "subTab": 4,
+    "subTab": 3,
     "subTabLabel": "common.toast"
   },
   {
@@ -1222,7 +1141,7 @@
     "widget": "NCheckbox",
     "tab": 8,
     "tabLabel": "common.notifications",
-    "subTab": 4,
+    "subTab": 3,
     "subTabLabel": "common.toast"
   },
   {
@@ -1231,7 +1150,7 @@
     "widget": "NCheckbox",
     "tab": 8,
     "tabLabel": "common.notifications",
-    "subTab": 4,
+    "subTab": 3,
     "subTabLabel": "common.toast"
   },
   {
