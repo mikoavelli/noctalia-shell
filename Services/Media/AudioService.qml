@@ -9,10 +9,6 @@ import qs.Services.System
 Singleton {
   id: root
 
-  // Rate limiting for volume feedback (minimum 100ms between sounds)
-  property var lastVolumeFeedbackTime: 0
-  readonly property int minVolumeFeedbackInterval: 100
-
   // Devices
   readonly property PwNode sink: Pipewire.ready ? Pipewire.defaultAudioSink : null
   readonly property PwNode source: validatedSource
@@ -350,8 +346,6 @@ Singleton {
     sink.audio.muted = false;
     sink.audio.volume = clampedVolume;
 
-    playVolumeFeedback(clampedVolume);
-
     // Clear flag after a short delay to allow external changes to be detected
     Qt.callLater(() => {
                    isSettingOutputVolume = false;
@@ -425,29 +419,6 @@ Singleton {
     Qt.callLater(() => {
                    isSettingInputVolume = false;
                  });
-  }
-
-  function playVolumeFeedback(currentVolume: real) {
-    if (!SoundService.multimediaAvailable) {
-      return;
-    }
-
-    if (!Settings.data.audio.volumeFeedback) {
-      return;
-    }
-
-    const now = Date.now();
-    if (now - lastVolumeFeedbackTime < minVolumeFeedbackInterval) {
-      return;
-    }
-    lastVolumeFeedbackTime = now;
-
-    const feedbackVolume = currentVolume;
-    SoundService.playSound("volume-change.wav", {
-                             volume: feedbackVolume,
-                             fallback: false,
-                             repeat: false
-                           });
   }
 
   function setInputMuted(muted: bool) {

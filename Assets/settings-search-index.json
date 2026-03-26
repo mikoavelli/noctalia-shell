@@ -72,15 +72,6 @@
     "subTabLabel": "common.volumes"
   },
   {
-    "labelKey": "panels.audio.volumes-volume-feedback-label",
-    "descriptionKey": "panels.audio.volumes-volume-feedback-description",
-    "widget": "NToggle",
-    "tab": 12,
-    "tabLabel": "panels.audio.title",
-    "subTab": 0,
-    "subTabLabel": "common.volumes"
-  },
-  {
     "labelKey": "panels.osd.types-input-volume-label",
     "descriptionKey": "panels.audio.volumes-input-volume-description",
     "widget": "NValueSlider",
