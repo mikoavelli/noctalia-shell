@@ -18,51 +18,19 @@ NBox {
   readonly property var now: Time.now
   property int calendarMonth: now.getMonth()
   property int calendarYear: now.getFullYear()
-  readonly property int firstDayOfWeek: Settings.data.location.firstDayOfWeek === -1 ? I18n.locale.firstDayOfWeek : Settings.data.location.firstDayOfWeek
-
-  // Helper function to calculate ISO week number
-  function getISOWeekNumber(date) {
-    const target = new Date(date.valueOf());
-    const dayNr = (date.getDay() + 6) % 7;
-    target.setDate(target.getDate() - dayNr + 3);
-    const firstThursday = new Date(target.getFullYear(), 0, 4);
-    const diff = target - firstThursday;
-    const oneWeek = 1000 * 60 * 60 * 24 * 7;
-    const weekNumber = 1 + Math.round(diff / oneWeek);
-    return weekNumber;
-  }
-
-  // Helper function to check if an event is all-day
-  function isAllDayEvent(event) {
-    const duration = event.end - event.start;
-    const startDate = new Date(event.start * 1000);
-    const isAtMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
-    return duration === 86400 && isAtMidnight;
-  }
+  readonly property int firstDayOfWeek: -1 // Use locale
 
   // Navigation functions
   function navigateToPreviousMonth() {
     let newDate = new Date(root.calendarYear, root.calendarMonth - 1, 1);
     root.calendarYear = newDate.getFullYear();
     root.calendarMonth = newDate.getMonth();
-    const now = new Date();
-    const monthStart = new Date(root.calendarYear, root.calendarMonth, 1);
-    const monthEnd = new Date(root.calendarYear, root.calendarMonth + 1, 0);
-    const daysBehind = Math.max(0, Math.ceil((now - monthStart) / (24 * 60 * 60 * 1000)));
-    const daysAhead = Math.max(0, Math.ceil((monthEnd - now) / (24 * 60 * 60 * 1000)));
-    CalendarService.loadEvents(daysAhead + 30, daysBehind + 30);
   }
 
   function navigateToNextMonth() {
     let newDate = new Date(root.calendarYear, root.calendarMonth + 1, 1);
     root.calendarYear = newDate.getFullYear();
     root.calendarMonth = newDate.getMonth();
-    const now = new Date();
-    const monthStart = new Date(root.calendarYear, root.calendarMonth, 1);
-    const monthEnd = new Date(root.calendarYear, root.calendarMonth + 1, 0);
-    const daysBehind = Math.max(0, Math.ceil((now - monthStart) / (24 * 60 * 60 * 1000)));
-    const daysAhead = Math.max(0, Math.ceil((monthEnd - now) / (24 * 60 * 60 * 1000)));
-    CalendarService.loadEvents(daysAhead + 30, daysBehind + 30);
   }
 
   // Wheel handler for month navigation
@@ -119,7 +87,6 @@ NBox {
         onClicked: {
           root.calendarMonth = root.now.getMonth();
           root.calendarYear = root.now.getFullYear();
-          CalendarService.loadEvents();
         }
       }
 
@@ -164,208 +131,102 @@ NBox {
       }
     }
 
-    // Calendar grid with week numbers
-    RowLayout {
+    // Calendar grid
+    GridLayout {
+      id: grid
       Layout.fillWidth: true
-      spacing: 0
+      columns: 7
+      columnSpacing: Style.marginXXS
+      rowSpacing: Style.marginXXS
 
-      // Helper functions
-      function hasEventsOnDate(year, month, day) {
-        if (!CalendarService.available || CalendarService.events.length === 0)
-          return false;
-        const targetDate = new Date(year, month, day);
-        const targetStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()).getTime() / 1000;
-        const targetEnd = targetStart + 86400;
-        return CalendarService.events.some(event => {
-                                             return (event.start >= targetStart && event.start < targetEnd) || (event.end > targetStart && event.end <= targetEnd) || (event.start < targetStart && event.end > targetEnd);
-                                           });
-      }
+      property int month: root.calendarMonth
+      property int year: root.calendarYear
 
-      function getEventsForDate(year, month, day) {
-        if (!CalendarService.available || CalendarService.events.length === 0)
-          return [];
-        const targetDate = new Date(year, month, day);
-        const targetStart = Math.floor(new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()).getTime() / 1000);
-        const targetEnd = targetStart + 86400;
-        return CalendarService.events.filter(event => {
-                                               return (event.start >= targetStart && event.start < targetEnd) || (event.end > targetStart && event.end <= targetEnd) || (event.start < targetStart && event.end > targetEnd);
-                                             });
-      }
+      property var daysModel: {
+        const firstOfMonth = new Date(year, month, 1);
+        const lastOfMonth = new Date(year, month + 1, 0);
+        const daysInMonth = lastOfMonth.getDate();
+        const firstDayOfWeek = root.firstDayOfWeek;
+        const firstOfMonthDayOfWeek = firstOfMonth.getDay();
+        let daysBefore = (firstOfMonthDayOfWeek - firstDayOfWeek + 7) % 7;
+        const lastOfMonthDayOfWeek = lastOfMonth.getDay();
+        const daysAfter = (firstDayOfWeek - lastOfMonthDayOfWeek - 1 + 7) % 7;
+        const days = [];
+        const today = new Date();
 
-      function isMultiDayEvent(event) {
-        if (root.isAllDayEvent(event)) {
-          return false;
-        }
-        const startDate = new Date(event.start * 1000);
-        const endDate = new Date(event.end * 1000);
-        const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-        const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-        return startDateOnly.getTime() !== endDateOnly.getTime();
-      }
-
-      function getEventColor(event, isToday) {
-        if (isMultiDayEvent(event)) {
-          return isToday ? Color.mOnSecondary : Color.mTertiary;
-        } else if (root.isAllDayEvent(event)) {
-          return isToday ? Color.mOnSecondary : Color.mSecondary;
-        } else {
-          return isToday ? Color.mOnSecondary : Color.mPrimary;
-        }
-      }
-
-      // Calendar grid
-      GridLayout {
-        id: grid
-        Layout.fillWidth: true
-        columns: 7
-        columnSpacing: Style.marginXXS
-        rowSpacing: Style.marginXXS
-
-        property int month: root.calendarMonth
-        property int year: root.calendarYear
-
-        property var daysModel: {
-          const firstOfMonth = new Date(year, month, 1);
-          const lastOfMonth = new Date(year, month + 1, 0);
-          const daysInMonth = lastOfMonth.getDate();
-          const firstDayOfWeek = root.firstDayOfWeek;
-          const firstOfMonthDayOfWeek = firstOfMonth.getDay();
-          let daysBefore = (firstOfMonthDayOfWeek - firstDayOfWeek + 7) % 7;
-          const lastOfMonthDayOfWeek = lastOfMonth.getDay();
-          const daysAfter = (firstDayOfWeek - lastOfMonthDayOfWeek - 1 + 7) % 7;
-          const days = [];
-          const today = new Date();
-
-          // Previous month days
-          const prevMonth = new Date(year, month, 0);
-          const prevMonthDays = prevMonth.getDate();
-          for (var i = daysBefore - 1; i >= 0; i--) {
-            const day = prevMonthDays - i;
-            days.push({
-                        "day": day,
-                        "month": month - 1,
-                        "year": month === 0 ? year - 1 : year,
-                        "today": false,
-                        "currentMonth": false
-                      });
-          }
-
-          // Current month days
-          for (var day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
-            days.push({
-                        "day": day,
-                        "month": month,
-                        "year": year,
-                        "today": isToday,
-                        "currentMonth": true
-                      });
-          }
-
-          // Next month days
-          for (var i = 1; i <= daysAfter; i++) {
-            days.push({
-                        "day": i,
-                        "month": month + 1,
-                        "year": month === 11 ? year + 1 : year,
-                        "today": false,
-                        "currentMonth": false
-                      });
-          }
-
-          return days;
+        // Previous month days
+        const prevMonth = new Date(year, month, 0);
+        const prevMonthDays = prevMonth.getDate();
+        for (var i = daysBefore - 1; i >= 0; i--) {
+          const day = prevMonthDays - i;
+          days.push({
+                      "day": day,
+                      "month": month - 1,
+                      "year": month === 0 ? year - 1 : year,
+                      "today": false,
+                      "currentMonth": false
+                    });
         }
 
-        Repeater {
-          model: grid.daysModel
+        // Current month days
+        for (var day = 1; day <= daysInMonth; day++) {
+          const date = new Date(year, month, day);
+          const isToday = date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
+          days.push({
+                      "day": day,
+                      "month": month,
+                      "year": year,
+                      "today": isToday,
+                      "currentMonth": true
+                    });
+        }
 
-          Item {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Style.baseWidgetSize * 0.9
+        // Next month days
+        for (var i = 1; i <= daysAfter; i++) {
+          days.push({
+                      "day": i,
+                      "month": month + 1,
+                      "year": month === 11 ? year + 1 : year,
+                      "today": false,
+                      "currentMonth": false
+                    });
+        }
 
-            Rectangle {
-              width: Style.baseWidgetSize * 0.9
-              height: Style.baseWidgetSize * 0.9
+        return days;
+      }
+
+      Repeater {
+        model: grid.daysModel
+
+        Item {
+          Layout.fillWidth: true
+          Layout.preferredHeight: Style.baseWidgetSize * 0.9
+
+          Rectangle {
+            width: Style.baseWidgetSize * 0.9
+            height: Style.baseWidgetSize * 0.9
+            anchors.centerIn: parent
+            radius: Style.radiusM
+            color: modelData.today ? Color.mSecondary : "transparent"
+
+            NText {
               anchors.centerIn: parent
-              radius: Style.radiusM
-              color: modelData.today ? Color.mSecondary : "transparent"
-
-              NText {
-                anchors.centerIn: parent
-                text: modelData.day
-                color: {
-                  if (modelData.today)
-                    return Color.mOnSecondary;
-                  if (modelData.currentMonth)
-                    return Color.mOnSurface;
-                  return Color.mOnSurfaceVariant;
-                }
-                opacity: modelData.currentMonth ? 1.0 : 0.4
-                pointSize: Style.fontSizeM
-                font.weight: modelData.today ? Style.fontWeightBold : Style.fontWeightMedium
+              text: modelData.day
+              color: {
+                if (modelData.today)
+                  return Color.mOnSecondary;
+                if (modelData.currentMonth)
+                  return Color.mOnSurface;
+                return Color.mOnSurfaceVariant;
               }
+              opacity: modelData.currentMonth ? 1.0 : 0.4
+              pointSize: Style.fontSizeM
+              font.weight: modelData.today ? Style.fontWeightBold : Style.fontWeightMedium
+            }
 
-              // Event indicator dots
-              Row {
-                visible: Settings.data.location.showCalendarEvents && parent.parent.parent.parent.hasEventsOnDate(modelData.year, modelData.month, modelData.day)
-                spacing: 2
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: Style.marginXS
-
-                Repeater {
-                  model: parent.parent.parent.parent.parent.getEventsForDate(modelData.year, modelData.month, modelData.day)
-
-                  Rectangle {
-                    width: 4
-                    height: width
-                    radius: Style.radiusXXS
-                    color: parent.parent.parent.parent.parent.getEventColor(modelData, modelData.today)
-                  }
-                }
-              }
-
-              MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                enabled: Settings.data.location.showCalendarEvents
-
-                onEntered: {
-                  const events = parent.parent.parent.parent.getEventsForDate(modelData.year, modelData.month, modelData.day);
-                  if (events.length > 0) {
-                    const summaries = events.map(event => {
-                                                   if (root.isAllDayEvent(event)) {
-                                                     return event.summary;
-                                                   } else {
-                                                     const timeFormat = Settings.data.location.use12hourFormat ? "hh:mm AP" : "HH:mm";
-                                                     const start = new Date(event.start * 1000);
-                                                     const startFormatted = I18n.locale.toString(start, timeFormat);
-                                                     const end = new Date(event.end * 1000);
-                                                     const endFormatted = I18n.locale.toString(end, timeFormat);
-                                                     return `${startFormatted}-${endFormatted} ${event.summary}`;
-                                                   }
-                                                 }).join('\n');
-                    TooltipService.show(parent, summaries, "auto", Style.tooltipDelay, Settings.data.ui.fontFixed);
-                  }
-                }
-
-                onClicked: {
-                  const dateWithSlashes = `${(modelData.month + 1).toString().padStart(2, '0')}/${modelData.day.toString().padStart(2, '0')}/${modelData.year.toString().substring(2)}`;
-                  if (ProgramCheckerService.gnomeCalendarAvailable) {
-                    Quickshell.execDetached(["gnome-calendar", "--date", dateWithSlashes]);
-                  }
-                }
-
-                onExited: {
-                  TooltipService.hide();
-                }
-              }
-
-              Behavior on color {
-                ColorAnimation {
-                  duration: Style.animationFast
-                }
+            Behavior on color {
+              ColorAnimation {
+                duration: Style.animationFast
               }
             }
           }

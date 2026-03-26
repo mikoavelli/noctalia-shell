@@ -86,23 +86,6 @@ ColumnLayout {
     saveCards();
   }
 
-  // Clock style section
-  ColumnLayout {
-    spacing: Style.marginM
-    Layout.fillWidth: true
-
-    NToggle {
-      label: I18n.tr("panels.location.date-time-show-events-label")
-      description: I18n.tr("panels.location.date-time-show-events-description")
-      checked: Settings.data.location.showCalendarEvents
-      onToggled: checked => Settings.data.location.showCalendarEvents = checked
-    }
-  }
-
-  NDivider {
-    Layout.fillWidth: true
-  }
-
   // Calendar Cards Management Section
   ColumnLayout {
     spacing: Style.marginXXS

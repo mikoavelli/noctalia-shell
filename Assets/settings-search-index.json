@@ -1307,27 +1307,9 @@
     "subTabLabel": "common.sources"
   },
   {
-    "labelKey": "panels.location.date-time-show-events-label",
-    "descriptionKey": "panels.location.date-time-show-events-description",
-    "widget": "NToggle",
-    "tab": 15,
-    "tabLabel": "panels.region.title",
-    "subTab": 2,
-    "subTabLabel": "common.calendar-panel"
-  },
-  {
     "labelKey": "panels.location.date-time-12hour-format-label",
     "descriptionKey": "panels.location.date-time-12hour-format-description",
     "widget": "NToggle",
-    "tab": 15,
-    "tabLabel": "panels.region.title",
-    "subTab": 1,
-    "subTabLabel": "common.date"
-  },
-  {
-    "labelKey": "panels.location.date-time-first-day-of-week-label",
-    "descriptionKey": "panels.location.date-time-first-day-of-week-description",
-    "widget": "NComboBox",
     "tab": 15,
     "tabLabel": "panels.region.title",
     "subTab": 1,

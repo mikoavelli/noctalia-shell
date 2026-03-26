@@ -278,8 +278,6 @@ Singleton {
       property bool weatherEnabled: true
       property bool weatherShowEffects: true
       property bool use12hourFormat: false
-      property bool showCalendarEvents: true
-      property int firstDayOfWeek: -1 // -1 = auto (use locale), 0 = Sunday, 1 = Monday, 6 = Saturday
       property bool hideWeatherTimezone: false
       property bool hideWeatherCityName: false
     }
