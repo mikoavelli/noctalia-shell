@@ -17,7 +17,6 @@ import qs.Modules.Panels.Settings.Tabs.LockScreen
 import qs.Modules.Panels.Settings.Tabs.Notifications
 import qs.Modules.Panels.Settings.Tabs.Osd
 import qs.Modules.Panels.Settings.Tabs.Plugins
-import qs.Modules.Panels.Settings.Tabs.Region
 import qs.Modules.Panels.Settings.Tabs.SessionMenu
 import qs.Modules.Panels.Settings.Tabs.SystemMonitor
 import qs.Modules.Panels.Settings.Tabs.UserInterface
@@ -425,10 +424,6 @@ Item {
     ConnectionsTab {}
   }
   Component {
-    id: regionTab
-    RegionTab {}
-  }
-  Component {
     id: colorSchemeTab
     ColorSchemeTab {}
   }
@@ -560,12 +555,6 @@ Item {
             "label": "panels.connections.title",
             "icon": "settings-network",
             "source": connectionsTab
-          },
-          {
-            "id": SettingsPanel.Tab.Location,
-            "label": "panels.region.title",
-            "icon": "settings-location",
-            "source": regionTab
           },
           {
             "id": SettingsPanel.Tab.SystemMonitor,

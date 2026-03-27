@@ -279,7 +279,7 @@ Loader {
                   Component.onCompleted: forceActiveFocus()
                 }
 
-                // Main panel with password, weather, media, session controls
+                // Main panel with password, media, session controls
                 LockScreenPanel {
                   id: panelComponent
                   lockControl: lockContext

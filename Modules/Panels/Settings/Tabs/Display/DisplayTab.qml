@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 import qs.Commons
-import qs.Services.Location
 import qs.Services.UI
 import qs.Widgets
 

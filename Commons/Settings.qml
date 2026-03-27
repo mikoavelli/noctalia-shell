@@ -28,7 +28,6 @@ Singleton {
   readonly property string configDir: Quickshell.env("NOCTALIA_CONFIG_DIR") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/" + shellName + "/"
   readonly property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
   readonly property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
-  readonly property string defaultLocation: "Tokyo"
   readonly property string defaultAvatar: Quickshell.env("HOME") + "/.face"
   readonly property string defaultVideosDirectory: Quickshell.env("HOME") + "/Videos"
   readonly property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"
@@ -270,16 +269,6 @@ Singleton {
       // Bluetooth available devices list: hide items without a name
       property bool bluetoothHideUnnamedDevices: false
       property bool boxBorderEnabled: false
-    }
-
-    // location
-    property JsonObject location: JsonObject {
-      property string name: defaultLocation
-      property bool weatherEnabled: true
-      property bool weatherShowEffects: true
-      property bool use12hourFormat: false
-      property bool hideWeatherTimezone: false
-      property bool hideWeatherCityName: false
     }
 
     // calendar

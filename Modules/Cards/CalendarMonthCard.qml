@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
-import qs.Services.Location
 import qs.Services.System
 import qs.Services.UI
 import qs.Widgets
@@ -18,7 +17,7 @@ NBox {
   readonly property var now: Time.now
   property int calendarMonth: now.getMonth()
   property int calendarYear: now.getFullYear()
-  readonly property int firstDayOfWeek: -1 // Use locale
+  readonly property int firstDayOfWeek: 1 // Monday
 
   // Navigation functions
   function navigateToPreviousMonth() {

@@ -496,7 +496,6 @@
     "volume": "Volume",
     "volumes": "Volumes",
     "wallpaper": "Wallpaper",
-    "weather": "Weather",
     "week": "Week",
     "widgets": "Widgets",
     "width": "Width",
@@ -954,10 +953,6 @@
       "keybinds-right": "Move right",
       "keybinds-title": "Navigation keybinds",
       "keybinds-up": "Move up",
-      "language-desc": "Choose your preferred language for the application.",
-      "language-select-auto-detect": "Automatic",
-      "language-select-description": "Select the language used in the application's interface.",
-      "language-select-label": "Application language",
       "launch-setup-wizard": "Setup wizard",
       "profile-desc": "Edit your user details and avatar.",
       "profile-picture-description": "Your profile picture that appears throughout the interface.",
@@ -1038,31 +1033,6 @@
       "settings-view-mode-label": "View mode",
       "title": "Launcher"
     },
-    "location": {
-      "calendar-cards-desc": "Organize and enable/disable cards in the calendar panel.",
-      "calendar-cards-title": "Calendar cards",
-      "calendar-month-label": "Calendar Month",
-      "date-time-12hour-format-description": "Display time in 12-hour format on the lock screen and calendar. The bar clock has its own settings.",
-      "date-time-12hour-format-label": "Use 12-hour time format",
-      "date-time-desc": "Customize how date and time appear.",
-      "date-time-title": "Date & time",
-      "location-desc": "Get accurate weather and Night Light scheduling by setting your location.",
-      "location-search-description": "e.g. Toronto, ON",
-      "location-search-label": "Search for a location",
-      "location-search-placeholder": "Enter the location name",
-      "location-title": "Your location",
-      "weather-desc": "Choose your preferred temperature unit.",
-      "weather-enabled-description": "Show weather information throughout the interface and fetch weather data. When disabled, all weather elements will be hidden and no network requests will be made.",
-      "weather-enabled-label": "Enable weather",
-      "weather-hide-city-description": "Hide the city name from weather displays throughout the interface.",
-      "weather-hide-city-label": "Hide city name",
-      "weather-hide-timezone-description": "Hide the timezone abbreviation from weather displays throughout the interface.",
-      "weather-hide-timezone-label": "Hide timezone",
-      "weather-show-effects-description": "Show additional visual effects (like rain, snow, or lightning) on the weather card.",
-      "weather-show-effects-label": "Display weather effects",
-      "weather-show-in-calendar-description": "Show the daily weather forecast directly in your calendar view.",
-      "weather-show-in-calendar-label": "Display weather in calendar"
-    },
     "lock-screen": {
       "allow-password-with-fprintd-description": "When fprintd (fingerprint authentication) is active, this option lets you still login using your password instead of a fingerprint",
       "allow-password-with-fprintd-label": "Allow password login with fprintd",
@@ -1074,7 +1044,7 @@
       "clock-style-description": "Choose the visual style of the clock on the lock screen.",
       "clock-style-digital": "Digital",
       "clock-style-label": "Clock style",
-      "compact-lockscreen-description": "Show only the login input and system controls, hiding weather and media widgets.",
+      "compact-lockscreen-description": "Show only the login input and system controls, hiding media widget.",
       "compact-lockscreen-label": "Compact lock screen",
       "lock-on-suspend-description": "Automatically lock the screen when suspending the system.",
       "lock-on-suspend-label": "Lock on suspend",
@@ -1455,7 +1425,6 @@
   "system": {
     "cpu-temperature": "{temp}°C",
     "disk-usage": "{percent}%",
-    "location-display": "{name} ({coordinates})",
     "monitor-description": "{model} ({width}x{height} @ {scale}x)",
     "no-media-player-detected": "No media player detected",
     "scaling-percentage": "{percentage}%",
@@ -1681,17 +1650,6 @@
       "page-prefix": "Page",
       "page-suffix": "of {total}"
     }
-  },
-  "weather": {
-    "clear-sky": "Clear sky",
-    "drizzle": "Drizzle",
-    "fog": "Fog",
-    "mainly-clear": "Mainly clear",
-    "overcast": "Overcast",
-    "partly-cloudy": "Partly cloudy",
-    "rain-showers": "Rain showers",
-    "snow": "Snow",
-    "thunderstorm": "Thunderstorm"
   },
   "widgets": {
     "color-picker": {

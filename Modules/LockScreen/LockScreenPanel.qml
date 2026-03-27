@@ -6,7 +6,6 @@ import qs.Commons
 import qs.Services.Compositor
 import qs.Services.Hardware
 import qs.Services.Keyboard
-import qs.Services.Location
 import qs.Services.Media
 import qs.Widgets
 import qs.Widgets.AudioSpectrum
@@ -41,7 +40,6 @@ Item {
   property string pendingAction: ""
   property bool timerActive: false
   property int timeRemaining: 0
-  readonly property bool weatherReady: Settings.data.location.weatherEnabled && (LocationService.data.weather !== null)
 
   // Timer management functions
   function startTimer(action) {
@@ -176,7 +174,7 @@ Item {
     }
   }
 
-  // Bottom container with weather, password input and controls
+  // Bottom container with password input and controls
   Rectangle {
     id: bottomContainer
 
@@ -218,8 +216,7 @@ Item {
 
         Rectangle {
           Layout.preferredWidth: 220
-          // Expand to take remaining space when weather is hidden
-          Layout.fillWidth: !(Settings.data.location.weatherEnabled && LocationService.data.weather !== null)
+          Layout.fillWidth: true
           Layout.preferredHeight: 50
           radius: Style.radiusL
           color: "transparent"
@@ -324,120 +321,6 @@ Item {
         Item {
           Layout.preferredWidth: Style.marginM
           visible: !(MediaService.currentPlayer && MediaService.canPlay)
-        }
-
-        // Current weather
-        RowLayout {
-          visible: Settings.data.location.weatherEnabled && LocationService.data.weather !== null
-          Layout.preferredWidth: 180
-          spacing: Style.marginM
-
-          NIcon {
-            Layout.alignment: Qt.AlignVCenter
-            icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode, LocationService.data.weather.current_weather.is_day) : "weather-cloud-off"
-            pointSize: Style.fontSizeXXXL
-            color: Color.mPrimary
-          }
-
-          ColumnLayout {
-            Layout.fillWidth: true
-            spacing: Style.marginXXS
-
-            RowLayout {
-              Layout.fillWidth: true
-              spacing: Style.marginL
-
-              NText {
-                text: {
-                  var temp = LocationService.data.weather.current_weather.temperature;
-                  var suffix = "C";
-                  temp = Math.round(temp);
-                  return temp + "°" + suffix;
-                }
-                pointSize: Style.fontSizeXL
-                font.weight: Style.fontWeightBold
-                color: Color.mOnSurface
-              }
-
-              NText {
-                text: {
-                  var wind = LocationService.data.weather.current_weather.windspeed;
-                  var unit = "km/h";
-                  wind = Math.round(wind);
-                  return wind + " " + unit;
-                }
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurfaceVariant
-              }
-            }
-
-            RowLayout {
-              Layout.fillWidth: true
-              spacing: Style.marginM
-
-              NText {
-                text: Settings.data.location.name.split(",")[0]
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurfaceVariant
-                visible: !Settings.data.location.hideWeatherCityName
-              }
-
-              NText {
-                text: (LocationService.data.weather.current && LocationService.data.weather.current.relativehumidity_2m) ? LocationService.data.weather.current.relativehumidity_2m + "% humidity" : ""
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurfaceVariant
-              }
-            }
-          }
-        }
-
-        // Forecast
-        RowLayout {
-          visible: Settings.data.location.weatherEnabled && LocationService.data.weather !== null
-          Layout.preferredWidth: 260
-          Layout.rightMargin: 8
-          spacing: Style.marginXS
-
-          Repeater {
-            model: MediaService.currentPlayer && MediaService.canPlay ? 2 : 4
-            delegate: ColumnLayout {
-              Layout.fillWidth: true
-              spacing: Style.marginXXS + 1
-
-              NText {
-                text: {
-                  var weatherDate = new Date(LocationService.data.weather.daily.time[index].replace(/-/g, "/"));
-                  return I18n.locale.toString(weatherDate, "ddd");
-                }
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurfaceVariant
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-              }
-
-              NIcon {
-                Layout.alignment: Qt.AlignHCenter
-                icon: LocationService.weatherSymbolFromCode(LocationService.data.weather.daily.weathercode[index])
-                pointSize: Style.fontSizeXL
-                color: Color.mOnSurfaceVariant
-              }
-
-              NText {
-                text: {
-                  var max = LocationService.data.weather.daily.temperature_2m_max[index];
-                  var min = LocationService.data.weather.daily.temperature_2m_min[index];
-                  max = Math.round(max);
-                  min = Math.round(min);
-                  return max + "°/" + min + "°";
-                }
-                pointSize: Style.fontSizeM
-                font.weight: Style.fontWeightMedium
-                color: Color.mOnSurfaceVariant
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-              }
-            }
-          }
         }
 
         Item {

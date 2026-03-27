@@ -6,7 +6,6 @@ import Quickshell.Wayland
 import qs.Commons
 import qs.Modules.Cards
 import qs.Modules.MainScreen
-import qs.Services.Location
 import qs.Services.UI
 import qs.Widgets
 
