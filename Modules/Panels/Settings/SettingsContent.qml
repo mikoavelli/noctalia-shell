@@ -9,7 +9,6 @@ import qs.Modules.Panels.Settings.Tabs.Audio
 import qs.Modules.Panels.Settings.Tabs.Bar
 import qs.Modules.Panels.Settings.Tabs.ColorScheme
 import qs.Modules.Panels.Settings.Tabs.Connections
-import qs.Modules.Panels.Settings.Tabs.ControlCenter
 import qs.Modules.Panels.Settings.Tabs.Display
 import qs.Modules.Panels.Settings.Tabs.Dock
 import qs.Modules.Panels.Settings.Tabs.LockScreen
@@ -435,10 +434,6 @@ Item {
     NotificationsTab {}
   }
   Component {
-    id: controlCenterTab
-    ControlCenterTab {}
-  }
-  Component {
     id: userInterfaceTab
     UserInterfaceTab {}
   }
@@ -496,12 +491,6 @@ Item {
             "label": "panels.dock.title",
             "icon": "settings-dock",
             "source": dockTab
-          },
-          {
-            "id": SettingsPanel.Tab.ControlCenter,
-            "label": "panels.control-center.title",
-            "icon": "settings-control-center",
-            "source": controlCenterTab
           },
           {
             "id": SettingsPanel.Tab.Notifications,

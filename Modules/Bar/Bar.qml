@@ -290,14 +290,9 @@ Item {
                              }
                            }
                          }
-                         // Click is on empty bar background - open control center
-                         var controlCenterPanel = PanelService.getPanel("controlCenterPanel", screen);
-                         if (Settings.data.controlCenter.position === "close_to_bar_button") {
-                           // Will attempt to open the panel next to the bar button if any.
-                           controlCenterPanel?.toggle(null, "ControlCenter");
-                         } else {
-                           controlCenterPanel?.toggle();
-                         }
+                         // Click is on empty bar background - open settings
+                         var settingsPanel = PanelService.getPanel("settingsPanel", screen);
+                         settingsPanel?.toggle(null, "settingsPanel");
                          mouse.accepted = true;
                        }
                      }

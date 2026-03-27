@@ -18,7 +18,6 @@ Singleton {
                            "Bluetooth": bluetoothComponent,
                            "Brightness": brightnessComponent,
                            "Clock": clockComponent,
-                           "ControlCenter": controlCenterComponent,
                            "CustomButton": customButtonComponent,
                            "KeepAwake": keepAwakeComponent,
                            "KeyboardLayout": keyboardLayoutComponent,
@@ -48,7 +47,6 @@ Singleton {
                                      "Bluetooth": "WidgetSettings/BluetoothSettings.qml",
                                      "Brightness": "WidgetSettings/BrightnessSettings.qml",
                                      "Clock": "WidgetSettings/ClockSettings.qml",
-                                     "ControlCenter": "WidgetSettings/ControlCenterSettings.qml",
                                      "CustomButton": "WidgetSettings/CustomButtonSettings.qml",
                                      "KeepAwake": "WidgetSettings/KeepAwakeSettings.qml",
                                      "KeyboardLayout": "WidgetSettings/KeyboardLayoutSettings.qml",
@@ -112,14 +110,6 @@ Singleton {
                                     "formatHorizontal": "HH:mm ddd, MMM dd",
                                     "formatVertical": "HH mm - dd MM",
                                     "tooltipFormat": "HH:mm ddd, MMM dd"
-                                  },
-                                  "ControlCenter": {
-                                    "useDistroLogo": false,
-                                    "icon": "noctalia",
-                                    "customIconPath": "",
-                                    "colorizeDistroLogo": false,
-                                    "colorizeSystemIcon": "none",
-                                    "enableColorization": false
                                   },
                                   "CustomButton": {
                                     "icon": "heart",
@@ -349,9 +339,6 @@ Singleton {
   }
   property Component sessionMenuComponent: Component {
     SessionMenu {}
-  }
-  property Component controlCenterComponent: Component {
-    ControlCenter {}
   }
   property Component spacerComponent: Component {
     Spacer {}

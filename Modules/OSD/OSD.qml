@@ -183,9 +183,8 @@ Variants {
       root.currentBrightness = newBrightness;
       // Don't show OSD if brightness panel is open
       var brightnessPanel = PanelService.getPanel("brightnessPanel", root.modelData);
-      var controlCenterPanel = PanelService.getPanel("controlCenterPanel", root.modelData);
 
-      if ((brightnessPanel && brightnessPanel.isPanelOpen) || (controlCenterPanel && controlCenterPanel.isPanelOpen)) {
+      if (brightnessPanel && brightnessPanel.isPanelOpen) {
         return;
       }
       showOSD(OSD.Type.Brightness);
@@ -210,11 +209,10 @@ Variants {
       if (!isTypeEnabled(type))
         return;
 
-      // Suppress Audio OSD if Audio Panel or Control Center is open
+      // Suppress Audio OSD if Audio Panel is open
       if (type === OSD.Type.Volume || type === OSD.Type.InputVolume) {
         var audioPanel = PanelService.getPanel("audioPanel", root.modelData);
-        var controlCenterPanel = PanelService.getPanel("controlCenterPanel", root.modelData);
-        if ((audioPanel && audioPanel.isPanelOpen) || (controlCenterPanel && controlCenterPanel.isPanelOpen)) {
+        if (audioPanel && audioPanel.isPanelOpen) {
           return;
         }
       }

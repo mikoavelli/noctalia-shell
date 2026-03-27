@@ -50,10 +50,6 @@ ColumnLayout {
       var removedWidgets = newArray.splice(index, 1);
       widgets[section] = newArray;
       BarService.widgetsRevision++;
-
-      if (removedWidgets[0].id === "ControlCenter" && BarService.lookupWidget("ControlCenter") === undefined) {
-        ToastService.showWarning(I18n.tr("toast.missing-control-center.label"), I18n.tr("toast.missing-control-center.description"), 6000);
-      }
     }
   }
 

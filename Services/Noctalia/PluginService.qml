@@ -802,24 +802,6 @@ Singleton {
         }
       }
 
-      // Load control center widget component if provided
-      if (manifest.entryPoints && manifest.entryPoints.controlCenterWidget) {
-        var ccWidgetPath = pluginDir + "/" + manifest.entryPoints.controlCenterWidget;
-        var ccWidgetLoadVersion = PluginRegistry.pluginLoadVersions[pluginId] || 0;
-        var ccWidgetComponent = Qt.createComponent("file://" + ccWidgetPath + "?v=" + ccWidgetLoadVersion);
-
-        if (ccWidgetComponent.status === Component.Ready) {
-          root.loadedPlugins[pluginId].controlCenterWidget = ccWidgetComponent;
-          pluginApi.controlCenterWidget = ccWidgetComponent;
-
-          // Register with ControlCenterWidgetRegistry
-          ControlCenterWidgetRegistry.registerPluginWidget(pluginId, ccWidgetComponent, manifest.metadata);
-          Logger.i("PluginService", "Loaded control center widget for plugin:", pluginId);
-        } else if (ccWidgetComponent.status === Component.Error) {
-          root.recordPluginError(pluginId, "controlCenterWidget", ccWidgetComponent.errorString());
-        }
-      }
-
       Logger.i("PluginService", "Plugin loaded:", pluginId);
       root.pluginLoaded(pluginId);
 
@@ -849,11 +831,6 @@ Singleton {
       BarWidgetRegistry.unregisterPluginWidget(pluginId);
     }
 
-    // Unregister from ControlCenterWidgetRegistry
-    if (plugin.manifest.entryPoints && plugin.manifest.entryPoints.controlCenterWidget) {
-      ControlCenterWidgetRegistry.unregisterPluginWidget(pluginId);
-    }
-
     // Destroy Main instance if any
     if (plugin.mainInstance) {
       plugin.mainInstance.destroy();
@@ -881,7 +858,6 @@ Singleton {
         // Instance references (set after loading)
         property var mainInstance: null
         property var barWidget: null
-        property var controlCenterWidget: null
 
         // Panel state: which screen the plugin's panel is currently open on (null if closed)
         property var panelOpenScreen: null

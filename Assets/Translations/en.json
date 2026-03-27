@@ -18,6 +18,7 @@
     "raise-to-top": "Raise to top",
     "random-wallpaper": "Random wallpaper",
     "run-custom-command": "Run custom command",
+    "shortcuts-custom-button-on-middle-clicked-label": "Middle click command",
     "show-active-only": "Show active only",
     "show-all": "Show all",
     "toggle-mute": "Toggle mute",
@@ -84,16 +85,6 @@
       "use-monospaced-font-label": "Use monospaced font",
       "vertical-bar-description": "Use a space to separate each part onto a new line.",
       "vertical-bar-label": "Vertical bar"
-    },
-    "control-center": {
-      "browse-file": "Browse File",
-      "browse-library": "Browse Library",
-      "color-selection-description": "Apply theme colors to icons.",
-      "enable-colorization-description": "Enable colorization for the control center icon, applying theme colors.",
-      "icon-description": "Select an icon from the library or a custom file.",
-      "select-custom-icon": "Select a custom icon",
-      "use-distro-logo-description": "Use your distribution's logo instead of a custom icon.",
-      "use-distro-logo-label": "Use distro logo instead of icon"
     },
     "custom-button": {
       "collapse-condition-description": "If the output text matches this value, the button will collapse.",
@@ -499,16 +490,6 @@
     "windows": "Windows",
     "yes": "Yes"
   },
-  "control-center": {
-    "power-profile": {
-      "tooltip-action": "Power Profile",
-      "tooltip-disabled": "Install power-profiles-daemon to use power profiles"
-    },
-    "wifi": {
-      "label-disconnected": "Wi-Fi disconnected",
-      "label-ethernet": "Ethernet"
-    }
-  },
   "display-modes": {
     "always-hide": "Always hide",
     "always-show": "Always show",
@@ -562,10 +543,6 @@
       "type-floating": "Floating",
       "type-framed": "Framed",
       "type-simple": "Simple"
-    },
-    "control-center": {
-      "quick-settings-style-classic": "Classic",
-      "quick-settings-style-modern": "Modern"
     },
     "frame-rates-fps": "{fps} FPS",
     "notification-density": {
@@ -765,40 +742,6 @@
       "hide-unnamed-devices-label": "Hide unnamed devices",
       "pin-instructions": "Please enter the PIN code displayed on your device.",
       "title": "Connections"
-    },
-    "control-center": {
-      "cards-desc": "Customize which controls appear in the control center and in what order.",
-      "desc": "Configure the control center panel positioning and behavior.",
-      "position-description": "Choose where the control center panel appears when opened.",
-      "shortcuts-custom-button-command-description": "The command to execute when the button is clicked.",
-      "shortcuts-custom-button-default-tooltip": "Custom button, configure in settings.",
-      "shortcuts-custom-button-enable-on-state-logic-description": "Enable a second icon and 'hot' state based on a check command.",
-      "shortcuts-custom-button-enable-on-state-logic-label": "Enable on-state logic",
-      "shortcuts-custom-button-general-tooltip-text-description": "General description for the button's tooltip.",
-      "shortcuts-custom-button-general-tooltip-text-label": "General tooltip text",
-      "shortcuts-custom-button-icon-description": "Select an icon from the library.",
-      "shortcuts-custom-button-on-clicked-description": "Command to execute when the button is left-clicked.",
-      "shortcuts-custom-button-on-clicked-label": "Left click command",
-      "shortcuts-custom-button-on-middle-clicked-description": "Command to execute when the button is middle-clicked.",
-      "shortcuts-custom-button-on-middle-clicked-label": "Middle click command",
-      "shortcuts-custom-button-on-right-clicked-description": "Command to execute when the button is right-clicked.",
-      "shortcuts-custom-button-on-right-clicked-label": "Right click command",
-      "shortcuts-custom-button-on-state-command-description": "Command to execute to check if the button should be in the 'on' state. Returns 0 for on, non-zero for off.",
-      "shortcuts-custom-button-on-state-command-label": "On-state check command",
-      "shortcuts-custom-button-on-state-icon-description": "The icon for the button when it's in the 'on' state.",
-      "shortcuts-custom-button-on-state-icon-label": "On-state icon",
-      "shortcuts-custom-button-show-exec-tooltip-description": "Show tooltips with command details (left/right/middle click).",
-      "shortcuts-custom-button-show-exec-tooltip-label": "Show command tooltips",
-      "shortcuts-custom-button-state-checks-add": "Add State Check",
-      "shortcuts-custom-button-state-checks-command": "Command to execute for this state check",
-      "shortcuts-custom-button-state-checks-label": "State checks",
-      "shortcuts-custom-button-state-checks-remove": "Remove",
-      "shortcuts-custom-button-tooltip-description": "The tooltip to show when hovering over the button.",
-      "shortcuts-custom-button-tooltip-label": "Tooltip",
-      "shortcuts-title": "Shortcuts widgets",
-      "system-monitor-disk-path-description": "Select which disk mount point the system monitor card in the control center should monitor.",
-      "system-monitor-disk-path-label": "System monitor disk path",
-      "title": "Control Center"
     },
     "display": {
       "monitors-brightness-step-description": "Adjust the step size for brightness changes (scroll wheel and keyboard shortcuts).",
@@ -1363,10 +1306,6 @@
       "changed": "Keyboard layout changed to {layout}",
       "title": "Keyboard"
     },
-    "missing-control-center": {
-      "description": "The control center widget has been removed from the bar. To access it from the bar again, you will need to re-add the widget. You can open it with right clicking on the bar too",
-      "label": "Last control center widget removed"
-    },
     "night-light": {
       "forced": "Forced activation",
       "normal": "Normal mode",
@@ -1435,7 +1374,6 @@
     "night-light-not-installed": "Night Light (not available)",
     "noctalia-performance-enabled": "Noctalia Performance Mode",
     "open-annotation-tool": "Open with annotation tool",
-    "open-control-center": "Control center",
     "open-notification-history-enable-dnd": "Notification history",
     "open-settings": "Settings",
     "open-tray-dropdown": "System tray",

@@ -65,10 +65,6 @@ NBox {
       widgets[section] = newArray;
       _saveWidgets(widgets);
       BarService.widgetsRevision++;
-
-      if (removedWidgets[0].id === "ControlCenter" && BarService.lookupWidget("ControlCenter") === undefined) {
-        ToastService.showWarning(I18n.tr("toast.missing-control-center.label"), I18n.tr("toast.missing-control-center.description"), 12000);
-      }
     }
   }
 

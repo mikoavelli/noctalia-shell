@@ -188,9 +188,6 @@ Singleton {
           },
           {
             "id": "Brightness"
-          },
-          {
-            "id": "ControlCenter"
           }
         ]
       }
@@ -316,63 +313,6 @@ Singleton {
       property string sortOrder: "name" // "name", "name_desc", "date", "date_desc", "random"
       property list<var> favorites: []
       // Format: [{ "path": "/path/to/wallpaper.jpg", "colorScheme": "...", "useWallpaperColors": true, "generationMethod": "tonal-spot" }]
-    }
-
-    // control center
-    property JsonObject controlCenter: JsonObject {
-      // Position: close_to_bar_button, center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
-      property string position: "close_to_bar_button"
-      property string diskPath: "/"
-      property JsonObject shortcuts
-      shortcuts: JsonObject {
-        property list<var> left: [
-          {
-            "id": "Network"
-          },
-          {
-            "id": "Bluetooth"
-          },
-          {
-            "id": "WallpaperSelector"
-          },
-          {
-            "id": "NoctaliaPerformance"
-          }
-        ]
-        property list<var> right: [
-          {
-            "id": "Notifications"
-          },
-          {
-            "id": "PowerProfile"
-          },
-          {
-            "id": "KeepAwake"
-          }
-        ]
-      }
-      property list<var> cards: [
-        {
-          "id": "profile-card",
-          "enabled": true
-        },
-        {
-          "id": "shortcuts-card",
-          "enabled": true
-        },
-        {
-          "id": "audio-card",
-          "enabled": true
-        },
-        {
-          "id": "brightness-card",
-          "enabled": false
-        },
-        {
-          "id": "media-sysmon-card",
-          "enabled": true
-        }
-      ]
     }
 
     // system monitor
@@ -819,23 +759,7 @@ Singleton {
     }
 
     // -----------------
-    // 2. remove any non existing control center widget type
-    const ccSections = ["left", "right"];
-    for (var s = 0; s < ccSections.length; s++) {
-      const sectionName = ccSections[s];
-      const shortcuts = adapter.controlCenter.shortcuts[sectionName];
-      for (var i = shortcuts.length - 1; i >= 0; i--) {
-        var shortcut = shortcuts[i];
-        if (!ControlCenterWidgetRegistry.hasWidget(shortcut.id)) {
-          Logger.w(`Settings`, `!!! Deleted invalid control center widget ${shortcut.id} !!!`);
-          shortcuts.splice(i, 1);
-          removedWidget = true;
-        }
-      }
-    }
-
-    // -----------------
-    // 3. upgrade user widget settings
+    // 2. upgrade user widget settings
     for (var s = 0; s < sections.length; s++) {
       const sectionName = sections[s];
       for (var i = 0; i < adapter.bar.widgets[sectionName].length; i++) {

@@ -15,7 +15,6 @@ import qs.Modules.Panels.Battery
 import qs.Modules.Panels.Bluetooth
 import qs.Modules.Panels.Brightness
 import qs.Modules.Panels.Clock
-import qs.Modules.Panels.ControlCenter
 import qs.Modules.Panels.Dock
 import qs.Modules.Panels.Media
 import qs.Modules.Panels.Network
@@ -253,12 +252,6 @@ PanelWindow {
     BrightnessPanel {
       id: brightnessPanel
       objectName: "brightnessPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    ControlCenterPanel {
-      id: controlCenterPanel
-      objectName: "controlCenterPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 

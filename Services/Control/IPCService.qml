@@ -70,7 +70,6 @@ Singleton {
                                             "bar": SettingsPanel.Tab.Bar,
                                             "colorscheme": SettingsPanel.Tab.ColorScheme,
                                             "lockscreen": SettingsPanel.Tab.LockScreen,
-                                            "controlcenter": SettingsPanel.Tab.ControlCenter,
                                             "osd": SettingsPanel.Tab.OSD,
                                             "display": SettingsPanel.Tab.Display,
                                             "dock": SettingsPanel.Tab.Dock,
@@ -325,21 +324,6 @@ Singleton {
 
     function lockAndSuspend() {
       CompositorService.lockAndSuspend();
-    }
-  }
-
-  IpcHandler {
-    target: "controlCenter"
-    function toggle() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var controlCenterPanel = PanelService.getPanel("controlCenterPanel", screen);
-                                              if (Settings.data.controlCenter.position === "close_to_bar_button") {
-                                                // Will attempt to open the panel next to the bar button if any.
-                                                controlCenterPanel?.toggle(null, "ControlCenter");
-                                              } else {
-                                                controlCenterPanel?.toggle();
-                                              }
-                                            });
     }
   }
 

@@ -190,7 +190,7 @@ Item {
                    });
       }
 
-      // Append available players (like in Control Center) so user can switch from the bar
+      // Append available players so user can switch from the bar
       var players = MediaService.getAvailablePlayers ? MediaService.getAvailablePlayers() : [];
       if (players && players.length > 1) {
         for (var i = 0; i < players.length; i++) {

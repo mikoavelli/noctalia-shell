@@ -10,7 +10,7 @@ Singleton {
   id: root
 
   // Register a component that needs audio data, call this when a visualizer becomes active.
-  // Pass a unique identifier (e.g., "lockscreen", "controlcenter:screen1", "plugin:fancy-audiovisualizer")
+  // Pass a unique identifier (e.g., "lockscreen", "plugin:fancy-audiovisualizer")
   function registerComponent(componentId) {
     root.registeredComponents[componentId] = true;
     root.registeredComponents = Object.assign({}, root.registeredComponents);
