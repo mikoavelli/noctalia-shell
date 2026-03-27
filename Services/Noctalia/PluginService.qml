@@ -743,7 +743,6 @@ Singleton {
       // Initialize plugin entry with API and manifest
       root.loadedPlugins[pluginId] = {
         barWidget: null,
-        launcherProvider: null,
         mainInstance: null,
         api: pluginApi,
         manifest: manifest
@@ -803,24 +802,6 @@ Singleton {
         }
       }
 
-      // Load launcher provider component if provided (don't instantiate - Launcher will do that)
-      if (manifest.entryPoints && manifest.entryPoints.launcherProvider) {
-        var launcherProviderPath = pluginDir + "/" + manifest.entryPoints.launcherProvider;
-        var launcherProviderLoadVersion = PluginRegistry.pluginLoadVersions[pluginId] || 0;
-        var launcherProviderComponent = Qt.createComponent("file://" + launcherProviderPath + "?v=" + launcherProviderLoadVersion);
-
-        if (launcherProviderComponent.status === Component.Ready) {
-          root.loadedPlugins[pluginId].launcherProvider = launcherProviderComponent;
-          pluginApi.launcherProvider = launcherProviderComponent;
-
-          // Register with LauncherProviderRegistry
-          LauncherProviderRegistry.registerPluginProvider(pluginId, launcherProviderComponent, manifest.metadata);
-          Logger.i("PluginService", "Loaded launcher provider for plugin:", pluginId);
-        } else if (launcherProviderComponent.status === Component.Error) {
-          root.recordPluginError(pluginId, "launcherProvider", launcherProviderComponent.errorString());
-        }
-      }
-
       // Load control center widget component if provided
       if (manifest.entryPoints && manifest.entryPoints.controlCenterWidget) {
         var ccWidgetPath = pluginDir + "/" + manifest.entryPoints.controlCenterWidget;
@@ -868,11 +849,6 @@ Singleton {
       BarWidgetRegistry.unregisterPluginWidget(pluginId);
     }
 
-    // Unregister from LauncherProviderRegistry
-    if (plugin.manifest.entryPoints && plugin.manifest.entryPoints.launcherProvider) {
-      LauncherProviderRegistry.unregisterPluginProvider(pluginId);
-    }
-
     // Unregister from ControlCenterWidgetRegistry
     if (plugin.manifest.entryPoints && plugin.manifest.entryPoints.controlCenterWidget) {
       ControlCenterWidgetRegistry.unregisterPluginWidget(pluginId);
@@ -905,7 +881,6 @@ Singleton {
         // Instance references (set after loading)
         property var mainInstance: null
         property var barWidget: null
-        property var launcherProvider: null
         property var controlCenterWidget: null
 
         // Panel state: which screen the plugin's panel is currently open on (null if closed)
@@ -925,9 +900,6 @@ Singleton {
         property var openPanel: null
         property var closePanel: null
         property var togglePanel: null
-        property var openLauncher: null
-        property var closeLauncher: null
-        property var toggleLauncher: null
         property var withCurrentScreen: null
         property var tr: null
         property var trp: null
@@ -1005,53 +977,6 @@ Singleton {
         }
       }
       return false;
-    };
-
-    // ----------------------------------------
-    // Launcher provider methods
-    // ----------------------------------------
-
-    // Get the search prefix for this plugin's launcher provider
-    var getSearchPrefix = function () {
-      var metadata = LauncherProviderRegistry.getProviderMetadata("plugin:" + pluginId);
-      var prefix = (metadata && metadata.commandPrefix) ? metadata.commandPrefix : pluginId;
-      return ">" + prefix + " ";
-    };
-
-    api.openLauncher = function (screen) {
-      // Open the launcher with this plugin's provider active
-      if (!screen) {
-        Logger.w("PluginAPI", "No screen available for opening launcher");
-        return;
-      }
-      PanelService.openLauncherWithSearch(screen, getSearchPrefix());
-    };
-
-    api.closeLauncher = function (screen) {
-      // Close the launcher
-      if (!screen) {
-        Logger.w("PluginAPI", "No screen available for closing launcher");
-        return;
-      }
-      PanelService.closeLauncher(screen);
-    };
-
-    api.toggleLauncher = function (screen) {
-      // Toggle the launcher with this plugin's provider active
-      if (!screen) {
-        Logger.w("PluginAPI", "No screen available for toggling launcher");
-        return;
-      }
-      var searchPrefix = getSearchPrefix();
-      var searchText = PanelService.getLauncherSearchText(screen);
-      var isInThisMode = searchText.startsWith(searchPrefix);
-      if (!PanelService.isLauncherOpen(screen)) {
-        PanelService.openLauncherWithSearch(screen, searchPrefix);
-      } else if (isInThisMode) {
-        PanelService.closeLauncher(screen);
-      } else {
-        PanelService.setLauncherSearchText(screen, searchPrefix);
-      }
     };
 
     // ----------------------------------------

@@ -457,40 +457,6 @@ Item {
                                  Logger.w("Dock", `Could not find desktop entry for pinned app: ${modelData.appId}`);
                                  return;
                                }
-
-                               if (Settings.data.appLauncher.customLaunchPrefixEnabled && Settings.data.appLauncher.customLaunchPrefix) {
-                                 // Use custom launch prefix
-                                 const prefix = Settings.data.appLauncher.customLaunchPrefix.split(" ");
-
-                                 if (app.runInTerminal) {
-                                   const terminal = Settings.data.appLauncher.terminalCommand.split(" ");
-                                   const command = prefix.concat(terminal.concat(app.command));
-                                   Quickshell.execDetached(command);
-                                 } else {
-                                   const command = prefix.concat(app.command);
-                                   Quickshell.execDetached(command);
-                                 }
-                               } else if (Settings.data.appLauncher.useApp2Unit && ProgramCheckerService.app2unitAvailable && app.id) {
-                                 Logger.d("Dock", `Using app2unit for: ${app.id}`);
-                                 if (app.runInTerminal)
-                                 Quickshell.execDetached(["app2unit", "--", app.id + ".desktop"]);
-                                 else
-                                 Quickshell.execDetached(["app2unit", "--"].concat(app.command));
-                               } else {
-                                 // Fallback logic when app2unit is not used
-                                 if (app.runInTerminal) {
-                                   Logger.d("Dock", "Executing terminal app manually: " + app.name);
-                                   const terminal = Settings.data.appLauncher.terminalCommand.split(" ");
-                                   const command = terminal.concat(app.command);
-                                   CompositorService.spawn(command);
-                                 } else if (app.command && app.command.length > 0) {
-                                   CompositorService.spawn(app.command);
-                                 } else if (app.execute) {
-                                   app.execute();
-                                 } else {
-                                   Logger.w("Dock", `Could not launch: ${app.name}. No valid launch method.`);
-                                 }
-                               }
                              }
                            }
                          }

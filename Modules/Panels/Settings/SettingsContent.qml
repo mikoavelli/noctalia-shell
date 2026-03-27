@@ -12,7 +12,6 @@ import qs.Modules.Panels.Settings.Tabs.Connections
 import qs.Modules.Panels.Settings.Tabs.ControlCenter
 import qs.Modules.Panels.Settings.Tabs.Display
 import qs.Modules.Panels.Settings.Tabs.Dock
-import qs.Modules.Panels.Settings.Tabs.Launcher
 import qs.Modules.Panels.Settings.Tabs.LockScreen
 import qs.Modules.Panels.Settings.Tabs.Notifications
 import qs.Modules.Panels.Settings.Tabs.Osd
@@ -400,10 +399,6 @@ Item {
     GeneralTab {}
   }
   Component {
-    id: launcherTab
-    LauncherTab {}
-  }
-  Component {
     id: barTab
     BarTab {}
   }
@@ -507,12 +502,6 @@ Item {
             "label": "panels.control-center.title",
             "icon": "settings-control-center",
             "source": controlCenterTab
-          },
-          {
-            "id": SettingsPanel.Tab.Launcher,
-            "label": "panels.launcher.title",
-            "icon": "settings-launcher",
-            "source": launcherTab
           },
           {
             "id": SettingsPanel.Tab.Notifications,

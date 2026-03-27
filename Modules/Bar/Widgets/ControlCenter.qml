@@ -77,11 +77,6 @@ NIconButton {
 
     model: [
       {
-        "label": I18n.tr("actions.open-launcher"),
-        "action": "open-launcher",
-        "icon": "search"
-      },
-      {
         "label": I18n.tr("actions.open-settings"),
         "action": "open-settings",
         "icon": "adjustments"
@@ -97,9 +92,7 @@ NIconButton {
                    contextMenu.close();
                    PanelService.closeContextMenu(screen);
 
-                   if (action === "open-launcher") {
-                     PanelService.toggleLauncher(screen);
-                   } else if (action === "open-settings") {
+                   if (action === "open-settings") {
                      var panel = PanelService.getPanel("settingsPanel", screen);
                      panel.requestedTab = SettingsPanel.Tab.General;
                      panel.toggle();
@@ -121,7 +114,6 @@ NIconButton {
   onRightClicked: {
     PanelService.showContextMenu(contextMenu, root, screen);
   }
-  onMiddleClicked: PanelService.toggleLauncher(screen)
 
   IconImage {
     id: customOrDistroLogo

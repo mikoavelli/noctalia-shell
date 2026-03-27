@@ -23,7 +23,6 @@ Singleton {
                            "KeepAwake": keepAwakeComponent,
                            "KeyboardLayout": keyboardLayoutComponent,
                            "LockKeys": lockKeysComponent,
-                           "Launcher": launcherComponent,
                            "MediaMini": mediaMiniComponent,
                            "Microphone": microphoneComponent,
                            "Network": networkComponent,
@@ -53,7 +52,6 @@ Singleton {
                                      "CustomButton": "WidgetSettings/CustomButtonSettings.qml",
                                      "KeepAwake": "WidgetSettings/KeepAwakeSettings.qml",
                                      "KeyboardLayout": "WidgetSettings/KeyboardLayoutSettings.qml",
-                                     "Launcher": "WidgetSettings/LauncherSettings.qml",
                                      "LockKeys": "WidgetSettings/LockKeysSettings.qml",
                                      "MediaMini": "WidgetSettings/MediaMiniSettings.qml",
                                      "Microphone": "WidgetSettings/MicrophoneSettings.qml",
@@ -174,10 +172,6 @@ Singleton {
                                     "numLockIcon": "letter-n",
                                     "scrollLockIcon": "letter-s",
                                     "hideWhenOff": false
-                                  },
-                                  "Launcher": {
-                                    "icon": "rocket",
-                                    "iconColor": "none"
                                   },
                                   "MediaMini": {
                                     "hideMode": "hidden",
@@ -334,9 +328,6 @@ Singleton {
   }
   property Component lockKeysComponent: Component {
     LockKeys {}
-  }
-  property Component launcherComponent: Component {
-    Launcher {}
   }
   property Component mediaMiniComponent: Component {
     MediaMini {}

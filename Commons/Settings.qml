@@ -159,9 +159,6 @@ Singleton {
       widgets: JsonObject {
         property list<var> left: [
           {
-            "id": "Launcher"
-          },
-          {
             "id": "Clock"
           },
           {
@@ -322,36 +319,6 @@ Singleton {
       property string sortOrder: "name" // "name", "name_desc", "date", "date_desc", "random"
       property list<var> favorites: []
       // Format: [{ "path": "/path/to/wallpaper.jpg", "colorScheme": "...", "useWallpaperColors": true, "generationMethod": "tonal-spot" }]
-    }
-
-    // applauncher
-    property JsonObject appLauncher: JsonObject {
-      property bool enableClipboardHistory: false
-      property bool autoPasteClipboard: false
-      property bool enableClipPreview: true
-      property bool clipboardWrapText: true
-      property string clipboardWatchTextCommand: "wl-paste --type text --watch cliphist store"
-      property string clipboardWatchImageCommand: "wl-paste --type image --watch cliphist store"
-      property string position: "center"  // Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
-      property list<string> pinnedApps: []
-      property bool useApp2Unit: false
-      property bool sortByMostUsed: true
-      property string terminalCommand: "alacritty -e"
-      property bool customLaunchPrefixEnabled: false
-      property string customLaunchPrefix: ""
-      // View mode: "list" or "grid"
-      property string viewMode: "list"
-      property bool showCategories: true
-      // Icon mode: "tabler" or "native"
-      property string iconMode: "tabler"
-      property bool showIconBackground: false
-      property bool enableSettingsSearch: true
-      property bool enableWindowsSearch: true
-      property bool enableSessionSearch: true
-      property bool ignoreMouseInput: false
-      property string screenshotAnnotationTool: ""
-      property bool overviewLayer: false
-      property string density: "default" // "compact", "default", "comfortable"
     }
 
     // control center

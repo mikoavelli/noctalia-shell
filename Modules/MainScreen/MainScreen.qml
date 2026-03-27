@@ -17,7 +17,6 @@ import qs.Modules.Panels.Brightness
 import qs.Modules.Panels.Clock
 import qs.Modules.Panels.ControlCenter
 import qs.Modules.Panels.Dock
-import qs.Modules.Panels.Launcher
 import qs.Modules.Panels.Media
 import qs.Modules.Panels.Network
 import qs.Modules.Panels.NotificationHistory
@@ -266,12 +265,6 @@ PanelWindow {
     ClockPanel {
       id: clockPanel
       objectName: "clockPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    Launcher {
-      id: launcherPanel
-      objectName: "launcherPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 

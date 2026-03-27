@@ -87,7 +87,7 @@ Item {
               let screen = CompositorService.getFocusedScreen();
 
               if (screen) {
-                // Apply the bar check if configured (skip for overlay launcher etc.)
+                // Apply the bar check if configured
                 if (!skipBarCheck && !Settings.data.general.allowPanelsOnScreenWithoutBar) {
                   const monitors = Settings.data.bar.monitors || [];
                   const hasBar = monitors.length === 0 || monitors.includes(screen.name);

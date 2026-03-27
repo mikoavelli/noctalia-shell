@@ -75,7 +75,6 @@ Singleton {
                                             "display": SettingsPanel.Tab.Display,
                                             "dock": SettingsPanel.Tab.Dock,
                                             "general": SettingsPanel.Tab.General,
-                                            "launcher": SettingsPanel.Tab.Launcher,
                                             "location": SettingsPanel.Tab.Location,
                                             "connections": SettingsPanel.Tab.Connections,
                                             "notifications": SettingsPanel.Tab.Notifications,
@@ -203,97 +202,6 @@ Singleton {
     }
     function disable() {
       IdleInhibitorService.removeManualInhibitor();
-    }
-  }
-
-  IpcHandler {
-    target: "launcher"
-    function toggle() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInAppMode = !searchText.startsWith(">");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                // Closed -> open in app mode
-                                                PanelService.openLauncherWithSearch(screen, "");
-                                              } else if (isInAppMode) {
-                                                // Already in app mode -> close
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                // In another mode -> switch to app mode
-                                                PanelService.setLauncherSearchText(screen, "");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
-    }
-    function clipboard() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInClipMode = searchText.startsWith(">clip");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                // Closed -> open in clipboard mode
-                                                PanelService.openLauncherWithSearch(screen, ">clip ");
-                                              } else if (isInClipMode) {
-                                                // Already in clipboard mode -> close
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                // In another mode -> switch to clipboard mode
-                                                PanelService.setLauncherSearchText(screen, ">clip ");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
-    }
-    function command() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInCmdMode = searchText.startsWith(">cmd");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                PanelService.openLauncherWithSearch(screen, ">cmd ");
-                                              } else if (isInCmdMode) {
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                PanelService.setLauncherSearchText(screen, ">cmd ");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
-    }
-    function emoji() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInEmojiMode = searchText.startsWith(">emoji");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                // Closed -> open in emoji mode
-                                                PanelService.openLauncherWithSearch(screen, ">emoji ");
-                                              } else if (isInEmojiMode) {
-                                                // Already in emoji mode -> close
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                // In another mode -> switch to emoji mode
-                                                PanelService.setLauncherSearchText(screen, ">emoji ");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
-    }
-    function windows() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInWindowsMode = searchText.startsWith(">win");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                PanelService.openLauncherWithSearch(screen, ">win ");
-                                              } else if (isInWindowsMode) {
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                PanelService.setLauncherSearchText(screen, ">win ");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
-    }
-    function settings() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var searchText = PanelService.getLauncherSearchText(screen);
-                                              var isInSettingsMode = searchText.startsWith(">settings");
-                                              if (!PanelService.isLauncherOpen(screen)) {
-                                                PanelService.openLauncherWithSearch(screen, ">settings ");
-                                              } else if (isInSettingsMode) {
-                                                PanelService.closeLauncher(screen);
-                                              } else {
-                                                PanelService.setLauncherSearchText(screen, ">settings ");
-                                              }
-                                            }, Settings.data.appLauncher.overviewLayer);
     }
   }
 
