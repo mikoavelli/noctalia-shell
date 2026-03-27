@@ -286,10 +286,6 @@ Singleton {
     property JsonObject calendar: JsonObject {
       property list<var> cards: [
         {
-          "id": "calendar-header-card",
-          "enabled": true
-        },
-        {
           "id": "calendar-month-card",
           "enabled": true
         }

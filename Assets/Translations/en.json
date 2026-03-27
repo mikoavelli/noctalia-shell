@@ -497,7 +497,6 @@
     "volumes": "Volumes",
     "wallpaper": "Wallpaper",
     "weather": "Weather",
-    "weather-loading": "Loading weather...",
     "week": "Week",
     "widgets": "Widgets",
     "width": "Width",
@@ -1042,7 +1041,6 @@
     "location": {
       "calendar-cards-desc": "Organize and enable/disable cards in the calendar panel.",
       "calendar-cards-title": "Calendar cards",
-      "calendar-header-label": "Calendar Header",
       "calendar-month-label": "Calendar Month",
       "date-time-12hour-format-description": "Display time in 12-hour format on the lock screen and calendar. The bar clock has its own settings.",
       "date-time-12hour-format-label": "Use 12-hour time format",

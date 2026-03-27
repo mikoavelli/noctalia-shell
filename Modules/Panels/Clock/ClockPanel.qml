@@ -36,8 +36,6 @@ SmartPanel {
           Layout.fillWidth: true
           sourceComponent: {
             switch (modelData.id) {
-            case "calendar-header-card":
-              return calendarHeaderCard;
             case "calendar-month-card":
               return calendarMonthCard;
             default:
@@ -46,13 +44,6 @@ SmartPanel {
           }
         }
       }
-    }
-  }
-
-  Component {
-    id: calendarHeaderCard
-    CalendarHeaderCard {
-      Layout.fillWidth: true
     }
   }
 
