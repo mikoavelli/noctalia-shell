@@ -621,14 +621,6 @@ Rectangle {
     }
   }
 
-  CalculatorProvider {
-    id: calcProvider
-    Component.onCompleted: {
-      registerProvider(this);
-      Logger.d("Launcher", "Registered: CalculatorProvider");
-    }
-  }
-
   SettingsProvider {
     id: settingsProvider
     Component.onCompleted: {
