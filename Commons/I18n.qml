@@ -235,27 +235,6 @@ Singleton {
   }
 
   // -------------------------------------------
-  // Get all translation keys (useful for debugging)
-  function getAllKeys(obj, prefix) {
-    if (typeof obj === "undefined")
-      obj = translations;
-    if (typeof prefix === "undefined")
-      prefix = "";
-
-    var keys = [];
-    for (var key in (obj || {})) {
-      const value = obj[key];
-      const fullKey = prefix ? `${prefix}.${key}` : key;
-      if (typeof value === "object" && value !== null) {
-        keys = keys.concat(getAllKeys(value, fullKey));
-      } else if (typeof value === "string") {
-        keys.push(fullKey);
-      }
-    }
-    return keys;
-  }
-
-  // -------------------------------------------
   // Reload translations (useful for development)
   function reload() {
     Logger.d("I18n", "Reloading translations");

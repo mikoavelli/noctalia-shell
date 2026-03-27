@@ -11,10 +11,6 @@ Singleton {
     return _go(search, targets, options);
   }
 
-  function single(search, target) {
-    return _single(search, target);
-  }
-
   function highlight(result, open, close) {
     if (open === undefined)
       open = '<b>';
@@ -25,10 +21,6 @@ Singleton {
 
   function prepare(target) {
     return _prepare(target);
-  }
-
-  function cleanup() {
-    return _cleanup();
   }
 
   // Internal implementation
@@ -278,11 +270,6 @@ Singleton {
                        });
   }
 
-  function _cleanup() {
-    _preparedCache.clear();
-    _preparedSearchCache.clear();
-  }
-
   function _isPrepared(x) {
     return typeof x === 'object' && typeof x._bitflags === 'number';
   }
@@ -323,18 +310,6 @@ Singleton {
     while (obj && (++i < len))
       obj = obj[segs[i]];
     return obj;
-  }
-
-  function _single(search, target) {
-    if (!search || !target)
-      return _NULL;
-    var preparedSearch = _getPreparedSearch(search);
-    if (!_isPrepared(target))
-      target = _getPrepared(target);
-    var searchBitflags = preparedSearch.bitflags;
-    if ((searchBitflags & target._bitflags) !== searchBitflags)
-      return _NULL;
-    return _algorithm(preparedSearch, target);
   }
 
   function _highlight(result, open, close) {

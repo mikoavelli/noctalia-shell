@@ -156,11 +156,6 @@ Singleton {
     return Math.floor(n / 2) * 2 + 1;
   }
 
-  // Ensures a number is always even (rounds down to nearest even)
-  function toEven(n) {
-    return Math.floor(n / 2) * 2;
-  }
-
   // Get bar height for a specific density and orientation
   function getBarHeightForDensity(density, isVertical) {
     let h;

@@ -17,7 +17,7 @@ Singleton {
   // Programs to check - maps property names to commands
   readonly property var programsToCheck: ({
                                             "nmcliAvailable": ["sh", "-c", "command -v nmcli"],
-                                            "wlsunsetAvailable": ["sh", "-c", "command -v wlsunset"],
+                                            "wlsunsetAvailable": ["sh", "-c", "command -v wlsunset"]
                                           })
 
   // Discord client auto-detection

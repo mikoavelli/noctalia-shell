@@ -15,7 +15,6 @@ Singleton {
   property bool isLoaded: false
   property bool reloadSettings: false
   property bool directoriesCreated: false
-  property bool isFreshInstall: false
 
   /*
   Shell directories.
@@ -109,8 +108,6 @@ Singleton {
         return;
       }
       if (error.toString().includes("No such file") || error === 2) {
-        // File doesn't exist, create it with default values
-        root.isFreshInstall = true;
         writeAdapter();
       }
     }
@@ -593,24 +590,6 @@ Singleton {
     }
 
     return current;
-  }
-
-  // -----------------------------------------------------
-  // Compare current value with default value
-  // Returns true if values differ, false if they match or default is not found
-  function isValueChanged(path, currentValue) {
-    var defaultValue = getDefaultValue(path);
-    if (defaultValue === undefined) {
-      return false; // Can't compare if default not found
-    }
-
-    // Deep comparison for objects and arrays
-    if (typeof currentValue === "object" && typeof defaultValue === "object") {
-      return JSON.stringify(currentValue) !== JSON.stringify(defaultValue);
-    }
-
-    // Simple comparison for primitives
-    return currentValue !== defaultValue;
   }
 
   // -----------------------------------------------------

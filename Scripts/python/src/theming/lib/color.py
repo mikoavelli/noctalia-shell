@@ -154,12 +154,6 @@ def hsl_to_rgb(h: float, s: float, l: float) -> RGB:
     )
 
 
-def adjust_lightness(color: Color, target_l: float) -> Color:
-    """Adjust a color's lightness to a target value (0-1)."""
-    h, s, _ = color.to_hsl()
-    return Color.from_hsl(h, s, target_l)
-
-
 def shift_hue(color: Color, degrees: float) -> Color:
     """Shift a color's hue by specified degrees."""
     h, s, l = color.to_hsl()

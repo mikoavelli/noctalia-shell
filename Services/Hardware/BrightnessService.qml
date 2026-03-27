@@ -19,17 +19,6 @@ Singleton {
   // Signal emitted when a specific monitor's brightness changes, includes monitor context
   signal monitorBrightnessChanged(var monitor, real newBrightness)
 
-  function getAvailableMethods(): list<string> {
-    var methods = [];
-    if (Settings.data.brightness.enableDdcSupport && monitors.some(m => m.isDdc))
-      methods.push("ddcutil");
-    if (monitors.some(m => !m.isDdc))
-      methods.push("internal");
-    if (appleDisplayPresent)
-      methods.push("apple");
-    return methods;
-  }
-
   // Global helpers for IPC and shortcuts
   function increaseBrightness(): void {
     monitors.forEach(m => m.increaseBrightness());
@@ -41,10 +30,6 @@ Singleton {
 
   function setBrightness(value: real): void {
     monitors.forEach(m => m.setBrightnessDebounced(value));
-  }
-
-  function getDetectedDisplays(): list<var> {
-    return detectedDisplays;
   }
 
   reloadableId: "brightness"
@@ -311,7 +296,7 @@ Singleton {
 
     // Timer for debouncing rapid changes
     readonly property Timer timer: Timer {
-      interval: 250
+      interval: 0
       onTriggered: {
         if (!isNaN(monitor.queuedBrightness)) {
           monitor.setBrightness(monitor.queuedBrightness);

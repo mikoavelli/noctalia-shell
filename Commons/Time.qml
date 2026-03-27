@@ -22,16 +22,6 @@ Singleton {
     return Math.floor(root.now / 1000);
   }
 
-  // Timer state (for countdown/stopwatch)
-  property bool timerRunning: false
-  property bool timerStopwatchMode: false
-  property int timerRemainingSeconds: 0
-  property int timerTotalSeconds: 0
-  property int timerElapsedSeconds: 0
-  property bool timerSoundPlaying: false
-  property int timerStartTimestamp: 0 // Unix timestamp when timer was started
-  property int timerPausedAt: 0 // Value when paused (for resuming)
-
   Timer {
     id: updateTimer
     interval: 1000
@@ -50,20 +40,6 @@ Singleton {
       root._lastUpdateTs = currentTs;
 
       root.now = newTime;
-
-      // Update timer if running
-      if (root.timerRunning && root.timerStartTimestamp > 0) {
-        const elapsedSinceStart = root.timestamp - root.timerStartTimestamp;
-
-        if (root.timerStopwatchMode) {
-          root.timerElapsedSeconds = root.timerPausedAt + elapsedSinceStart;
-        } else {
-          root.timerRemainingSeconds = root.timerTotalSeconds - elapsedSinceStart;
-          if (root.timerRemainingSeconds <= 0) {
-            root.timerOnFinished();
-          }
-        }
-      }
 
       // Adjust next interval to sync with the start of the next second
       var msIntoSecond = newTime.getMilliseconds();
@@ -134,7 +110,7 @@ Singleton {
     return parts.join(' ');
   }
 
-  // Format a date into
+  // Format a date into relative time
   function formatRelativeTime(date) {
     if (!date)
       return "";
@@ -158,75 +134,5 @@ Singleton {
     return I18n.tr("notifications.time.diff-dd", {
                      "diff": Math.floor(diff / 86400000)
                    });
-  }
-
-  // Timer functions
-  function timerStart() {
-    if (root.timerStopwatchMode) {
-      root.timerRunning = true;
-      root.timerStartTimestamp = root.timestamp;
-      root.timerPausedAt = root.timerElapsedSeconds;
-    } else {
-      if (root.timerRemainingSeconds <= 0) {
-        return;
-      }
-      root.timerRunning = true;
-      root.timerTotalSeconds = root.timerRemainingSeconds;
-      root.timerStartTimestamp = root.timestamp;
-      root.timerPausedAt = 0;
-    }
-  }
-
-  function timerPause() {
-    if (root.timerRunning) {
-      // Calculate and set remainingSeconds BEFORE changing timerRunning
-      // This ensures the UI sees the correct value when it reacts to timerRunning changing
-      if (root.timerStopwatchMode) {
-        root.timerPausedAt = root.timerElapsedSeconds;
-      } else {
-        // Calculate remaining seconds at the exact moment of pause
-        // Use current time directly to avoid stale timestamp issues
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const elapsedSinceStart = currentTimestamp - root.timerStartTimestamp;
-        const currentRemaining = root.timerTotalSeconds - elapsedSinceStart;
-        root.timerPausedAt = Math.max(0, currentRemaining);
-
-        // CRITICAL: Update timerRemainingSeconds to the paused value BEFORE changing timerRunning
-        // This ensures UI sees correct value when it reacts to timerRunning change
-        root.timerRemainingSeconds = root.timerPausedAt;
-      }
-    }
-    root.timerRunning = false;
-    root.timerStartTimestamp = 0;
-    // Stop any repeating notification sound when pausing
-    SoundService.stopSound("alarm-beep.wav");
-    root.timerSoundPlaying = false;
-  }
-
-  function timerReset() {
-    root.timerRunning = false;
-    root.timerStartTimestamp = 0;
-    if (root.timerStopwatchMode) {
-      root.timerElapsedSeconds = 0;
-      root.timerPausedAt = 0;
-    } else {
-      root.timerRemainingSeconds = 0;
-      root.timerTotalSeconds = 0;
-      root.timerPausedAt = 0;
-    }
-    // Stop any repeating notification sound
-    SoundService.stopSound("alarm-beep.wav");
-    root.timerSoundPlaying = false;
-  }
-
-  function timerOnFinished() {
-    root.timerRunning = false;
-    root.timerRemainingSeconds = 0;
-    // Play notification sound with repeat at lower volume
-    root.timerSoundPlaying = true;
-    SoundService.playSound("alarm-beep.wav", {
-                             repeat: true,
-                             volume: 0.3
-                           });
   }
 }
