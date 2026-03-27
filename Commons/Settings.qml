@@ -292,10 +292,6 @@ Singleton {
         {
           "id": "calendar-month-card",
           "enabled": true
-        },
-        {
-          "id": "weather-card",
-          "enabled": true
         }
       ]
     }
@@ -422,10 +418,6 @@ Singleton {
         {
           "id": "brightness-card",
           "enabled": false
-        },
-        {
-          "id": "weather-card",
-          "enabled": true
         },
         {
           "id": "media-sysmon-card",

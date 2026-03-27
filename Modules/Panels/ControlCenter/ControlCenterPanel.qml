@@ -39,9 +39,6 @@ SmartPanel {
       const card = Settings.data.controlCenter.cards[i];
       if (!card.enabled)
         continue;
-      const contributes = (card.id !== "weather-card" || Settings.data.location.weatherEnabled);
-      if (!contributes)
-        continue;
       count++;
       switch (card.id) {
       case "profile-card":
@@ -55,9 +52,6 @@ SmartPanel {
         break;
       case "brightness-card":
         height += brightnessHeight;
-        break;
-      case "weather-card":
-        height += weatherHeight;
         break;
       case "media-sysmon-card":
         height += mediaSysMonHeight;
@@ -99,7 +93,7 @@ SmartPanel {
       Repeater {
         model: Settings.data.controlCenter.cards
         Loader {
-          active: modelData.enabled && (modelData.id !== "weather-card" || Settings.data.location.weatherEnabled)
+          active: modelData.enabled
           visible: active
           Layout.fillWidth: true
           Layout.preferredHeight: {
@@ -112,8 +106,6 @@ SmartPanel {
               return audioHeight;
             case "brightness-card":
               return brightnessHeight;
-            case "weather-card":
-              return weatherHeight;
             case "media-sysmon-card":
               return mediaSysMonHeight;
             default:
@@ -130,8 +122,6 @@ SmartPanel {
               return audioCard;
             case "brightness-card":
               return brightnessCard;
-            case "weather-card":
-              return weatherCard;
             case "media-sysmon-card":
               return mediaSysMonCard;
             }
@@ -158,15 +148,6 @@ SmartPanel {
     Component {
       id: brightnessCard
       BrightnessCard {}
-    }
-
-    Component {
-      id: weatherCard
-      WeatherCard {
-        Component.onCompleted: {
-          root.weatherHeight = this.height;
-        }
-      }
     }
 
     Component {

@@ -31,7 +31,7 @@ SmartPanel {
       Repeater {
         model: Settings.data.calendar.cards
         Loader {
-          active: modelData.enabled && (modelData.id !== "weather-card" || Settings.data.location.weatherEnabled)
+          active: modelData.enabled
           visible: active
           Layout.fillWidth: true
           sourceComponent: {
@@ -40,8 +40,6 @@ SmartPanel {
               return calendarHeaderCard;
             case "calendar-month-card":
               return calendarMonthCard;
-            case "weather-card":
-              return weatherCard;
             default:
               return null;
             }
@@ -62,15 +60,6 @@ SmartPanel {
     id: calendarMonthCard
     CalendarMonthCard {
       Layout.fillWidth: true
-    }
-  }
-
-  Component {
-    id: weatherCard
-    WeatherCard {
-      Layout.fillWidth: true
-      forecastDays: 5
-      showLocation: false
     }
   }
 }

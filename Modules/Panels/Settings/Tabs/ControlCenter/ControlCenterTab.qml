@@ -39,12 +39,6 @@ ColumnLayout {
       "required": false
     },
     {
-      "id": "weather-card",
-      "text": "Weather",
-      "enabled": true,
-      "required": false
-    },
-    {
       "id": "media-sysmon-card",
       "text": "Media and System Monitor",
       "enabled": true,
@@ -90,10 +84,6 @@ ColumnLayout {
         if (settingCard.id === cardsDefault[j].id) {
           var card = cardsDefault[j];
           card.enabled = settingCard.enabled;
-          // Auto-disable weather card if weather is disabled
-          if (card.id === "weather-card" && !Settings.data.location.weatherEnabled) {
-            card.enabled = false;
-          }
           cardsModel.push(card);
         }
       }
@@ -110,12 +100,7 @@ ColumnLayout {
       }
 
       if (!found) {
-        var card = cardsDefault[i];
-        // Auto-disable weather card if weather is disabled
-        if (card.id === "weather-card" && !Settings.data.location.weatherEnabled) {
-          card.enabled = false;
-        }
-        cardsModel.push(card);
+        cardsModel.push(cardsDefault[i]);
       }
     }
   }
