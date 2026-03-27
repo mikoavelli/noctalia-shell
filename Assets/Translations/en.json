@@ -769,10 +769,6 @@
     "color-scheme": {
       "color-source-use-wallpaper-colors-description": "Generate color schemes from your wallpaper. Automatically extracts colors to create a cohesive theme.",
       "color-source-use-wallpaper-colors-label": "Use wallpaper colors",
-      "dark-mode-mode-description": "Enables automatic switching between Light and Dark Mode.",
-      "dark-mode-mode-label": "Dark Mode schedule",
-      "dark-mode-mode-manual": "Manual",
-      "dark-mode-mode-off": "Off",
       "dark-mode-switch-description": "Switches to a darker theme for easier viewing at night.",
       "delete-error-description": "Failed to delete {scheme}",
       "delete-error-title": "Delete failed",
@@ -886,12 +882,6 @@
       "monitors-title": "Per-monitor settings",
       "night-light-enable-description": "Apply a warm color filter to reduce blue light emission.",
       "night-light-enable-label": "Enable Night Light",
-      "night-light-manual-schedule-description": "Set custom times for sunrise and sunset.",
-      "night-light-manual-schedule-label": "Manual scheduling",
-      "night-light-manual-schedule-select-start": "Select start time",
-      "night-light-manual-schedule-select-stop": "Select stop time",
-      "night-light-manual-schedule-sunrise": "Sunrise time",
-      "night-light-manual-schedule-sunset": "Sunset time",
       "night-light-temperature-description": "Set the color warmth of the display.",
       "night-light-temperature-label": "Color temperature",
       "title": "Display"

@@ -65,7 +65,7 @@ Singleton {
   Timer {
     id: updateTimer
     interval: 20 * 1000
-    running: Settings.data.location.weatherEnabled || Settings.data.colorSchemes.schedulingMode == "location"
+    running: Settings.data.location.weatherEnabled
     repeat: true
     onTriggered: {
       update();
