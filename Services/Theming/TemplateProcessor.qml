@@ -188,7 +188,7 @@ Singleton {
   // ================================================================================
   function buildThemeConfig() {
     var lines = [];
-    var mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
+    var mode = "dark";
 
     if (Settings.data.colorSchemes.useWallpaperColors) {
       addWallpaperTheming(lines, mode);

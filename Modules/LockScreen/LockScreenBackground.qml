@@ -12,7 +12,7 @@ Item {
 
   // Cached wallpaper path - exposed for parent components
   property string resolvedWallpaperPath: ""
-  property color tintColor: Settings.data.colorSchemes.darkMode ? Color.mSurface : Color.mOnSurface
+  property color tintColor: Color.mSurface
 
   required property var screen
 

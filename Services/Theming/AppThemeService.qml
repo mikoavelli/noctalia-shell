@@ -29,10 +29,6 @@ Singleton {
 
   Connections {
     target: Settings.data.colorSchemes
-    function onDarkModeChanged() {
-      Logger.d("AppThemeService", "Detected dark mode change");
-      generate();
-    }
     function onMonitorForColorsChanged() {
       if (Settings.data.colorSchemes.useWallpaperColors) {
         Logger.d("AppThemeService", "Monitor for colors changed to:", Settings.data.colorSchemes.monitorForColors);
@@ -70,13 +66,13 @@ Singleton {
       Logger.e("AppThemeService", "No wallpaper found for monitor:", effectiveMonitor);
       return;
     }
-    const mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
+    const mode = "dark";
     TemplateProcessor.processWallpaperColors(wp, mode);
   }
 
   function generateFromPredefinedScheme(schemeData) {
     Logger.i("AppThemeService", "Generating templates from predefined color scheme");
-    const mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
+    const mode = "dark";
     TemplateProcessor.processPredefinedScheme(schemeData, mode);
   }
 }

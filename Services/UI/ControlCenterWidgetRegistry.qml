@@ -13,7 +13,6 @@ Singleton {
                            "AirplaneMode": airplaneModeComponent,
                            "Bluetooth": bluetoothComponent,
                            "CustomButton": customButtonComponent,
-                           "DarkMode": darkModeComponent,
                            "KeepAwake": keepAwakeComponent,
                            "Notifications": notificationsComponent,
                            "PowerProfile": powerProfileComponent,
@@ -45,9 +44,6 @@ Singleton {
   }
   property Component customButtonComponent: Component {
     CustomButton {}
-  }
-  property Component darkModeComponent: Component {
-    DarkMode {}
   }
   property Component keepAwakeComponent: Component {
     KeepAwake {}

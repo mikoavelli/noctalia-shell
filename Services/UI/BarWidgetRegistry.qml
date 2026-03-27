@@ -20,7 +20,6 @@ Singleton {
                            "Clock": clockComponent,
                            "ControlCenter": controlCenterComponent,
                            "CustomButton": customButtonComponent,
-                           "DarkMode": darkModeComponent,
                            "KeepAwake": keepAwakeComponent,
                            "KeyboardLayout": keyboardLayoutComponent,
                            "LockKeys": lockKeysComponent,
@@ -52,7 +51,6 @@ Singleton {
                                      "Clock": "WidgetSettings/ClockSettings.qml",
                                      "ControlCenter": "WidgetSettings/ControlCenterSettings.qml",
                                      "CustomButton": "WidgetSettings/CustomButtonSettings.qml",
-                                     "DarkMode": "WidgetSettings/DarkModeSettings.qml",
                                      "KeepAwake": "WidgetSettings/KeepAwakeSettings.qml",
                                      "KeyboardLayout": "WidgetSettings/KeyboardLayoutSettings.qml",
                                      "Launcher": "WidgetSettings/LauncherSettings.qml",
@@ -157,9 +155,6 @@ Singleton {
                                     "enableColorization": false,
                                     "colorizeSystemIcon": "none",
                                     "ipcIdentifier": ""
-                                  },
-                                  "DarkMode": {
-                                    "iconColor": "none"
                                   },
                                   "KeepAwake": {
                                     "iconColor": "none",
@@ -330,9 +325,6 @@ Singleton {
   }
   property Component customButtonComponent: Component {
     CustomButton {}
-  }
-  property Component darkModeComponent: Component {
-    DarkMode {}
   }
   property Component keyboardLayoutComponent: Component {
     KeyboardLayout {}

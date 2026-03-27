@@ -288,15 +288,6 @@
     "subTabLabel": "common.monitors"
   },
   {
-    "labelKey": "tooltips.switch-to-dark-mode",
-    "descriptionKey": "panels.color-scheme.dark-mode-switch-description",
-    "widget": "NToggle",
-    "tab": 2,
-    "tabLabel": "panels.color-scheme.title",
-    "subTab": 0,
-    "subTabLabel": "common.colors"
-  },
-  {
     "labelKey": "panels.color-scheme.color-source-use-wallpaper-colors-label",
     "descriptionKey": "panels.color-scheme.color-source-use-wallpaper-colors-description",
     "widget": "NToggle",

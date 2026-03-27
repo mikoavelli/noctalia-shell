@@ -958,7 +958,6 @@ Singleton {
     return {
       "path": path,
       "colorScheme": Settings.data.colorSchemes.predefinedScheme,
-      "darkMode": Settings.data.colorSchemes.darkMode,
       "useWallpaperColors": Settings.data.colorSchemes.useWallpaperColors,
       "generationMethod": Settings.data.colorSchemes.generationMethod,
       "paletteColors": [Color.mPrimary.toString(), Color.mSecondary.toString(), Color.mTertiary.toString(), Color.mError.toString()]
@@ -1012,17 +1011,14 @@ Singleton {
 
     // Track which auto-triggered properties are changing to avoid redundant generation calls
     var generationMethodChanging = Settings.data.colorSchemes.generationMethod !== favorite.generationMethod;
-    var darkModeChanging = Settings.data.colorSchemes.darkMode !== favorite.darkMode;
 
     // Update settings to match the favorite's saved color scheme
     Settings.data.colorSchemes.useWallpaperColors = favorite.useWallpaperColors;
     Settings.data.colorSchemes.predefinedScheme = favorite.colorScheme;
     Settings.data.colorSchemes.generationMethod = favorite.generationMethod;
-    Settings.data.colorSchemes.darkMode = favorite.darkMode;
 
     // Only explicitly trigger generation if the auto-triggered properties didn't change.
-    // If generationMethod or darkMode changed, their change handlers already called generate().
-    if (!generationMethodChanging && !darkModeChanging) {
+    if (!generationMethodChanging) {
       AppThemeService.generate();
     }
   }

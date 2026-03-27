@@ -225,7 +225,7 @@ Item {
             // Apply dock shader to active window icon (always themed)
             layer.enabled: widgetSettings.colorizeIcons !== false
             layer.effect: ShaderEffect {
-              property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
+              property color targetColor: Color.mOnSurface
               property real colorizeMode: 0.0 // Dock mode (grayscale)
 
               fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")

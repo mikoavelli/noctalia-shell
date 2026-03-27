@@ -51,7 +51,7 @@ Popup {
 
       // Check if scheme has dark/light variants
       if (entry.dark || entry.light) {
-        variant = Settings.data.colorSchemes.darkMode ? (entry.dark || entry.light) : (entry.light || entry.dark);
+        variant = entry.dark || entry.light;
       }
 
       if (variant && variant[colorKey]) {

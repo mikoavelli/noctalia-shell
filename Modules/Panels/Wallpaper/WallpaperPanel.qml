@@ -421,13 +421,6 @@ SmartPanel {
             }
 
             NIconButton {
-              icon: Settings.data.colorSchemes.darkMode ? "moon" : "sun"
-              tooltipText: Settings.data.colorSchemes.darkMode ? I18n.tr("tooltips.switch-to-light-mode") : I18n.tr("tooltips.switch-to-dark-mode")
-              baseSize: Style.baseWidgetSize * 0.8
-              onClicked: Settings.data.colorSchemes.darkMode = !Settings.data.colorSchemes.darkMode
-            }
-
-            NIconButton {
               icon: "color-swatch"
               tooltipText: Settings.data.colorSchemes.useWallpaperColors ? I18n.tr("wallpaper.panel.color-extraction-enabled") : I18n.tr("wallpaper.panel.color-extraction-disabled")
               baseSize: Style.baseWidgetSize * 0.8
@@ -1257,30 +1250,12 @@ SmartPanel {
                   return WallpaperService.getFavorite(wallpaperItem.wallpaperPath);
                 }
                 property var colors: favData && favData.paletteColors ? favData.paletteColors : []
-                property bool isDark: favData ? favData.darkMode : false
 
                 Connections {
                   target: WallpaperService
                   function onFavoriteDataUpdated(path) {
                     if (path === wallpaperItem.wallpaperPath)
                       paletteRow._favRevision++;
-                  }
-                }
-
-                // Dark/light mode indicator
-                Rectangle {
-                  width: paletteRow.diameter
-                  height: paletteRow.diameter
-                  radius: width * 0.5
-                  color: Color.mSurface
-                  border.color: Color.mShadow
-                  border.width: Style.borderS
-
-                  NIcon {
-                    icon: paletteRow.isDark ? "moon" : "sun"
-                    pointSize: parent.width * 0.45
-                    color: Color.mOnSurface
-                    anchors.centerIn: parent
                   }
                 }
 

@@ -739,7 +739,7 @@ Item {
               }
 
               layer.effect: ShaderEffect {
-                property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
+                property color targetColor: Color.mOnSurface
                 property real colorizeMode: 0
                 fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
               }

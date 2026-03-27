@@ -16,22 +16,6 @@ Singleton {
   property string downloadedSchemesDirectory: Settings.configDir + "colorschemes"
   property string colorsJsonFilePath: Settings.configDir + "colors.json"
 
-  Connections {
-    target: Settings.data.colorSchemes
-    function onDarkModeChanged() {
-      Logger.d("ColorScheme", "Detected dark mode change");
-      if (!Settings.data.colorSchemes.useWallpaperColors && Settings.data.colorSchemes.predefinedScheme) {
-        // Re-apply current scheme to pick the right variant
-        applyScheme(Settings.data.colorSchemes.predefinedScheme);
-      }
-      // Toast: dark/light mode switched
-      const enabled = !!Settings.data.colorSchemes.darkMode;
-      const label = enabled ? I18n.tr("tooltips.switch-to-dark-mode") : I18n.tr("tooltips.switch-to-light-mode");
-      const description = I18n.tr("common.enabled");
-      ToastService.showNotice(label, description, "dark-mode");
-    }
-  }
-
   // --------------------------------
   function init() {
     // does nothing but ensure the singleton is created
@@ -183,11 +167,7 @@ Singleton {
         var variant = data;
         // If scheme provides dark/light variants, pick based on settings
         if (data && (data.dark || data.light)) {
-          if (Settings.data.colorSchemes.darkMode) {
-            variant = data.dark || data.light;
-          } else {
-            variant = data.light || data.dark;
-          }
+          variant = data.dark || data.light;
         }
         writeColorsToDisk(variant);
         Logger.i("ColorScheme", "Applying color scheme:", getBasename(path));

@@ -47,7 +47,7 @@ ColumnLayout {
       var variant = entry;
 
       if (entry.dark || entry.light) {
-        variant = Settings.data.colorSchemes.darkMode ? (entry.dark || entry.light) : (entry.light || entry.dark);
+        variant = entry.dark || entry.light;
       }
 
       if (variant && variant[colorKey]) {
@@ -106,20 +106,6 @@ ColumnLayout {
         }
       }
     }
-  }
-
-  NToggle {
-    label: I18n.tr("tooltips.switch-to-dark-mode")
-    description: I18n.tr("panels.color-scheme.dark-mode-switch-description")
-    checked: Settings.data.colorSchemes.darkMode
-    onToggled: checked => {
-                 Settings.data.colorSchemes.darkMode = checked;
-                 root.cacheVersion++;
-               }
-  }
-
-  NDivider {
-    Layout.fillWidth: true
   }
 
   NToggle {
