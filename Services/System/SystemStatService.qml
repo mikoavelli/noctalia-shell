@@ -255,8 +255,6 @@ Singleton {
   // Thermal zone fallback (for ARM SoCs with SCMI sensors, etc.)
   // Matches thermal zone types containing "cpu" and picks the hottest big-core zone.
   // Also provides GPU temp via zones like "gpu-avg-thermal" or "gpu0-thermal".
-  readonly property var thermalZoneCpuPatterns: ["cpu-b", "cpu-m", "cpu"]
-  readonly property var thermalZoneGpuPatterns: ["gpu-avg", "gpu0", "gpu"]
   property string cpuThermalZonePath: ""
   property var cpuThermalZonePaths: [] // All matching CPU zones for averaging
   property string gpuThermalZonePath: ""

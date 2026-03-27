@@ -45,15 +45,6 @@ Singleton {
   }
 
   /**
-  * Convenience function to get arc direction directly from corner state
-  */
-  function getArcDirectionFromState(cornerState) {
-    const multX = getMultX(cornerState);
-    const multY = getMultY(cornerState);
-    return getArcDirection(multX, multY);
-  }
-
-  /**
   * Get the "flattening" radius when shape dimensions are too small
   * Prevents visual artifacts when radius exceeds dimensions
   */

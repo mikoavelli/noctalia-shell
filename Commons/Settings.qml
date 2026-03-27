@@ -28,7 +28,6 @@ Singleton {
   readonly property string cacheDir: Quickshell.env("NOCTALIA_CACHE_DIR") || (Quickshell.env("XDG_CACHE_HOME") || Quickshell.env("HOME") + "/.cache") + "/" + shellName + "/"
   readonly property string settingsFile: Quickshell.env("NOCTALIA_SETTINGS_FILE") || (configDir + "settings.json")
   readonly property string defaultAvatar: Quickshell.env("HOME") + "/.face"
-  readonly property string defaultVideosDirectory: Quickshell.env("HOME") + "/Videos"
   readonly property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"
 
   // Signal emitted when settings are loaded after startupcale changes
@@ -547,20 +546,6 @@ Singleton {
       }
     }
     return null;
-  }
-
-  // Helper to find index of a screen override entry
-  function _findScreenOverrideIndex(screenName) {
-    var overrides = data.bar.screenOverrides;
-    if (!screenName || !overrides || overrides.length === undefined) {
-      return -1;
-    }
-    for (var i = 0; i < overrides.length; i++) {
-      if (overrides[i] && overrides[i].name === screenName) {
-        return i;
-      }
-    }
-    return -1;
   }
 
   // -----------------------------------------------------

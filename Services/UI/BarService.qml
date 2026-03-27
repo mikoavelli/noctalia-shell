@@ -281,23 +281,6 @@ Singleton {
     return instances;
   }
 
-  // Get widget with full metadata
-  function getWidgetWithMetadata(widgetId, screenName = null, section = null) {
-    for (var key in widgetInstances) {
-      var widget = widgetInstances[key];
-      if (!widget)
-        continue;
-      if (widget.widgetId === widgetId) {
-        if (!screenName || widget.screenName === screenName) {
-          if (section === null || widget.section === section) {
-            return widget;
-          }
-        }
-      }
-    }
-    return undefined;
-  }
-
   // Get all widgets in a specific section
   function getWidgetsBySection(section, screenName = null) {
     var widgetEntries = [];

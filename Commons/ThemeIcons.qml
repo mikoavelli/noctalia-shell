@@ -7,8 +7,6 @@ import qs.Commons
 Singleton {
   id: root
 
-  property real scoreThreshold: 0.2
-
   // Manual overrides for tricky apps
   property var substitutions: ({
                                  "code-url-handler": "visual-studio-code",

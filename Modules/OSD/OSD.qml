@@ -54,12 +54,6 @@ Variants {
       return enabledTypes.includes(OSD.Type.LockKey);
     }
 
-    readonly property var validIcons: {
-      const iconKeys = Object.keys(Icons.icons);
-      const aliasKeys = Object.keys(Icons.aliases);
-      return new Set([...iconKeys, ...aliasKeys]);
-    }
-
     function getIcon() {
       switch (currentOSDType) {
       case OSD.Type.Volume:

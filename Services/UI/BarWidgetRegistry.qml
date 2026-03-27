@@ -444,9 +444,4 @@ Singleton {
   function isPluginWidget(id) {
     return id.startsWith("plugin:");
   }
-
-  // Get list of plugin widget IDs
-  function getPluginWidgets() {
-    return Object.keys(pluginWidgets);
-  }
 }

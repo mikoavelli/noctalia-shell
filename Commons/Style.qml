@@ -24,7 +24,6 @@ Singleton {
   readonly property int fontWeightBold: 700
 
   // Container Radii: major layout sections (sidebars, cards, content panels)
-  readonly property int radiusXXXS: Math.round(3 * Settings.data.general.radiusRatio)
   readonly property int radiusXXS: Math.round(4 * Settings.data.general.radiusRatio)
   readonly property int radiusXS: Math.round(8 * Settings.data.general.radiusRatio)
   readonly property int radiusS: Math.round(12 * Settings.data.general.radiusRatio)
@@ -59,7 +58,6 @@ Singleton {
   readonly property real opacityLight: 0.25
   readonly property real opacityMedium: 0.5
   readonly property real opacityHeavy: 0.75
-  readonly property real opacityAlmost: 0.95
   readonly property real opacityFull: 1.0
 
   // Shadows

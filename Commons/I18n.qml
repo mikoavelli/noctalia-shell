@@ -12,7 +12,6 @@ Singleton {
   property string langCode: ""
   property var locale: Qt.locale()
   property string systemDetectedLangCode: ""
-  property string fullLocaleCode: "" // Preserves regional locale variants
   // Static list of available translations — update when adding/removing translation files
   property var availableLanguages: ["en", "de", "es", "fr", "hu", "ja", "ko-KR", "ku", "nl", "nn-HN", "nn-NO", "pl", "pt", "ru", "sv", "tr", "uk-UA", "zh-CN", "zh-TW"]
   property var translations: ({})
@@ -72,7 +71,6 @@ Singleton {
         } else {
           Logger.w("I18n", `Translation file for "${root.langCode}" not found, falling back to English`);
           root.langCode = "en";
-          root.fullLocaleCode = "en";
           root.locale = Qt.locale("en");
           Qt.callLater(loadTranslations);
         }
@@ -119,7 +117,6 @@ Singleton {
 
     var lang = determineFastLanguage();
     langCode = lang.code;
-    fullLocaleCode = lang.fullLocale;
     locale = Qt.locale(lang.fullLocale);
     systemDetectedLangCode = lang.code;
     Logger.i("I18n", `Loading "${lang.code}" (locale: "${lang.fullLocale}")`);
@@ -195,7 +192,6 @@ Singleton {
 
     if (newLangCode !== langCode && availableLanguages.includes(newLangCode)) {
       langCode = newLangCode;
-      fullLocaleCode = fullLocale;
       locale = Qt.locale(fullLocale);
       Logger.i("I18n", `Language set to "${langCode}" with locale "${fullLocale}"`);
       languageChanged(langCode);

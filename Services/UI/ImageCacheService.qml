@@ -553,34 +553,6 @@ Singleton {
   }
 
   // -------------------------------------------------
-  // Clear Cache Functions
-  // -------------------------------------------------
-  function clearAll() {
-    Logger.i("ImageCache", "Clearing all cache");
-    clearThumbnails();
-    clearLarge();
-    clearNotifications();
-  }
-
-  function clearThumbnails() {
-    Logger.i("ImageCache", "Clearing thumbnails cache");
-    Quickshell.execDetached(["rm", "-rf", wpThumbDir]);
-    Quickshell.execDetached(["mkdir", "-p", wpThumbDir]);
-  }
-
-  function clearLarge() {
-    Logger.i("ImageCache", "Clearing large cache");
-    Quickshell.execDetached(["rm", "-rf", wpLargeDir]);
-    Quickshell.execDetached(["mkdir", "-p", wpLargeDir]);
-  }
-
-  function clearNotifications() {
-    Logger.i("ImageCache", "Clearing notifications cache");
-    Quickshell.execDetached(["rm", "-rf", notificationsDir]);
-    Quickshell.execDetached(["mkdir", "-p", notificationsDir]);
-  }
-
-  // -------------------------------------------------
   // ImageMagick Detection
   // -------------------------------------------------
   Process {

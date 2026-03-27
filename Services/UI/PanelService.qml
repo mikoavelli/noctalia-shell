@@ -194,29 +194,6 @@ Singleton {
     return null;
   }
 
-  // Check if a panel exists
-  function hasPanel(name) {
-    return name in registeredPanels;
-  }
-
-  // Check if panels can be shown on a given screen (has bar enabled or allowPanelsOnScreenWithoutBar)
-  function canShowPanelsOnScreen(screen) {
-    const name = screen?.name || "";
-    const monitors = Settings.data.bar.monitors || [];
-    const allowPanelsOnScreenWithoutBar = Settings.data.general.allowPanelsOnScreenWithoutBar;
-    return allowPanelsOnScreenWithoutBar || monitors.length === 0 || monitors.includes(name);
-  }
-
-  // Find a screen that can show panels
-  function findScreenForPanels() {
-    for (let i = 0; i < Quickshell.screens.length; i++) {
-      if (canShowPanelsOnScreen(Quickshell.screens[i])) {
-        return Quickshell.screens[i];
-      }
-    }
-    return null;
-  }
-
   // Helper to keep only one panel open at any time
   function willOpenPanel(panel) {
     if (openedPanel && openedPanel !== panel) {

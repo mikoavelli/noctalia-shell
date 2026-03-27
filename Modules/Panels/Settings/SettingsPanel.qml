@@ -235,22 +235,6 @@ SmartPanel {
     scrollPageDown();
   }
 
-  function onCtrlJPressed() {
-    if (_settingsContent && _settingsContent.searchText.trim() !== "") {
-      _settingsContent.searchSelectNext();
-    } else {
-      scrollDown();
-    }
-  }
-
-  function onCtrlKPressed() {
-    if (_settingsContent && _settingsContent.searchText.trim() !== "") {
-      _settingsContent.searchSelectPrevious();
-    } else {
-      scrollUp();
-    }
-  }
-
   panelContent: Rectangle {
     id: panelContent
     color: "transparent"
