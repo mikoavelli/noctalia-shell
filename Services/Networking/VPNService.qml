@@ -9,44 +9,36 @@ import qs.Services.UI
 Singleton {
   id: root
 
-  property var connections: ({})
+  property var connections: ({
+                               "windscribe": {
+                                 "uuid": "windscribe",
+                                 "name": "Windscribe",
+                                 "active": false
+                               }
+                             })
+
   property bool refreshing: false
   property bool connecting: false
   property bool disconnecting: false
   property string connectingUuid: ""
-  property string disconnectingUuid: ""
   property string lastError: ""
   property bool refreshPending: false
 
   readonly property var activeConnections: {
-    const result = [];
-    const map = connections;
-    for (const key in map) {
-      const conn = map[key];
-      if (conn && conn.active) {
-        result.push(conn);
-      }
-    }
-    return result;
+    const conn = connections["windscribe"];
+    return (conn && conn.active) ? [conn] : [];
   }
 
   readonly property var inactiveConnections: {
-    const result = [];
-    const map = connections;
-    for (const key in map) {
-      const conn = map[key];
-      if (conn && !conn.active) {
-        result.push(conn);
-      }
-    }
-    return result;
+    const conn = connections["windscribe"];
+    return (conn && !conn.active) ? [conn] : [];
   }
 
   readonly property bool hasActiveConnection: activeConnections.length > 0
 
   Timer {
     id: refreshTimer
-    interval: 5000
+    interval: 3000
     running: true
     repeat: true
     onTriggered: refresh()
@@ -60,8 +52,20 @@ Singleton {
   }
 
   Component.onCompleted: {
-    Logger.i("VPN", "Service started");
+    Logger.i("VPN", "Windscribe Service started");
     refresh();
+  }
+
+  function toggle() {
+    if (connecting || disconnecting) {
+      return;
+    }
+
+    if (hasActiveConnection) {
+      disconnect("windscribe");
+    } else {
+      connect("windscribe");
+    }
   }
 
   function refresh() {
@@ -75,58 +79,18 @@ Singleton {
   }
 
   function connect(uuid) {
-    if (connecting || !uuid) {
+    if (connecting)
       return;
-    }
-    const conn = connections[uuid];
-    if (!conn) {
-      return;
-    }
     connecting = true;
-    connectingUuid = uuid;
-    lastError = "";
-    connectProcess.uuid = uuid;
-    connectProcess.name = conn.name;
+    connectingUuid = "windscribe";
     connectProcess.running = true;
   }
 
   function disconnect(uuid) {
-    if (disconnecting || !uuid) {
+    if (disconnecting)
       return;
-    }
-    const conn = connections[uuid];
-    if (!conn) {
-      return;
-    }
     disconnecting = true;
-    disconnectingUuid = uuid;
-    lastError = "";
-    disconnectProcess.uuid = uuid;
-    disconnectProcess.name = conn.name;
     disconnectProcess.running = true;
-  }
-
-  function toggle(uuid) {
-    const conn = connections[uuid];
-    if (!conn) {
-      return;
-    }
-    if (conn.active) {
-      disconnect(uuid);
-    } else {
-      connect(uuid);
-    }
-  }
-
-  function setConnection(uuid, data) {
-    if (!uuid) {
-      return;
-    }
-    const map = Object.assign({}, connections);
-    if (map[uuid]) {
-      map[uuid] = Object.assign({}, map[uuid], data);
-      connections = map;
-    }
   }
 
   function scheduleRefresh(interval) {
@@ -136,151 +100,87 @@ Singleton {
 
   Process {
     id: refreshProcess
+    command: ["windscribe-cli", "status"]
     running: false
-    command: ["nmcli", "-t", "-f", "NAME,UUID,TYPE,DEVICE", "connection", "show"]
 
     stdout: StdioCollector {
       onStreamFinished: {
-        const lines = text.split("\n");
-        const map = {};
-        for (let i = 0; i < lines.length; ++i) {
-          const line = lines[i].trim();
-          if (!line) {
-            continue;
-          }
-          const lastColonIdx = line.lastIndexOf(":");
-          if (lastColonIdx === -1) {
-            continue;
-          }
-          const device = line.substring(lastColonIdx + 1);
-          const remaining = line.substring(0, lastColonIdx);
-          const secondLastColonIdx = remaining.lastIndexOf(":");
-          if (secondLastColonIdx === -1) {
-            continue;
-          }
-          const type = remaining.substring(secondLastColonIdx + 1);
-          if (type !== "vpn" && type !== "wireguard") {
-            continue;
-          }
-          const remaining2 = remaining.substring(0, secondLastColonIdx);
-          const thirdLastColonIdx = remaining2.lastIndexOf(":");
-          if (thirdLastColonIdx === -1) {
-            continue;
-          }
-          const uuid = remaining2.substring(thirdLastColonIdx + 1);
-          const name = remaining2.substring(0, thirdLastColonIdx);
-          if (!uuid || !name) {
-            continue;
-          }
-          const active = device && device !== "--";
-          map[uuid] = {
-            "uuid": uuid,
-            "name": name,
-            "device": device,
-            "active": active
-          };
+        const isConnected = text.includes("Connect state: Connected");
+
+        let location = "Windscribe";
+        if (isConnected) {
+          const match = text.match(/Connect state: Connected: (.+)/);
+          if (match && match[1])
+          location = match[1];
         }
-        connections = map;
-        const pending = refreshPending;
+
+        connections = {
+          "windscribe": {
+            "uuid": "windscribe",
+            "name": location,
+            "active": isConnected
+          }
+        };
+
         refreshing = false;
-        refreshPending = false;
-        if (pending) {
-          scheduleRefresh(200);
+        if (refreshPending) {
+          refreshPending = false;
+          scheduleRefresh(500);
         }
       }
     }
 
     stderr: StdioCollector {
       onStreamFinished: {
-        const pending = refreshPending;
         refreshing = false;
-        refreshPending = false;
-        if (text.trim()) {
-          lastError = text.split("\n")[0].trim();
-          Logger.w("VPN", "Refresh error: " + text);
-        }
-        if (pending) {
-          scheduleRefresh(2000);
-        }
       }
     }
   }
 
   Process {
     id: connectProcess
-    property string uuid: ""
-    property string name: ""
+    command: ["windscribe-cli", "connect", "No Vampires", "udp"]
     running: false
-    command: ["nmcli", "connection", "up", "uuid", uuid]
 
     stdout: StdioCollector {
       onStreamFinished: {
-        const output = text.trim();
-        if (!output || (!output.includes("successfully activated") && !output.includes("Connection successfully"))) {
-          return;
-        }
-        setConnection(connectProcess.uuid, {
-                        "active": true
-                      });
         connecting = false;
         connectingUuid = "";
-        lastError = "";
-        Logger.i("VPN", "Connected to " + connectProcess.name);
-        ToastService.showNotice(connectProcess.name, I18n.tr("toast.vpn.connected", {
-                                                               "name": connectProcess.name
-                                                             }), "shield-lock");
-        scheduleRefresh(1000);
+        ToastService.showNotice("Windscribe", "VPN Connected", "shield-lock");
+        scheduleRefresh(500);
       }
     }
 
     stderr: StdioCollector {
       onStreamFinished: {
-        const trimmed = text.trim();
-        if (trimmed) {
-          lastError = trimmed.split("\n")[0].trim();
-          Logger.w("VPN", "Connect error: " + trimmed);
-          ToastService.showWarning(connectProcess.name, lastError);
+        if (text.trim()) {
+          Logger.w("VPN", "Connect error: " + text);
+          ToastService.showWarning("Windscribe", text.split("\n")[0]);
         }
         connecting = false;
         connectingUuid = "";
+        scheduleRefresh(500);
       }
     }
   }
 
   Process {
     id: disconnectProcess
-    property string uuid: ""
-    property string name: ""
+    command: ["windscribe-cli", "disconnect"]
     running: false
-    command: ["nmcli", "connection", "down", "uuid", uuid]
 
     stdout: StdioCollector {
       onStreamFinished: {
-        Logger.i("VPN", "Disconnected from " + disconnectProcess.name);
-        setConnection(disconnectProcess.uuid, {
-                        "active": false,
-                        "device": ""
-                      });
         disconnecting = false;
-        disconnectingUuid = "";
-        lastError = "";
-        ToastService.showNotice(disconnectProcess.name, I18n.tr("toast.vpn.disconnected", {
-                                                                  "name": disconnectProcess.name
-                                                                }), "shield-off");
-        scheduleRefresh(1000);
+        ToastService.showNotice("Windscribe", "VPN Disconnected", "shield-off");
+        scheduleRefresh(500);
       }
     }
 
     stderr: StdioCollector {
       onStreamFinished: {
-        const trimmed = text.trim();
-        if (trimmed) {
-          lastError = trimmed.split("\n")[0].trim();
-          Logger.w("VPN", "Disconnect error: " + trimmed);
-          ToastService.showWarning(disconnectProcess.name, lastError);
-        }
         disconnecting = false;
-        disconnectingUuid = "";
+        scheduleRefresh(500);
       }
     }
   }

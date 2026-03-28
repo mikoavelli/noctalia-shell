@@ -18,11 +18,9 @@ Item {
   property int sectionWidgetsCount: 0
 
   property var widgetMetadata: BarWidgetRegistry.widgetMetadata[widgetId]
-  // Explicit screenName property ensures reactive binding when screen changes
-  readonly property string screenName: screen ? screen.name : ""
   property var widgetSettings: {
-    if (section && sectionWidgetIndex >= 0 && screenName) {
-      var widgets = Settings.getBarWidgetsForScreen(screenName)[section];
+    if (section && sectionWidgetIndex >= 0) {
+      var widgets = Settings.data.bar.widgets[section];
       if (widgets && sectionWidgetIndex < widgets.length) {
         return widgets[sectionWidgetIndex];
       }
@@ -30,8 +28,7 @@ Item {
     return {};
   }
 
-  readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
-  readonly property bool isBarVertical: barPosition === "left" || barPosition === "right"
+  readonly property bool isBarVertical: Settings.data.bar.position === "left" || Settings.data.bar.position === "right"
   readonly property string displayMode: widgetSettings.displayMode !== undefined ? widgetSettings.displayMode : widgetMetadata.displayMode
   readonly property string iconColorKey: widgetSettings.iconColor !== undefined ? widgetSettings.iconColor : widgetMetadata.iconColor
   readonly property string textColorKey: widgetSettings.textColor !== undefined ? widgetSettings.textColor : widgetMetadata.textColor
@@ -45,27 +42,21 @@ Item {
     model: {
       const items = [];
       const active = VPNService.activeConnections;
-      for (let i = 0; i < active.length; ++i) {
-        const conn = active[i];
+
+      if (active.length > 0) {
         items.push({
-                     "label": I18n.tr("actions.disconnect-vpn", {
-                                        "name": conn.name
-                                      }),
-                     "action": "disconnect:" + conn.uuid,
+                     "label": "Disconnect Windscribe",
+                     "action": "disconnect",
                      "icon": "shield-off"
                    });
-      }
-      const inactive = VPNService.inactiveConnections;
-      for (let i = 0; i < inactive.length; ++i) {
-        const conn = inactive[i];
+      } else {
         items.push({
-                     "label": I18n.tr("actions.connect-vpn", {
-                                        "name": conn.name
-                                      }),
-                     "action": "connect:" + conn.uuid,
+                     "label": "Connect Windscribe (No Vampires)",
+                     "action": "connect",
                      "icon": "shield-lock"
                    });
       }
+
       items.push({
                    "label": I18n.tr("actions.widget-settings"),
                    "action": "widget-settings",
@@ -75,24 +66,19 @@ Item {
     }
 
     onTriggered: action => {
-                   contextMenu.close();
-                   PanelService.closeContextMenu(screen);
+                   var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
+                   if (popupMenuWindow)
+                   popupMenuWindow.close();
 
-                   if (!action) {
-                     return;
-                   }
+                   if (!action)
+                   return;
+
                    if (action === "widget-settings") {
                      BarService.openWidgetSettings(screen, section, sectionWidgetIndex, widgetId, widgetSettings);
-                     return;
-                   }
-                   if (action.startsWith("connect:")) {
-                     const uuid = action.substring("connect:".length);
-                     VPNService.connect(uuid);
-                     return;
-                   }
-                   if (action.startsWith("disconnect:")) {
-                     const uuid = action.substring("disconnect:".length);
-                     VPNService.disconnect(uuid);
+                   } else if (action === "connect") {
+                     VPNService.connect("windscribe");
+                   } else if (action === "disconnect") {
+                     VPNService.disconnect("windscribe");
                    }
                  }
   }
@@ -101,10 +87,12 @@ Item {
     id: pill
 
     screen: root.screen
+
     oppositeDirection: BarService.getPillDirection(root)
     customIconColor: Color.resolveColorKeyOptional(root.iconColorKey)
     customTextColor: Color.resolveColorKeyOptional(root.textColorKey)
     icon: VPNService.hasActiveConnection ? "shield-lock" : "shield"
+
     text: {
       if (VPNService.activeConnections.length > 0) {
         return VPNService.activeConnections[0].name;
@@ -117,18 +105,30 @@ Item {
       }
       return "";
     }
+
     suffix: {
       if (VPNService.activeConnections.length > 1) {
         return ` + ${VPNService.activeConnections.length - 1}`;
       }
       return "";
     }
+
     autoHide: false
     forceOpen: !isBarVertical && root.displayMode === "alwaysShow"
     forceClose: isBarVertical || root.displayMode === "alwaysHide" || !pill.text
-    onRightClicked: {
-      PanelService.showContextMenu(contextMenu, pill, screen);
+
+    onClicked: {
+      VPNService.toggle();
     }
+
+    onRightClicked: {
+      var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
+      if (popupMenuWindow) {
+        popupMenuWindow.showContextMenu(contextMenu);
+        contextMenu.openAtItem(pill, screen);
+      }
+    }
+
     tooltipText: {
       if (pill.text !== "") {
         return pill.text;
