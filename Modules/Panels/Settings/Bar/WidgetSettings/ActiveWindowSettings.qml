@@ -103,7 +103,7 @@ ColumnLayout {
     id: widthInput
     Layout.fillWidth: true
     label: I18n.tr("bar.taskbar.max-width-label")
-    description: I18n.tr("bar.media-mini.max-width-description")
+    description: I18n.tr("bar.active-window.max-width-description")
     placeholderText: widgetMetadata.maxWidth
     text: valueMaxWidth
     onEditingFinished: saveSettings()
@@ -111,8 +111,8 @@ ColumnLayout {
 
   NToggle {
     Layout.fillWidth: true
-    label: I18n.tr("bar.media-mini.use-fixed-width-label")
-    description: I18n.tr("bar.media-mini.use-fixed-width-description")
+    label: I18n.tr("bar.active-window.use-fixed-width-label")
+    description: I18n.tr("bar.active-window.use-fixed-width-description")
     checked: valueUseFixedWidth
     onToggled: checked => {
                  valueUseFixedWidth = checked;
@@ -121,7 +121,7 @@ ColumnLayout {
   }
 
   NComboBox {
-    label: I18n.tr("bar.media-mini.scrolling-mode-label")
+    label: I18n.tr("bar.active-window.scrolling-mode-label")
     description: I18n.tr("bar.active-window.scrolling-mode-description")
     model: [
       {

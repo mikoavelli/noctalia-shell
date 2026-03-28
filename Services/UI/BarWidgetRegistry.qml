@@ -13,7 +13,6 @@ Singleton {
   // Widget registry object mapping widget names to components
   property var widgets: ({
                            "ActiveWindow": activeWindowComponent,
-                           "AudioVisualizer": audioVisualizerComponent,
                            "Battery": batteryComponent,
                            "Bluetooth": bluetoothComponent,
                            "Brightness": brightnessComponent,
@@ -22,7 +21,6 @@ Singleton {
                            "KeepAwake": keepAwakeComponent,
                            "KeyboardLayout": keyboardLayoutComponent,
                            "LockKeys": lockKeysComponent,
-                           "MediaMini": mediaMiniComponent,
                            "Microphone": microphoneComponent,
                            "Network": networkComponent,
                            "NightLight": nightLightComponent,
@@ -41,7 +39,6 @@ Singleton {
 
   property var widgetSettingsMap: ({
                                      "ActiveWindow": "WidgetSettings/ActiveWindowSettings.qml",
-                                     "AudioVisualizer": "WidgetSettings/AudioVisualizerSettings.qml",
                                      "Battery": "WidgetSettings/BatterySettings.qml",
                                      "Bluetooth": "WidgetSettings/BluetoothSettings.qml",
                                      "Brightness": "WidgetSettings/BrightnessSettings.qml",
@@ -50,7 +47,6 @@ Singleton {
                                      "KeepAwake": "WidgetSettings/KeepAwakeSettings.qml",
                                      "KeyboardLayout": "WidgetSettings/KeyboardLayoutSettings.qml",
                                      "LockKeys": "WidgetSettings/LockKeysSettings.qml",
-                                     "MediaMini": "WidgetSettings/MediaMiniSettings.qml",
                                      "Microphone": "WidgetSettings/MicrophoneSettings.qml",
                                      "Network": "WidgetSettings/NetworkSettings.qml",
                                      "NightLight": "WidgetSettings/NightLightSettings.qml",
@@ -76,11 +72,6 @@ Singleton {
                                     "useFixedWidth": false,
                                     "colorizeIcons": false,
                                     "textColor": "none"
-                                  },
-                                  "AudioVisualizer": {
-                                    "width": 200,
-                                    "colorName": "primary",
-                                    "hideWhenIdle": false
                                   },
                                   "Battery": {
                                     "displayMode": "graphic-clean",
@@ -160,24 +151,6 @@ Singleton {
                                     "numLockIcon": "letter-n",
                                     "scrollLockIcon": "letter-s",
                                     "hideWhenOff": false
-                                  },
-                                  "MediaMini": {
-                                    "hideMode": "hidden",
-                                    "scrollingMode": "hover",
-                                    "maxWidth": 145,
-                                    "useFixedWidth": false,
-                                    "hideWhenIdle": false,
-                                    "showAlbumArt": true,
-                                    "showArtistFirst": true,
-                                    "showVisualizer": false,
-                                    "showProgressRing": true,
-                                    "visualizerType": "linear",
-                                    "textColor": "none",
-                                    "compactMode": false,
-                                    "panelShowAlbumArt": true,
-                                    "panelShowVisualizer": true,
-                                    "compactShowAlbumArt": true,
-                                    "compactShowVisualizer": false
                                   },
                                   "Microphone": {
                                     "displayMode": "onhover",
@@ -287,9 +260,6 @@ Singleton {
   property Component activeWindowComponent: Component {
     ActiveWindow {}
   }
-  property Component audioVisualizerComponent: Component {
-    AudioVisualizer {}
-  }
   property Component batteryComponent: Component {
     Battery {}
   }
@@ -313,9 +283,6 @@ Singleton {
   }
   property Component lockKeysComponent: Component {
     LockKeys {}
-  }
-  property Component mediaMiniComponent: Component {
-    MediaMini {}
   }
   property Component microphoneComponent: Component {
     Microphone {}

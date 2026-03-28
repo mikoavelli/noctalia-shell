@@ -447,59 +447,6 @@ Singleton {
   }
 
   IpcHandler {
-    target: "media"
-
-    function toggle() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var panel = PanelService.getPanel("mediaPlayerPanel", screen);
-                                              panel?.toggle(null, "MediaMini");
-                                            });
-    }
-
-    function playPause() {
-      MediaService.playPause();
-    }
-
-    function play() {
-      MediaService.play();
-    }
-
-    function stop() {
-      MediaService.stop();
-    }
-
-    function pause() {
-      MediaService.pause();
-    }
-
-    function next() {
-      MediaService.next();
-    }
-
-    function previous() {
-      MediaService.previous();
-    }
-
-    function seekRelative(offset: string) {
-      var offsetVal = parseFloat(offset);
-      if (Number.isNaN(offsetVal)) {
-        Logger.w("Media", "Argument to ipc call 'media seekRelative' must be a number");
-        return;
-      }
-      MediaService.seekRelative(offsetVal);
-    }
-
-    function seekByRatio(position: string) {
-      var positionVal = parseFloat(position);
-      if (Number.isNaN(positionVal)) {
-        Logger.w("Media", "Argument to ipc call 'media seekByRatio' must be a number");
-        return;
-      }
-      MediaService.seekByRatio(positionVal);
-    }
-  }
-
-  IpcHandler {
     target: "state"
 
     // Returns all settings and shell state as JSON

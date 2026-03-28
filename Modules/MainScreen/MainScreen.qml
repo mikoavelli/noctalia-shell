@@ -16,7 +16,6 @@ import qs.Modules.Panels.Bluetooth
 import qs.Modules.Panels.Brightness
 import qs.Modules.Panels.Clock
 import qs.Modules.Panels.Dock
-import qs.Modules.Panels.Media
 import qs.Modules.Panels.Network
 import qs.Modules.Panels.NotificationHistory
 import qs.Modules.Panels.Plugins
@@ -228,12 +227,6 @@ PanelWindow {
     AudioPanel {
       id: audioPanel
       objectName: "audioPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    MediaPlayerPanel {
-      id: mediaPlayerPanel
-      objectName: "mediaPlayerPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 

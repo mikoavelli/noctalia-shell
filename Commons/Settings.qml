@@ -162,9 +162,6 @@ Singleton {
           },
           {
             "id": "ActiveWindow"
-          },
-          {
-            "id": "MediaMini"
           }
         ]
         property list<var> center: [
@@ -432,10 +429,6 @@ Singleton {
     property JsonObject audio: JsonObject {
       property int volumeStep: 5
       property bool volumeOverdrive: false
-      property int cavaFrameRate: 30
-      property string visualizerType: "linear"
-      property list<string> mprisBlacklist: []
-      property string preferredPlayer: ""
     }
 
     // brightness

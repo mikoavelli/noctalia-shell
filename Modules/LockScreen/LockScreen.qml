@@ -8,7 +8,6 @@ import qs.Commons
 import qs.Services.Compositor
 import qs.Services.Hardware
 import qs.Services.Keyboard
-import qs.Services.Media
 import qs.Services.UI
 import qs.Widgets
 

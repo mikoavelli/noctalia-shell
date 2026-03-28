@@ -18,42 +18,6 @@
     "subTabLabel": "common.devices"
   },
   {
-    "labelKey": "panels.audio.media-primary-player-label",
-    "descriptionKey": "panels.audio.media-primary-player-description",
-    "widget": "NTextInput",
-    "tab": 9,
-    "tabLabel": "panels.audio.title",
-    "subTab": 2,
-    "subTabLabel": "common.media"
-  },
-  {
-    "labelKey": "panels.audio.media-excluded-player-label",
-    "descriptionKey": "panels.audio.media-excluded-player-description",
-    "widget": "NTextInputButton",
-    "tab": 9,
-    "tabLabel": "panels.audio.title",
-    "subTab": 2,
-    "subTabLabel": "common.media"
-  },
-  {
-    "labelKey": "panels.audio.visualizer-type-label",
-    "descriptionKey": "panels.audio.visualizer-type-description",
-    "widget": "NComboBox",
-    "tab": 9,
-    "tabLabel": "panels.audio.title",
-    "subTab": 3,
-    "subTabLabel": "common.visualizer"
-  },
-  {
-    "labelKey": "panels.audio.media-frame-rate-label",
-    "descriptionKey": "panels.audio.media-frame-rate-description",
-    "widget": "NComboBox",
-    "tab": 9,
-    "tabLabel": "panels.audio.title",
-    "subTab": 3,
-    "subTabLabel": "common.visualizer"
-  },
-  {
     "labelKey": "panels.osd.types-volume-label",
     "descriptionKey": "panels.audio.volumes-output-volume-description",
     "widget": "NValueSlider",
@@ -634,15 +598,6 @@
   {
     "labelKey": "panels.lock-screen.lock-on-suspend-label",
     "descriptionKey": "panels.lock-screen.lock-on-suspend-description",
-    "widget": "NToggle",
-    "tab": 7,
-    "tabLabel": "panels.lock-screen.title",
-    "subTab": 0,
-    "subTabLabel": "common.appearance"
-  },
-  {
-    "labelKey": "panels.lock-screen.compact-lockscreen-label",
-    "descriptionKey": "panels.lock-screen.compact-lockscreen-description",
     "widget": "NToggle",
     "tab": 7,
     "tabLabel": "panels.lock-screen.title",
