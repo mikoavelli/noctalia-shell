@@ -13,25 +13,11 @@ Singleton {
   readonly property string defaultDirectory: Settings.preprocessPath(Settings.data.wallpaper.directory)
   readonly property string solidColorPrefix: "solid://"
 
-  // All available wallpaper transitions
-  readonly property ListModel transitionsModel: ListModel {}
-
-  // All transition keys but filter out "none" and "random" so we are left with the real transitions
-  readonly property var allTransitions: Array.from({
-                                                     "length": transitionsModel.count
-                                                   }, (_, i) => transitionsModel.get(i).key).filter(key => key !== "random" && key != "none")
-
   property var wallpaperLists: ({})
   property int scanningCount: 0
 
   // Cache for current wallpapers - can be updated directly since we use signals for notifications
   property var currentWallpapers: ({})
-
-  // Track current alphabetical index for each screen
-  property var alphabeticalIndices: ({})
-
-  // Track used wallpapers for random mode (persisted across reboots)
-  property var usedRandomWallpapers: ({})
 
   property bool isInitialized: false
   property string wallpaperCacheFile: ""
@@ -60,7 +46,6 @@ Singleton {
   Connections {
     target: Settings.data.wallpaper
     function onDirectoryChanged() {
-      root.usedRandomWallpapers = {};
       root.refreshWallpapersList();
       // Emit directory change signals for monitors using the default directory
       if (!Settings.data.wallpaper.enableMultiMonitorDirectories) {
@@ -80,26 +65,11 @@ Singleton {
       }
     }
     function onEnableMultiMonitorDirectoriesChanged() {
-      root.usedRandomWallpapers = {};
       root.refreshWallpapersList();
       // Notify all monitors about potential directory changes
       for (var i = 0; i < Quickshell.screens.length; i++) {
         var screenName = Quickshell.screens[i].name;
         root.wallpaperDirectoryChanged(screenName, root.getMonitorDirectory(screenName));
-      }
-    }
-    function onAutomationEnabledChanged() {
-      root.toggleRandomWallpaper();
-    }
-    function onRandomIntervalSecChanged() {
-      root.restartRandomWallpaperTimer();
-    }
-    function onWallpaperChangeModeChanged() {
-      // Reset alphabetical indices when mode changes
-      root.alphabeticalIndices = {};
-      if (Settings.data.wallpaper.automationEnabled) {
-        root.restartRandomWallpaperTimer();
-        root.setNextWallpaper();
       }
     }
     function onViewModeChanged() {
@@ -189,40 +159,6 @@ Singleton {
                            "name": I18n.tr("wallpaper.fill-modes.repeat"),
                            "uniform": 4.0
                          });
-
-    // Populate transitionsModel with translated names
-    transitionsModel.append({
-                              "key": "none",
-                              "name": I18n.tr("common.none")
-                            });
-    transitionsModel.append({
-                              "key": "random",
-                              "name": I18n.tr("common.random")
-                            });
-    transitionsModel.append({
-                              "key": "fade",
-                              "name": I18n.tr("wallpaper.transitions.fade")
-                            });
-    transitionsModel.append({
-                              "key": "disc",
-                              "name": I18n.tr("wallpaper.transitions.disc")
-                            });
-    transitionsModel.append({
-                              "key": "stripes",
-                              "name": I18n.tr("wallpaper.transitions.stripes")
-                            });
-    transitionsModel.append({
-                              "key": "wipe",
-                              "name": I18n.tr("wallpaper.transitions.wipe")
-                            });
-    transitionsModel.append({
-                              "key": "pixelate",
-                              "name": I18n.tr("wallpaper.transitions.pixelate")
-                            });
-    transitionsModel.append({
-                              "key": "honeycomb",
-                              "name": I18n.tr("wallpaper.transitions.honeycomb")
-                            });
   }
 
   // -------------------------------------------------------------------
@@ -408,161 +344,6 @@ Singleton {
 
     // Emit signal for this specific wallpaper change
     root.wallpaperChanged(screenName, path);
-
-    // Restart the random wallpaper timer
-    if (randomWallpaperTimer.running) {
-      randomWallpaperTimer.restart();
-    }
-  }
-
-  // -------------------------------------------------------------------
-  function setRandomWallpaper() {
-    Logger.d("Wallpaper", "setRandomWallpaper");
-
-    if (Settings.data.wallpaper.enableMultiMonitorDirectories) {
-      // Pick a random wallpaper per screen
-      for (var i = 0; i < Quickshell.screens.length; i++) {
-        var screenName = Quickshell.screens[i].name;
-        var wallpaperList = getWallpapersList(screenName);
-
-        if (wallpaperList.length > 0) {
-          var randomPath = _pickUnusedRandom(screenName, wallpaperList);
-          changeWallpaper(randomPath, screenName);
-        }
-      }
-    } else {
-      // Pick a random wallpaper common to all screens
-      // We can use any screenName here, so we just pick the primary one.
-      var wallpaperList = getWallpapersList(Screen.name);
-      if (wallpaperList.length > 0) {
-        var randomPath = _pickUnusedRandom("all", wallpaperList);
-        changeWallpaper(randomPath, undefined);
-      }
-    }
-  }
-
-  // -------------------------------------------------------------------
-  // Pick a random wallpaper that hasn't been used yet in the current cycle.
-  // Once all wallpapers have been shown, resets the pool (keeping only the
-  // last-shown wallpaper to avoid an immediate repeat).
-  function _pickUnusedRandom(key, wallpaperList) {
-    var used = usedRandomWallpapers[key] || [];
-
-    // Clean stale entries (files that were removed from the directory)
-    var wallpaperSet = new Set(wallpaperList);
-    used = used.filter(function (path) {
-      return wallpaperSet.has(path);
-    });
-
-    // Filter to wallpapers that haven't been used yet
-    var unused = wallpaperList.filter(function (path) {
-      return used.indexOf(path) === -1;
-    });
-
-    // If all have been used, reset but keep the last one to avoid immediate repeat
-    if (unused.length === 0) {
-      var lastUsed = used.length > 0 ? used[used.length - 1] : "";
-      used = lastUsed ? [lastUsed] : [];
-      unused = wallpaperList.filter(function (path) {
-        return used.indexOf(path) === -1;
-      });
-      // Edge case: only one wallpaper in the directory
-      if (unused.length === 0) {
-        unused = wallpaperList;
-      }
-      Logger.d("Wallpaper", "All wallpapers used for", key, "- resetting pool");
-    }
-
-    // Pick randomly from unused
-    var randomIndex = Math.floor(Math.random() * unused.length);
-    var picked = unused[randomIndex];
-
-    // Record as used
-    used.push(picked);
-    usedRandomWallpapers[key] = used;
-
-    // Persist
-    saveTimer.restart();
-
-    return picked;
-  }
-
-  // -------------------------------------------------------------------
-  function setAlphabeticalWallpaper() {
-    Logger.d("Wallpaper", "setAlphabeticalWallpaper");
-
-    if (Settings.data.wallpaper.enableMultiMonitorDirectories) {
-      // Pick next alphabetical wallpaper per screen
-      for (var i = 0; i < Quickshell.screens.length; i++) {
-        var screenName = Quickshell.screens[i].name;
-        var wallpaperList = getWallpapersList(screenName);
-
-        if (wallpaperList.length > 0) {
-          // Get or initialize index for this screen
-          if (alphabeticalIndices[screenName] === undefined) {
-            // Find current wallpaper in list to set initial index
-            var currentWallpaper = currentWallpapers[screenName] || "";
-            var foundIndex = wallpaperList.indexOf(currentWallpaper);
-            alphabeticalIndices[screenName] = (foundIndex >= 0) ? foundIndex : 0;
-          }
-
-          // Get next index (wrap around)
-          var currentIndex = alphabeticalIndices[screenName];
-          var nextIndex = (currentIndex + 1) % wallpaperList.length;
-          alphabeticalIndices[screenName] = nextIndex;
-
-          var nextPath = wallpaperList[nextIndex];
-          changeWallpaper(nextPath, screenName);
-        }
-      }
-    } else {
-      // Pick next alphabetical wallpaper common to all screens
-      var wallpaperList = getWallpapersList(Screen.name);
-      if (wallpaperList.length > 0) {
-        // Use primary screen name as key for single directory mode
-        var key = "all";
-        if (alphabeticalIndices[key] === undefined) {
-          // Find current wallpaper in list to set initial index
-          var currentWallpaper = currentWallpapers[Screen.name] || "";
-          var foundIndex = wallpaperList.indexOf(currentWallpaper);
-          alphabeticalIndices[key] = (foundIndex >= 0) ? foundIndex : 0;
-        }
-
-        // Get next index (wrap around)
-        var currentIndex = alphabeticalIndices[key];
-        var nextIndex = (currentIndex + 1) % wallpaperList.length;
-        alphabeticalIndices[key] = nextIndex;
-
-        var nextPath = wallpaperList[nextIndex];
-        changeWallpaper(nextPath, undefined);
-      }
-    }
-  }
-
-  // -------------------------------------------------------------------
-  function toggleRandomWallpaper() {
-    Logger.d("Wallpaper", "toggleRandomWallpaper");
-    if (Settings.data.wallpaper.automationEnabled) {
-      restartRandomWallpaperTimer();
-      setNextWallpaper();
-    }
-  }
-
-  // -------------------------------------------------------------------
-  function setNextWallpaper() {
-    var mode = Settings.data.wallpaper.wallpaperChangeMode || "random";
-    if (mode === "alphabetical") {
-      setAlphabeticalWallpaper();
-    } else {
-      setRandomWallpaper();
-    }
-  }
-
-  // -------------------------------------------------------------------
-  function restartRandomWallpaperTimer() {
-    if (Settings.data.wallpaper.automationEnabled) {
-      randomWallpaperTimer.restart();
-    }
   }
 
   // -------------------------------------------------------------------
@@ -878,14 +659,6 @@ Singleton {
 
         if (updateList) {
           wallpaperLists[screenName] = files;
-
-          // Reset alphabetical indices when list changes
-          if (alphabeticalIndices[screenName] !== undefined) {
-            var currentWallpaper = currentWallpapers[screenName] || "";
-            var foundIndex = files.indexOf(currentWallpaper);
-            alphabeticalIndices[screenName] = (foundIndex >= 0) ? foundIndex : 0;
-          }
-
           Logger.i("Wallpaper", "Scan completed for", screenName, "found", files.length, "files");
           wallpaperListChanged(screenName, files.length);
         }
@@ -893,9 +666,6 @@ Singleton {
         Logger.w("Wallpaper", "Scan failed for", screenName, "exit code:", exitCode, "(directory might not exist)");
         if (updateList) {
           wallpaperLists[screenName] = [];
-          if (alphabeticalIndices[screenName] !== undefined) {
-            alphabeticalIndices[screenName] = 0;
-          }
           wallpaperListChanged(screenName, 0);
         }
       }
@@ -981,18 +751,6 @@ Singleton {
   signal favoriteDataUpdated(string path)
 
   // -------------------------------------------------------------------
-  // -------------------------------------------------------------------
-  // -------------------------------------------------------------------
-  Timer {
-    id: randomWallpaperTimer
-    interval: Settings.data.wallpaper.randomIntervalSec * 1000
-    running: Settings.data.wallpaper.automationEnabled
-    repeat: true
-    onTriggered: setNextWallpaper()
-    triggeredOnStart: false
-  }
-
-  // -------------------------------------------------------------------
   // Cache file persistence
   // -------------------------------------------------------------------
   FileView {
@@ -1004,13 +762,11 @@ Singleton {
       id: wallpaperCacheAdapter
       property var wallpapers: ({})
       property string defaultWallpaper: root.noctaliaDefaultWallpaper
-      property var usedRandomWallpapers: ({})
     }
 
     onLoaded: {
       // Load wallpapers from cache file
       root.currentWallpapers = wallpaperCacheAdapter.wallpapers || {};
-      root.usedRandomWallpapers = wallpaperCacheAdapter.usedRandomWallpapers || {};
 
       // Load default wallpaper from cache if it exists, otherwise use Noctalia default
       if (wallpaperCacheAdapter.defaultWallpaper && wallpaperCacheAdapter.defaultWallpaper !== "") {
@@ -1040,7 +796,6 @@ Singleton {
     onTriggered: {
       wallpaperCacheAdapter.wallpapers = root.currentWallpapers;
       wallpaperCacheAdapter.defaultWallpaper = root.defaultWallpaper;
-      wallpaperCacheAdapter.usedRandomWallpapers = root.usedRandomWallpapers;
       wallpaperCacheView.writeAdapter();
       Logger.d("Wallpaper", "Saved wallpapers to cache file");
     }

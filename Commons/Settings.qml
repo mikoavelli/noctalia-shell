@@ -285,13 +285,6 @@ Singleton {
       property color fillColor: "#000000"
       property bool useSolidColor: false
       property color solidColor: "#1a1a2e"
-      property bool automationEnabled: false
-      property string wallpaperChangeMode: "random" // "random" or "alphabetical"
-      property int randomIntervalSec: 300 // 5 min
-      property int transitionDuration: 1500 // 1500 ms
-      property string transitionType: "random"
-      property bool skipStartupTransition: false
-      property real transitionEdgeSmoothness: 0.05
       property string panelPosition: "follow_bar"
       property bool hideWallpaperFilenames: false
       property real overviewBlur: 0.4

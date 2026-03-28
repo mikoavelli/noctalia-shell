@@ -321,27 +321,11 @@ Singleton {
       }
     }
 
-    function random() {
-      if (Settings.data.wallpaper.enabled) {
-        WallpaperService.setRandomWallpaper();
-      }
-    }
-
     function set(path: string, screen: string) {
       if (screen === "all" || screen === "") {
         screen = undefined;
       }
       WallpaperService.changeWallpaper(path, screen);
-    }
-
-    function toggleAutomation() {
-      Settings.data.wallpaper.automationEnabled = !Settings.data.wallpaper.automationEnabled;
-    }
-    function disableAutomation() {
-      Settings.data.wallpaper.automationEnabled = false;
-    }
-    function enableAutomation() {
-      Settings.data.wallpaper.automationEnabled = true;
     }
   }
 

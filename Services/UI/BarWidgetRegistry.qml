@@ -36,7 +36,6 @@ Singleton {
                            "Tray": trayComponent,
                            "Volume": volumeComponent,
                            "VPN": vpnComponent,
-                           "WallpaperSelector": wallpaperSelectorComponent,
                            "Workspace": workspaceComponent
                          })
 
@@ -65,7 +64,6 @@ Singleton {
                                      "Tray": "WidgetSettings/TraySettings.qml",
                                      "Volume": "WidgetSettings/VolumeSettings.qml",
                                      "VPN": "WidgetSettings/VPNSettings.qml",
-                                     "WallpaperSelector": "WidgetSettings/WallpaperSelectorSettings.qml",
                                      "Workspace": "WidgetSettings/WorkspaceSettings.qml"
                                    })
 
@@ -282,9 +280,6 @@ Singleton {
                                     "middleClickCommand": "pwvucontrol || pavucontrol",
                                     "iconColor": "none",
                                     "textColor": "none"
-                                  },
-                                  "WallpaperSelector": {
-                                    "iconColor": "none"
                                   }
                                 })
 
@@ -357,9 +352,6 @@ Singleton {
   }
   property Component networkComponent: Component {
     Network {}
-  }
-  property Component wallpaperSelectorComponent: Component {
-    WallpaperSelector {}
   }
   property Component workspaceComponent: Component {
     Workspace {}

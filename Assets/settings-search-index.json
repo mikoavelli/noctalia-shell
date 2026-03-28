@@ -1108,49 +1108,12 @@
     "subTabLabel": "common.screen-corners"
   },
   {
-    "labelKey": "panels.wallpaper.automation-scheduled-change-label",
-    "descriptionKey": "panels.wallpaper.automation-scheduled-change-description",
-    "widget": "NToggle",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 2,
-    "subTabLabel": "common.automation"
-  },
-  {
-    "labelKey": "panels.wallpaper.automation-change-mode-label",
-    "descriptionKey": "panels.wallpaper.automation-change-mode-description",
-    "widget": "NComboBox",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 2,
-    "subTabLabel": "common.automation"
-  },
-  {
-    "labelKey": "panels.wallpaper.automation-interval-label",
-    "descriptionKey": "panels.wallpaper.automation-interval-description",
-    "widget": "NLabel",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 2,
-    "subTabLabel": "common.automation"
-  },
-  {
-    "labelKey": "panels.wallpaper.automation-custom-interval-label",
-    "descriptionKey": "panels.wallpaper.automation-custom-interval-description",
-    "widget": "NTextInput",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 2,
-    "subTabLabel": "common.automation"
-  },
-  {
     "labelKey": "panels.wallpaper.settings-enable-management-label",
     "descriptionKey": "panels.wallpaper.settings-enable-management-description",
     "widget": "NToggle",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "tooltips.wallpaper-selector",
@@ -1158,8 +1121,7 @@
     "widget": "NLabel",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-view-mode-label",
@@ -1167,8 +1129,7 @@
     "widget": "NComboBox",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-folder-label",
@@ -1176,8 +1137,7 @@
     "widget": "NTextInputButton",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-monitor-specific-label",
@@ -1185,8 +1145,15 @@
     "widget": "NToggle",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
+  },
+  {
+    "labelKey": "panels.wallpaper.fill-mode-label",
+    "descriptionKey": "panels.wallpaper.fill-mode-description",
+    "widget": "NComboBox",
+    "tab": 2,
+    "tabLabel": "common.wallpaper",
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-enable-overview-label",
@@ -1194,8 +1161,7 @@
     "widget": "NToggle",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-overview-blur-strength-label",
@@ -1203,8 +1169,7 @@
     "widget": "NValueSlider",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
+    "subTab": null
   },
   {
     "labelKey": "panels.wallpaper.settings-overview-tint-label",
@@ -1212,52 +1177,6 @@
     "widget": "NValueSlider",
     "tab": 2,
     "tabLabel": "common.wallpaper",
-    "subTab": 0,
-    "subTabLabel": "common.general"
-  },
-  {
-    "labelKey": "panels.wallpaper.look-feel-fill-mode-label",
-    "descriptionKey": "panels.wallpaper.look-feel-fill-mode-description",
-    "widget": "NComboBox",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
-  },
-  {
-    "labelKey": "panels.wallpaper.look-feel-transition-type-label",
-    "descriptionKey": "panels.wallpaper.look-feel-transition-type-description",
-    "widget": "NComboBox",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
-  },
-  {
-    "labelKey": "panels.wallpaper.look-feel-skip-startup-transition-label",
-    "descriptionKey": "panels.wallpaper.look-feel-skip-startup-transition-description",
-    "widget": "NToggle",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
-  },
-  {
-    "labelKey": "panels.wallpaper.look-feel-transition-duration-label",
-    "descriptionKey": "panels.wallpaper.look-feel-transition-duration-description",
-    "widget": "NValueSlider",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
-  },
-  {
-    "labelKey": "panels.wallpaper.look-feel-edge-smoothness-label",
-    "descriptionKey": "panels.wallpaper.look-feel-edge-smoothness-description",
-    "widget": "NValueSlider",
-    "tab": 2,
-    "tabLabel": "common.wallpaper",
-    "subTab": 1,
-    "subTabLabel": "common.look"
+    "subTab": null
   }
 ]
