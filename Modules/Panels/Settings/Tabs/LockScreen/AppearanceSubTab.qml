@@ -65,14 +65,6 @@ ColumnLayout {
   }
 
   NToggle {
-    label: I18n.tr("panels.lock-screen.compact-lockscreen-label")
-    description: I18n.tr("panels.lock-screen.compact-lockscreen-description")
-    checked: Settings.data.general.compactLockScreen
-    onToggled: checked => Settings.data.general.compactLockScreen = checked
-    defaultValue: Settings.getDefaultValue("general.compactLockScreen")
-  }
-
-  NToggle {
     label: I18n.tr("panels.lock-screen.lock-screen-animations-label")
     description: I18n.tr("panels.lock-screen.lock-screen-animations-description")
     checked: Settings.data.general.lockScreenAnimations

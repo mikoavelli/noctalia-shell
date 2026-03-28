@@ -125,11 +125,11 @@ Item {
     height: 40
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: 96 + (Settings.data.general.compactLockScreen ? 116 : 220)
+    anchors.bottomMargin: 212
     topLeftRadius: Style.radiusL
     topRightRadius: Style.radiusL
     color: Color.mSurface
-    visible: Settings.data.general.compactLockScreen && ((batteryIndicator.isReady) || keyboardLayout.currentLayout !== "Unknown")
+    visible: batteryIndicator.isReady || keyboardLayout.currentLayout !== "Unknown"
 
     RowLayout {
       anchors.centerIn: parent
@@ -179,10 +179,10 @@ Item {
     id: bottomContainer
 
     // Support for removing the session/power buttons at the bottom.
-    readonly property int deltaY: Settings.data.general.showSessionButtonsOnLockScreen ? 0 : (Settings.data.general.compactLockScreen ? 36 : 48) + 14
+    readonly property int deltaY: Settings.data.general.showSessionButtonsOnLockScreen ? 0 : 36 + 14
 
     height: {
-      let calcHeight = Settings.data.general.compactLockScreen ? 120 : 220;
+      let calcHeight = 120;
       if (!Settings.data.general.showSessionButtonsOnLockScreen) {
         calcHeight -= bottomContainer.deltaY;
       }
@@ -200,181 +200,6 @@ Item {
       anchors.fill: parent
       anchors.margins: 14
       spacing: Style.marginL
-
-      // Top info row
-      RowLayout {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 65
-        spacing: Style.marginXL
-        visible: !Settings.data.general.compactLockScreen
-
-        // Media widget with visualizer
-        Item {
-          Layout.preferredWidth: Style.marginM
-          visible: MediaService.currentPlayer && MediaService.canPlay
-        }
-
-        Rectangle {
-          Layout.preferredWidth: 220
-          Layout.fillWidth: true
-          Layout.preferredHeight: 50
-          radius: Style.radiusL
-          color: "transparent"
-          clip: true
-          visible: MediaService.currentPlayer && MediaService.canPlay
-
-          Loader {
-            anchors.fill: parent
-            anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "linear"
-            z: 0
-            sourceComponent: NLinearSpectrum {
-              anchors.fill: parent
-              values: CavaService.values
-              fillColor: Color.mPrimary
-              opacity: 0.4
-            }
-          }
-
-          Loader {
-            anchors.fill: parent
-            anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "mirrored"
-            z: 0
-            sourceComponent: NMirroredSpectrum {
-              anchors.fill: parent
-              values: CavaService.values
-              fillColor: Color.mPrimary
-              opacity: 0.4
-            }
-          }
-
-          Loader {
-            anchors.fill: parent
-            anchors.margins: 4
-            active: Settings.data.audio.visualizerType === "wave"
-            z: 0
-            sourceComponent: NWaveSpectrum {
-              anchors.fill: parent
-              values: CavaService.values
-              fillColor: Color.mPrimary
-              opacity: 0.4
-            }
-          }
-
-          RowLayout {
-            anchors.fill: parent
-            anchors.margins: 8
-            spacing: Style.marginM
-            z: 1
-
-            Rectangle {
-              Layout.preferredWidth: 34
-              Layout.preferredHeight: 34
-              radius: Math.min(Style.radiusL, width / 2)
-              color: "transparent"
-              clip: true
-
-              NImageRounded {
-                anchors.fill: parent
-                anchors.margins: 2
-                radius: Math.min(Style.radiusL, width / 2)
-                imagePath: MediaService.trackArtUrl
-                fallbackIcon: "disc"
-                fallbackIconSize: Style.fontSizeM
-                borderColor: Color.mOutline
-                borderWidth: Style.borderS
-              }
-            }
-
-            ColumnLayout {
-              Layout.fillWidth: true
-              spacing: Style.marginXXS
-
-              NText {
-                text: MediaService.trackTitle || "No media"
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurface
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-              }
-
-              NText {
-                text: MediaService.trackArtist || ""
-                pointSize: Style.fontSizeM
-                color: Color.mOnSurfaceVariant
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-              }
-            }
-          }
-        }
-
-        Rectangle {
-          Layout.preferredWidth: 1
-          Layout.fillHeight: true
-          Layout.rightMargin: 4
-          color: Qt.alpha(Color.mOutline, 0.3)
-          visible: MediaService.currentPlayer && MediaService.canPlay
-        }
-
-        Item {
-          Layout.preferredWidth: Style.marginM
-          visible: !(MediaService.currentPlayer && MediaService.canPlay)
-        }
-
-        Item {
-          Layout.fillWidth: batteryIndicator.isReady
-        }
-
-        // Battery and Keyboard Layout (full mode only)
-        ColumnLayout {
-          Layout.alignment: (batteryIndicator.isReady) ? (Qt.AlignRight | Qt.AlignVCenter) : Qt.AlignVCenter
-          spacing: Style.marginM
-          visible: (batteryIndicator.isReady) || keyboardLayout.currentLayout !== "Unknown"
-
-          // Battery
-          RowLayout {
-            spacing: Style.marginXS
-            visible: batteryIndicator.isReady
-
-            NIcon {
-              icon: batteryIndicator.icon
-              pointSize: Style.fontSizeM
-              color: batteryIndicator.charging ? Color.mPrimary : Color.mOnSurfaceVariant
-            }
-
-            NText {
-              text: Math.round(batteryIndicator.percent) + "%"
-              color: Color.mOnSurfaceVariant
-              pointSize: Style.fontSizeM
-            }
-          }
-
-          // Keyboard Layout
-          RowLayout {
-            spacing: Style.marginXS
-            visible: keyboardLayout.currentLayout !== "Unknown"
-
-            NIcon {
-              icon: "keyboard"
-              pointSize: Style.fontSizeM
-              color: Color.mOnSurfaceVariant
-            }
-
-            NText {
-              text: keyboardLayout.currentLayout
-              color: Color.mOnSurfaceVariant
-              pointSize: Style.fontSizeM
-              elide: Text.ElideRight
-            }
-          }
-        }
-
-        Item {
-          Layout.preferredWidth: Style.marginM
-        }
-      }
 
       // Password input
       RowLayout {
@@ -613,7 +438,7 @@ Item {
       RowLayout {
         id: sessionButtonRow
         Layout.fillWidth: true
-        Layout.preferredHeight: Settings.data.general.compactLockScreen ? 36 : 48
+        Layout.preferredHeight: 36
         Layout.alignment: Qt.AlignHCenter
         spacing: Style.marginM
         visible: Settings.data.general.showSessionButtonsOnLockScreen
@@ -635,8 +460,8 @@ Item {
             backgroundColor: Color.mOnSurfaceVariant
             textColor: Color.mOnPrimary
             hoverColor: Color.mPrimary
-            fontSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
-            iconSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+            fontSize: Style.fontSizeS
+            iconSize: Style.fontSizeM
             horizontalAlignment: Qt.AlignHCenter
             buttonRadius: Style.radiusL
             onClicked: startTimer("logout")
@@ -655,8 +480,8 @@ Item {
             backgroundColor: Color.mOnSurfaceVariant
             textColor: Color.mOnPrimary
             hoverColor: Color.mPrimary
-            fontSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
-            iconSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+            fontSize: Style.fontSizeS
+            iconSize: Style.fontSizeM
             horizontalAlignment: Qt.AlignHCenter
             buttonRadius: Style.radiusL
             onClicked: startTimer("suspend")
@@ -676,8 +501,8 @@ Item {
             backgroundColor: Color.mOnSurfaceVariant
             textColor: Color.mOnPrimary
             hoverColor: Color.mPrimary
-            fontSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
-            iconSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+            fontSize: Style.fontSizeS
+            iconSize: Style.fontSizeM
             horizontalAlignment: Qt.AlignHCenter
             buttonRadius: Style.radiusL
             onClicked: startTimer("hibernate")
@@ -696,8 +521,8 @@ Item {
             backgroundColor: Color.mOnSurfaceVariant
             textColor: Color.mOnPrimary
             hoverColor: Color.mPrimary
-            fontSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
-            iconSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+            fontSize: Style.fontSizeS
+            iconSize: Style.fontSizeM
             horizontalAlignment: Qt.AlignHCenter
             buttonRadius: Style.radiusL
             onClicked: startTimer("reboot")
@@ -716,8 +541,8 @@ Item {
             backgroundColor: Color.mError
             textColor: Color.mOnError
             hoverColor: Color.mError
-            fontSize: Settings.data.general.compactLockScreen ? Style.fontSizeS : Style.fontSizeM
-            iconSize: Settings.data.general.compactLockScreen ? Style.fontSizeM : Style.fontSizeL
+            fontSize: Style.fontSizeS
+            iconSize: Style.fontSizeM
             horizontalAlignment: Qt.AlignHCenter
             buttonRadius: Style.radiusL
             onClicked: startTimer("shutdown")

@@ -16,25 +16,6 @@ Loader {
   id: root
   active: false
 
-  // Track if the visualizer should be shown (lockscreen active + media playing + non-compact mode)
-  readonly property bool needsCava: root.active && !Settings.data.general.compactLockScreen && Settings.data.audio.visualizerType !== "" && Settings.data.audio.visualizerType !== "none"
-
-  onActiveChanged: {
-    if (root.active && root.needsCava) {
-      CavaService.registerComponent("lockscreen");
-    } else {
-      CavaService.unregisterComponent("lockscreen");
-    }
-  }
-
-  onNeedsCavaChanged: {
-    if (root.needsCava) {
-      CavaService.registerComponent("lockscreen");
-    } else {
-      CavaService.unregisterComponent("lockscreen");
-    }
-  }
-
   Component.onCompleted: {
     // Register with panel service
     PanelService.lockScreen = this;
@@ -120,7 +101,7 @@ Loader {
                   height: 50
                   anchors.horizontalCenter: parent.horizontalCenter
                   anchors.bottom: parent.bottom
-                  anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 280 : 360) * Style.uiScaleRatio
+                  anchors.bottomMargin: 280 * Style.uiScaleRatio
                   radius: Style.radiusL
                   color: Color.mTertiary
                   visible: lockContext.showInfo && lockContext.infoMessage && !panelComponent.timerActive
@@ -159,7 +140,7 @@ Loader {
                   height: 50
                   anchors.horizontalCenter: parent.horizontalCenter
                   anchors.bottom: parent.bottom
-                  anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 280 : 360) * Style.uiScaleRatio
+                  anchors.bottomMargin: 280 * Style.uiScaleRatio
                   radius: Style.radiusL
                   color: Color.mError
                   visible: lockContext.showFailure && lockContext.errorMessage && !panelComponent.timerActive
@@ -198,7 +179,7 @@ Loader {
                   height: 50
                   anchors.horizontalCenter: parent.horizontalCenter
                   anchors.bottom: parent.bottom
-                  anchors.bottomMargin: (Settings.data.general.compactLockScreen ? 280 : 360) * Style.uiScaleRatio
+                  anchors.bottomMargin: 280 * Style.uiScaleRatio
                   radius: Style.radiusL
                   color: Color.mSurface
                   visible: panelComponent.timerActive
