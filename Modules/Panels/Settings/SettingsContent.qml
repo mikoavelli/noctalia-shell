@@ -7,7 +7,6 @@ import qs.Commons
 import qs.Modules.Panels.Settings.Tabs
 import qs.Modules.Panels.Settings.Tabs.Audio
 import qs.Modules.Panels.Settings.Tabs.Bar
-import qs.Modules.Panels.Settings.Tabs.ColorScheme
 import qs.Modules.Panels.Settings.Tabs.Connections
 import qs.Modules.Panels.Settings.Tabs.Display
 import qs.Modules.Panels.Settings.Tabs.Dock
@@ -418,10 +417,6 @@ Item {
     ConnectionsTab {}
   }
   Component {
-    id: colorSchemeTab
-    ColorSchemeTab {}
-  }
-  Component {
     id: wallpaperTab
     WallpaperTab {}
   }
@@ -467,12 +462,6 @@ Item {
             "label": "panels.user-interface.title",
             "icon": "settings-user-interface",
             "source": userInterfaceTab
-          },
-          {
-            "id": SettingsPanel.Tab.ColorScheme,
-            "label": "panels.color-scheme.title",
-            "icon": "settings-color-scheme",
-            "source": colorSchemeTab
           },
           {
             "id": SettingsPanel.Tab.Wallpaper,

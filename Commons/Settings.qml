@@ -311,7 +311,7 @@ Singleton {
       property string wallhavenResolutionHeight: ""
       property string sortOrder: "name" // "name", "name_desc", "date", "date_desc", "random"
       property list<var> favorites: []
-      // Format: [{ "path": "/path/to/wallpaper.jpg", "colorScheme": "...", "useWallpaperColors": true, "generationMethod": "tonal-spot" }]
+      // Format: [{ "path": "/path/to/wallpaper.jpg", "colorScheme": "..." }]
     }
 
     // system monitor
@@ -465,20 +465,6 @@ Singleton {
       property int brightnessStep: 5
       property bool enforceMinimum: true
       property bool enableDdcSupport: false
-    }
-
-    property JsonObject colorSchemes: JsonObject {
-      property bool useWallpaperColors: false
-      property string predefinedScheme: "Noctalia (default)"
-      property string generationMethod: "tonal-spot"
-      property string monitorForColors: ""
-    }
-
-    // templates toggles
-    property JsonObject templates: JsonObject {
-      property list<var> activeTemplates: []
-      // Format: [{ "id": "gtk", "enabled": true }, { "id": "qt", "enabled": true }, ...]
-      property bool enableUserTheming: false
     }
 
     // night light

@@ -21,7 +21,6 @@ Singleton {
   // Signals for state changes
   signal displayStateChanged
   signal notificationsStateChanged
-  signal colorSchemesListChanged
 
   Component.onCompleted: {
     // Setup state file path (needs Settings to be available)
@@ -49,12 +48,6 @@ Singleton {
       property var notificationsState: ({
                                           lastSeenTs: 0
                                         })
-
-      // SchemeDownloader: color schemes list
-      property var colorSchemesList: ({
-                                        schemes: [],
-                                        timestamp: 0
-                                      })
 
       // UI state: settings panel, etc.
       property var ui: ({
@@ -143,20 +136,6 @@ Singleton {
     };
   }
 
-  // Color schemes list (SchemeDownloader)
-  function setColorSchemesList(listData) {
-    adapter.colorSchemesList = listData;
-    save();
-    colorSchemesListChanged();
-  }
-
-  function getColorSchemesList() {
-    return adapter.colorSchemesList || {
-      schemes: [],
-      timestamp: 0
-    };
-  }
-
   // UI state
   function setUiState(stateData) {
     adapter.ui = stateData;
@@ -197,7 +176,6 @@ Singleton {
           // -------------
           display: shellStateData.display || {},
           notificationsState: shellStateData.notificationsState || {},
-          colorSchemesList: shellStateData.colorSchemesList || {},
           ui: shellStateData.ui || {}
         }
       };

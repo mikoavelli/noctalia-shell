@@ -4,7 +4,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
-import qs.Services.Theming
 import qs.Services.UI
 
 Singleton {
@@ -379,12 +378,6 @@ Singleton {
     var outgoing = screenName !== undefined ? [currentWallpapers[screenName]] : Object.values(currentWallpapers);
 
     var unique = [...new Set(outgoing)];
-
-    unique.forEach(function (path) {
-      if (path && path !== newPath && isFavorite(path)) {
-        updateFavoriteColorScheme(path);
-      }
-    });
   }
 
   // -------------------------------------------------------------------
@@ -957,9 +950,6 @@ Singleton {
   function _createFavoriteEntry(path) {
     return {
       "path": path,
-      "colorScheme": Settings.data.colorSchemes.predefinedScheme,
-      "useWallpaperColors": Settings.data.colorSchemes.useWallpaperColors,
-      "generationMethod": Settings.data.colorSchemes.generationMethod,
       "paletteColors": [Color.mPrimary.toString(), Color.mSecondary.toString(), Color.mTertiary.toString(), Color.mError.toString()]
     };
   }
@@ -992,48 +982,6 @@ Singleton {
 
     Settings.data.wallpaper.favorites = favorites;
     favoritesChanged(path);
-  }
-
-  // -------------------------------------------------------------------
-  function applyFavoriteTheme(path, screenName) {
-    // Only apply theme if the wallpaper is on the monitor driving colors
-    var effectiveMonitor = Settings.data.colorSchemes.monitorForColors;
-    if (effectiveMonitor === "" || effectiveMonitor === undefined) {
-      effectiveMonitor = Quickshell.screens.length > 0 ? Quickshell.screens[0].name : "";
-    }
-    if (screenName !== undefined && screenName !== effectiveMonitor) {
-      return;
-    }
-
-    var favorite = getFavorite(path);
-    if (!favorite)
-      return;
-
-    // Track which auto-triggered properties are changing to avoid redundant generation calls
-    var generationMethodChanging = Settings.data.colorSchemes.generationMethod !== favorite.generationMethod;
-
-    // Update settings to match the favorite's saved color scheme
-    Settings.data.colorSchemes.useWallpaperColors = favorite.useWallpaperColors;
-    Settings.data.colorSchemes.predefinedScheme = favorite.colorScheme;
-    Settings.data.colorSchemes.generationMethod = favorite.generationMethod;
-
-    // Only explicitly trigger generation if the auto-triggered properties didn't change.
-    if (!generationMethodChanging) {
-      AppThemeService.generate();
-    }
-  }
-
-  // -------------------------------------------------------------------
-  function updateFavoriteColorScheme(path) {
-    var existingIndex = _findFavoriteIndex(path);
-    if (existingIndex === _favoriteNotFound)
-      return;
-
-    var favorites = Settings.data.wallpaper.favorites.slice();
-    favorites[existingIndex] = _createFavoriteEntry(path);
-    Settings.data.wallpaper.favorites = favorites;
-    Logger.d("Wallpaper", "Updated color scheme for favorite:", path);
-    favoriteDataUpdated(path);
   }
 
   signal favoritesChanged(string path)

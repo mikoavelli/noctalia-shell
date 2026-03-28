@@ -5,7 +5,6 @@ import Quickshell
 import qs.Commons
 import qs.Modules.MainScreen
 import qs.Modules.Panels.Settings
-import qs.Services.Theming
 import qs.Services.UI
 import qs.Widgets
 
@@ -418,78 +417,6 @@ SmartPanel {
                                   event.accepted = true;
                                 }
                               }
-            }
-
-            NIconButton {
-              icon: "color-swatch"
-              tooltipText: Settings.data.colorSchemes.useWallpaperColors ? I18n.tr("wallpaper.panel.color-extraction-enabled") : I18n.tr("wallpaper.panel.color-extraction-disabled")
-              baseSize: Style.baseWidgetSize * 0.8
-              onClicked: {
-                Settings.data.colorSchemes.useWallpaperColors = !Settings.data.colorSchemes.useWallpaperColors;
-                if (Settings.data.colorSchemes.useWallpaperColors) {
-                  AppThemeService.generate();
-                } else {
-                  ColorSchemeService.setPredefinedScheme(Settings.data.colorSchemes.predefinedScheme);
-                }
-              }
-            }
-
-            NComboBox {
-              id: colorSchemeComboBox
-              Layout.fillWidth: false
-              Layout.minimumWidth: 200
-              minimumWidth: 200
-
-              property bool _initialized: false
-              property bool _userChanging: false
-              Component.onCompleted: Qt.callLater(() => {
-                                                    _initialized = true;
-                                                  })
-
-              model: Settings.data.colorSchemes.useWallpaperColors ? TemplateProcessor.schemeTypes : ColorSchemeService.schemes.map(s => ({
-                                                                                                                                            "key": ColorSchemeService.getBasename(s),
-                                                                                                                                            "name": ColorSchemeService.getBasename(s)
-                                                                                                                                          }))
-              currentKey: Settings.data.colorSchemes.useWallpaperColors ? Settings.data.colorSchemes.generationMethod : Settings.data.colorSchemes.predefinedScheme
-              onCurrentKeyChanged: {
-                if (!_initialized)
-                  return;
-                if (_userChanging) {
-                  _userChanging = false;
-                  return;
-                }
-                schemeGlowAnimation.restart();
-              }
-              onSelected: key => {
-                            _userChanging = true;
-                            if (Settings.data.colorSchemes.useWallpaperColors) {
-                              Settings.data.colorSchemes.generationMethod = key;
-                              AppThemeService.generate();
-                            } else {
-                              ColorSchemeService.setPredefinedScheme(key);
-                            }
-                            Qt.callLater(() => {
-                                           _userChanging = false;
-                                         });
-                          }
-
-              SequentialAnimation {
-                id: schemeGlowAnimation
-                NumberAnimation {
-                  target: colorSchemeComboBox
-                  property: "opacity"
-                  to: 0.3
-                  duration: Style.animationSlow
-                  easing.type: Easing.OutCubic
-                }
-                NumberAnimation {
-                  target: colorSchemeComboBox
-                  property: "opacity"
-                  to: 1.0
-                  duration: Style.animationSlow
-                  easing.type: Easing.InCubic
-                }
-              }
             }
 
             NComboBox {

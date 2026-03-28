@@ -33,7 +33,6 @@ import qs.Services.Networking
 import qs.Services.Noctalia
 import qs.Services.Power
 import qs.Services.System
-import qs.Services.Theming
 import qs.Services.UI
 
 ShellRoot {
@@ -96,8 +95,6 @@ ShellRoot {
         // Critical services needed for initial UI rendering
         WallpaperService.init();
         ImageCacheService.init();
-        AppThemeService.init();
-        ColorSchemeService.init();
 
         // Defer non-critical services to unblock first frame
         Qt.callLater(function () {

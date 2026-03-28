@@ -15,7 +15,6 @@ import qs.Services.Networking
 import qs.Services.Noctalia
 import qs.Services.Power
 import qs.Services.System
-import qs.Services.Theming
 import qs.Services.UI
 
 Singleton {
@@ -68,13 +67,11 @@ Singleton {
                                             "about": SettingsPanel.Tab.About,
                                             "audio": SettingsPanel.Tab.Audio,
                                             "bar": SettingsPanel.Tab.Bar,
-                                            "colorscheme": SettingsPanel.Tab.ColorScheme,
                                             "lockscreen": SettingsPanel.Tab.LockScreen,
                                             "osd": SettingsPanel.Tab.OSD,
                                             "display": SettingsPanel.Tab.Display,
                                             "dock": SettingsPanel.Tab.Dock,
                                             "general": SettingsPanel.Tab.General,
-                                            "location": SettingsPanel.Tab.Location,
                                             "connections": SettingsPanel.Tab.Connections,
                                             "notifications": SettingsPanel.Tab.Notifications,
                                             "plugins": SettingsPanel.Tab.Plugins,
@@ -248,28 +245,6 @@ Singleton {
         return;
       }
       Settings.data.nightLight.enabled = !Settings.data.nightLight.enabled;
-    }
-  }
-
-  IpcHandler {
-    target: "colorScheme"
-    function set(schemeName: string) {
-      ColorSchemeService.setPredefinedScheme(schemeName);
-    }
-    function setGenerationMethod(method: string) {
-      var valid = false;
-      for (var i = 0; i < TemplateProcessor.schemeTypes.length; i++) {
-        if (TemplateProcessor.schemeTypes[i].key === method) {
-          valid = true;
-          break;
-        }
-      }
-
-      if (valid) {
-        Settings.data.colorSchemes.generationMethod = method;
-      } else {
-        Logger.w("IPC", "Invalid generation method received: " + method);
-      }
     }
   }
 
