@@ -536,16 +536,6 @@ Singleton {
   }
 
   IpcHandler {
-    target: "location"
-    function get(): string {
-      return Settings.data.location.name;
-    }
-    function set(name: string) {
-      Settings.data.location.name = name;
-    }
-  }
-
-  IpcHandler {
     target: "systemMonitor"
     function toggle() {
       root.screenDetector.withCurrentScreen(screen => {

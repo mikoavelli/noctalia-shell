@@ -19,15 +19,6 @@ Singleton {
                                             "wlsunsetAvailable": ["sh", "-c", "command -v wlsunset"]
                                           })
 
-  // Discord client auto-detection
-  property var availableDiscordClients: []
-
-  // Code client auto-detection
-  property var availableCodeClients: []
-
-  // Emacs client auto-detection
-  property var availableEmacsClients: []
-
   // Signal emitted when all checks are complete
   signal checksCompleted
 
