@@ -1141,7 +1141,6 @@
     "keybind-recording": "Recording keybind...",
     "search": "Search...",
     "search-icons": "e.g. noctalia, niri, battery, cloud",
-    "search-wallhaven": "Search Wallhaven...",
     "search-wallpapers": "Type to filter wallpapers..."
   },
   "positions": {
@@ -1326,7 +1325,6 @@
     "previous-media": "Previous track",
     "previous-month": "Previous month",
     "refresh-devices": "Refresh devices",
-    "refresh-wallhaven": "Refresh Wallhaven results",
     "refresh-wallpaper-list": "Refresh wallpaper list",
     "remove-widget": "Remove widget",
     "search-close": "Close search",
@@ -1357,8 +1355,6 @@
     "panel": {
       "apikey-help": "An API key is required to access NSFW content.",
       "apikey-label": "API Key",
-      "apikey-managed-by-env": "Managed via NOCTALIA_WALLHAVEN_API_KEY environment variable.",
-      "apikey-placeholder": "Enter your Wallhaven API Key",
       "apply-all-monitors-description": "Apply the selected wallpaper to all monitors.",
       "apply-all-monitors-label": "Apply to all monitors",
       "categories-anime": "Anime",
@@ -1388,9 +1384,7 @@
       "sorting-toplist": "Toplist",
       "sorting-views": "Views",
       "source-label": "Source",
-      "source-wallhaven": "Wallhaven",
-      "title": "Wallpaper Selector",
-      "wallhaven-settings-title": "Wallhaven Settings"
+      "title": "Wallpaper Selector"
     },
     "transitions": {
       "disc": "Disc",
@@ -1400,14 +1394,7 @@
       "stripes": "Stripes",
       "wipe": "Wipe"
     },
-    "try-different-search": "Try a different search query.",
-    "wallhaven": {
-      "loading": "Loading wallpapers...",
-      "no-results": "No wallpapers found. Try a different search query.",
-      "page": "{current} of {total}",
-      "page-prefix": "Page",
-      "page-suffix": "of {total}"
-    }
+    "try-different-search": "Try a different search query."
   },
   "widgets": {
     "color-picker": {

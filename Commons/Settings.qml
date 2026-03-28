@@ -296,19 +296,6 @@ Singleton {
       property bool hideWallpaperFilenames: false
       property real overviewBlur: 0.4
       property real overviewTint: 0.6
-      // Wallhaven settings
-      property bool useWallhaven: false
-      property string wallhavenQuery: ""
-      property string wallhavenSorting: "relevance"
-      property string wallhavenOrder: "desc"
-      property string wallhavenCategories: "111" // general,anime,people
-      property string wallhavenPurity: "100" // sfw only
-      property string wallhavenRatios: ""
-      property string wallhavenApiKey: ""
-      property string wallhavenResolutionMode: "atleast" // "atleast" or "exact"
-      property string wallhavenResolutionWidth: ""
-
-      property string wallhavenResolutionHeight: ""
       property string sortOrder: "name" // "name", "name_desc", "date", "date_desc", "random"
       property list<var> favorites: []
       // Format: [{ "path": "/path/to/wallpaper.jpg", "colorScheme": "..." }]
