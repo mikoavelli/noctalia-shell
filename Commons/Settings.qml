@@ -471,11 +471,6 @@ Singleton {
       property bool enabled: false
       property string temperature: "4500"
     }
-
-    // plugins
-    property JsonObject plugins: JsonObject {
-      property bool autoUpdate: false
-    }
   }
 
   // -----------------------------------------------------
