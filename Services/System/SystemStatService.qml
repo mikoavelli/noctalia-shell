@@ -44,7 +44,7 @@ Singleton {
   property real cpuGlobalMaxFreq: 3.5
   property real gpuTemp: 0
   property bool gpuAvailable: false
-  property string gpuType: "" // "amd", "intel", "nvidia"
+  property string gpuType: "" // "amd"
   property real memGb: 0
   property real memPercent: 0
   property real memTotalGb: 0
@@ -59,8 +59,6 @@ Singleton {
   property var diskAvailGb: ({})
   property real rxSpeed: 0
   property real txSpeed: 0
-  property real zfsArcSizeKb: 0 // ZFS ARC cache size in KB
-  property real zfsArcCminKb: 0 // ZFS ARC minimum (non-reclaimable) size in KB
   property real loadAvg1: 0
   property real loadAvg5: 0
   property real loadAvg15: 0
@@ -250,20 +248,9 @@ Singleton {
   // For Intel coretemp averaging of all cores/sensors
   property var intelTempValues: []
   property int intelTempFilesChecked: 0
-  property int intelTempMaxFiles: 20 // Will test up to temp20_input
+  property int intelTempMaxFiles: 20
 
-  // Thermal zone fallback (for ARM SoCs with SCMI sensors, etc.)
-  // Matches thermal zone types containing "cpu" and picks the hottest big-core zone.
-  // Also provides GPU temp via zones like "gpu-avg-thermal" or "gpu0-thermal".
-  property string cpuThermalZonePath: ""
-  property var cpuThermalZonePaths: [] // All matching CPU zones for averaging
-  property string gpuThermalZonePath: ""
-
-  // GPU temperature detection
-  // On dual-GPU systems, we prioritize discrete GPUs over integrated GPUs
-  // Priority: NVIDIA (opt-in) > AMD dGPU > Intel Arc > AMD iGPU
-  // Note: NVIDIA requires opt-in because nvidia-smi wakes the dGPU on laptops, draining battery
-  readonly property var supportedTempGpuSensorNames: ["amdgpu", "xe"]
+  readonly property var supportedTempGpuSensorNames: ["amdgpu"]
   property string gpuTempHwmonPath: ""
   property var foundGpuSensors: [] // [{hwmonPath, type, hasDedicatedVram}]
   property int gpuVramCheckIndex: 0
@@ -289,7 +276,6 @@ Singleton {
       root.prevTime = 0;
 
       // Trigger initial reads
-      zfsArcStatsFile.reload();
       loadAvgFile.reload();
 
       // Start persistent disk shell
@@ -304,15 +290,6 @@ Singleton {
     }
   }
 
-  // Re-run GPU detection when dGPU opt-in setting changes
-  Connections {
-    target: Settings.data.systemMonitor
-    function onEnableDgpuMonitoringChanged() {
-      Logger.i("SystemStat", "dGPU monitoring opt-in setting changed, re-detecting GPUs");
-      restartGpuDetection();
-    }
-  }
-
   // Reset differential state after suspend so the first reading is treated as fresh
   Connections {
     target: Time
@@ -323,22 +300,6 @@ Singleton {
     }
   }
 
-  function restartGpuDetection() {
-    // Reset GPU state
-    root.gpuAvailable = false;
-    root.gpuType = "";
-    root.gpuTempHwmonPath = "";
-    root.gpuTemp = 0;
-    root.foundGpuSensors = [];
-    root.gpuVramCheckIndex = 0;
-
-    // Restart GPU detection
-    gpuTempNameReader.currentIndex = 0;
-    gpuTempNameReader.checkNext();
-  }
-
-  // --------------------------------------------
-  // Timer for CPU usage, frequency, and temperature
   Timer {
     id: cpuTimer
     interval: root.cpuIntervalMs
@@ -369,10 +330,7 @@ Singleton {
     repeat: true
     running: root.shouldRun
     triggeredOnStart: true
-    onTriggered: {
-      memInfoFile.reload();
-      zfsArcStatsFile.reload();
-    }
+    onTriggered: memInfoFile.reload()
   }
 
   // Timer for disk usage
@@ -433,19 +391,6 @@ Singleton {
     id: loadAvgFile
     path: "/proc/loadavg"
     onLoaded: parseLoadAverage(text())
-  }
-
-  // ZFS ARC stats file (only exists on ZFS systems)
-  FileView {
-    id: zfsArcStatsFile
-    path: "/proc/spl/kstat/zfs/arcstats"
-    printErrors: false
-    onLoaded: parseZfsArcStats(text())
-    onLoadFailed: {
-      // File doesn't exist (non-ZFS system), set ARC values to 0
-      root.zfsArcSizeKb = 0;
-      root.zfsArcCminKb = 0;
-    }
   }
 
   // --------------------------------------------
@@ -573,8 +518,7 @@ Singleton {
 
     function checkNext() {
       if (currentIndex >= 16) {
-        // No hwmon sensor found, try thermal_zone fallback (ARM SoCs, SCMI, etc.)
-        thermalZoneScanner.startScan();
+        Logger.w("SystemStat", "No supported temperature sensor found");
         return;
       }
 
@@ -638,182 +582,6 @@ Singleton {
     }
   }
 
-  // --------------------------------------------
-  // Thermal zone fallback for CPU and GPU temperature
-  // Used on ARM SoCs (e.g., SCMI sensors) where hwmon doesn't expose
-  // coretemp/k10temp/zenpower. Scans /sys/class/thermal/thermal_zoneN/type
-  // for CPU and GPU zone names, then reads temp from all matching zones.
-  //
-  // CPU: reads all cpu-*-thermal zones and reports the hottest core.
-  // GPU: prefers gpu-avg-thermal (firmware average), falls back to max of gpu[0-9]-thermal.
-
-  FileView {
-    id: thermalZoneScanner
-    property int currentIndex: 0
-    property var cpuZones: []
-    property var gpuZones: []
-    property string gpuAvgZonePath: ""
-    printErrors: false
-
-    function startScan() {
-      currentIndex = 0;
-      cpuZones = [];
-      gpuZones = [];
-      gpuAvgZonePath = "";
-      checkNext();
-    }
-
-    function checkNext() {
-      if (currentIndex >= 20) {
-        finishScan();
-        return;
-      }
-      thermalZoneScanner.path = `/sys/class/thermal/thermal_zone${currentIndex}/type`;
-      thermalZoneScanner.reload();
-    }
-
-    onLoaded: {
-      const name = text().trim();
-      const zonePath = `/sys/class/thermal/thermal_zone${currentIndex}`;
-      if (name.startsWith("cpu") && name.endsWith("thermal")) {
-        cpuZones.push({
-                        "type": name,
-                        "path": zonePath + "/temp"
-                      });
-      } else if (name === "gpu-avg-thermal") {
-        gpuAvgZonePath = zonePath + "/temp";
-      } else if (/^gpu[0-9]+-?thermal$/.test(name)) {
-        gpuZones.push({
-                        "type": name,
-                        "path": zonePath + "/temp"
-                      });
-      }
-      currentIndex++;
-      Qt.callLater(() => {
-                     checkNext();
-                   });
-    }
-
-    onLoadFailed: function (error) {
-      currentIndex++;
-      Qt.callLater(() => {
-                     checkNext();
-                   });
-    }
-
-    function finishScan() {
-      // CPU thermal zones
-      if (cpuZones.length > 0) {
-        root.cpuTempSensorName = "thermal_zone";
-        root.cpuThermalZonePaths = cpuZones.map(z => z.path);
-        const types = cpuZones.map(z => z.type).join(", ");
-        Logger.i("SystemStat", `Found ${cpuZones.length} CPU thermal zone(s): ${types}`);
-      } else if (root.cpuTempHwmonPath === "") {
-        Logger.w("SystemStat", "No supported temperature sensor found");
-      }
-
-      // GPU thermal zones
-      if (gpuAvgZonePath !== "") {
-        root.gpuThermalZonePath = gpuAvgZonePath;
-        root.gpuAvailable = true;
-        root.gpuType = "thermal_zone";
-        Logger.i("SystemStat", `Found GPU thermal zone: gpu-avg-thermal`);
-      } else if (gpuZones.length > 0) {
-        root.gpuThermalZonePaths = gpuZones.map(z => z.path);
-        root.gpuThermalZonePath = gpuZones[0].path; // fallback single path
-        root.gpuAvailable = true;
-        root.gpuType = "thermal_zone";
-        const types = gpuZones.map(z => z.type).join(", ");
-        Logger.i("SystemStat", `Found ${gpuZones.length} GPU thermal zone(s): ${types} (using max)`);
-      }
-    }
-  }
-
-  // Thermal zone reader for CPU: reads all zones, reports max (hottest core)
-  FileView {
-    id: cpuThermalZoneReader
-    property int currentZoneIndex: 0
-    property var collectedTemps: []
-    printErrors: false
-
-    onLoaded: {
-      const temp = parseInt(text().trim()) / 1000.0;
-      if (!isNaN(temp) && temp > 0)
-      collectedTemps.push(temp);
-      currentZoneIndex++;
-      Qt.callLater(() => {
-                     readNextCpuThermalZone();
-                   });
-    }
-
-    onLoadFailed: function (error) {
-      currentZoneIndex++;
-      Qt.callLater(() => {
-                     readNextCpuThermalZone();
-                   });
-    }
-  }
-
-  function readNextCpuThermalZone() {
-    if (cpuThermalZoneReader.currentZoneIndex >= root.cpuThermalZonePaths.length) {
-      if (cpuThermalZoneReader.collectedTemps.length > 0) {
-        root.cpuTemp = Math.round(Math.max(...cpuThermalZoneReader.collectedTemps));
-      } else {
-        root.cpuTemp = 0;
-      }
-      root.pushCpuTempHistory();
-      return;
-    }
-    cpuThermalZoneReader.path = root.cpuThermalZonePaths[cpuThermalZoneReader.currentZoneIndex];
-    cpuThermalZoneReader.reload();
-  }
-
-  // Thermal zone reader for GPU: reads single zone (gpu-avg-thermal) or max of gpu[N] zones
-  FileView {
-    id: gpuThermalZoneReader
-    property int currentZoneIndex: 0
-    property var collectedTemps: []
-    printErrors: false
-
-    onLoaded: {
-      const temp = parseInt(text().trim()) / 1000.0;
-      if (!isNaN(temp) && temp > 0)
-      collectedTemps.push(temp);
-
-      // If we have multiple GPU zones (no gpu-avg), iterate and take max
-      if (root.gpuThermalZonePaths && root.gpuThermalZonePaths.length > 0) {
-        currentZoneIndex++;
-        if (currentZoneIndex < root.gpuThermalZonePaths.length) {
-          Qt.callLater(() => {
-                         readNextGpuThermalZone();
-                       });
-          return;
-        }
-        // All zones read, take max
-        root.gpuTemp = Math.round(Math.max(...collectedTemps));
-      } else {
-        // Single gpu-avg-thermal zone
-        root.gpuTemp = Math.round(temp);
-      }
-      root.pushGpuHistory();
-    }
-  }
-
-  function readNextGpuThermalZone() {
-    gpuThermalZoneReader.path = root.gpuThermalZonePaths[gpuThermalZoneReader.currentZoneIndex];
-    gpuThermalZoneReader.reload();
-  }
-
-  // Property to store multiple GPU thermal zone paths (when no gpu-avg is available)
-  property var gpuThermalZonePaths: []
-
-  // --------------------------------------------
-  // --------------------------------------------
-  // GPU Temperature
-  // On dual-GPU systems (e.g., Intel iGPU + NVIDIA dGPU, or AMD APU + AMD dGPU),
-  // we scan all hwmon entries, then select the best GPU based on priority.
-  // ----
-  // #1 - Scan all hwmon entries to find GPU sensors
   FileView {
     id: gpuTempNameReader
     property int currentIndex: 0
@@ -821,20 +589,11 @@ Singleton {
 
     function checkNext() {
       if (currentIndex >= 16) {
-        // Finished scanning all hwmon entries
-        // Only check nvidia-smi if user has explicitly enabled dGPU monitoring (opt-in)
-        // because nvidia-smi wakes up the dGPU on laptops, draining battery
-        if (Settings.data.systemMonitor.enableDgpuMonitoring) {
-          Logger.d("SystemStat", `Found ${root.foundGpuSensors.length} sysfs GPU sensor(s), checking nvidia-smi (dGPU opt-in enabled)`);
-          nvidiaSmiCheck.running = true;
-        } else {
-          Logger.d("SystemStat", `Found ${root.foundGpuSensors.length} sysfs GPU sensor(s), skipping nvidia-smi (dGPU opt-in disabled)`);
-          root.gpuVramCheckIndex = 0;
-          checkNextGpuVram();
-        }
+        Logger.d("SystemStat", `Found ${root.foundGpuSensors.length} sysfs GPU sensor(s)`);
+        root.gpuVramCheckIndex = 0;
+        checkNextGpuVram();
         return;
       }
-
       gpuTempNameReader.path = `/sys/class/hwmon/hwmon${currentIndex}/name`;
       gpuTempNameReader.reload();
     }
@@ -842,17 +601,14 @@ Singleton {
     onLoaded: {
       const name = text().trim();
       if (root.supportedTempGpuSensorNames.includes(name)) {
-        // Collect this GPU sensor, don't stop - continue scanning for more
         const hwmonPath = `/sys/class/hwmon/hwmon${currentIndex}`;
-        const gpuType = name === "amdgpu" ? "amd" : "intel";
         root.foundGpuSensors.push({
                                     "hwmonPath": hwmonPath,
-                                    "type": gpuType,
-                                    "hasDedicatedVram": false // Will be checked later for AMD
+                                    "type": "amd",
+                                    "hasDedicatedVram": false
                                   });
         Logger.d("SystemStat", `Found ${name} GPU sensor at ${hwmonPath}`);
       }
-      // Continue scanning regardless of whether we found a match
       currentIndex++;
       Qt.callLater(() => {
                      checkNext();
@@ -867,12 +623,9 @@ Singleton {
     }
   }
 
-  // ----
-  // #2 - Read GPU sensor value (AMD/Intel via sysfs)
   FileView {
     id: gpuTempReader
     printErrors: false
-
     onLoaded: {
       const data = text().trim();
       root.gpuTemp = Math.round(parseInt(data) / 1000.0);
@@ -880,37 +633,9 @@ Singleton {
     }
   }
 
-  // ----
-  // #3 - Check if nvidia-smi is available (for NVIDIA GPUs)
-  Process {
-    id: nvidiaSmiCheck
-    command: ["sh", "-c", "command -v nvidia-smi"]
-    running: false
-    stdout: StdioCollector {
-      onStreamFinished: {
-        if (text.trim().length > 0) {
-          // Add NVIDIA as a GPU option (always discrete, highest priority)
-          root.foundGpuSensors.push({
-                                      "hwmonPath": "",
-                                      "type": "nvidia",
-                                      "hasDedicatedVram": true // NVIDIA is always discrete
-                                    });
-          Logger.d("SystemStat", "Found NVIDIA GPU (nvidia-smi available)");
-        }
-        // After NVIDIA check, check VRAM for AMD GPUs to distinguish dGPU from iGPU
-        root.gpuVramCheckIndex = 0;
-        checkNextGpuVram();
-      }
-    }
-  }
-
-  // ----
-  // #4 - Check VRAM for AMD GPUs to distinguish dGPU from iGPU
-  // dGPUs have dedicated VRAM, iGPUs don't (use system RAM)
   FileView {
     id: gpuVramChecker
     printErrors: false
-
     onLoaded: {
       // File exists and has content = dGPU with dedicated VRAM
       const vramSize = parseInt(text().trim());
@@ -934,69 +659,6 @@ Singleton {
     }
   }
 
-  // ----
-  // #4 - Read GPU temperature via nvidia-smi (NVIDIA only)
-  Process {
-    id: nvidiaTempProcess
-    command: ["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]
-    running: false
-    stdout: StdioCollector {
-      onStreamFinished: {
-        const temp = parseInt(text.trim());
-        if (!isNaN(temp)) {
-          root.gpuTemp = temp;
-          root.pushGpuHistory();
-        }
-      }
-    }
-  }
-
-  // -------------------------------------------------------
-  // -------------------------------------------------------
-  // Parse ZFS ARC stats from /proc/spl/kstat/zfs/arcstats
-  function parseZfsArcStats(text) {
-    if (!text)
-      return;
-    const lines = text.split('\n');
-
-    // The file format is: name type data
-    // We need to find the lines with "size" and "c_min" and extract the values (third column)
-    let foundSize = false;
-    let foundCmin = false;
-
-    for (const line of lines) {
-      const parts = line.trim().split(/\s+/);
-      if (parts.length >= 3) {
-        if (parts[0] === 'size') {
-          // The value is in bytes, convert to KB
-          const arcSizeBytes = parseInt(parts[2]) || 0;
-          root.zfsArcSizeKb = Math.floor(arcSizeBytes / 1024);
-          foundSize = true;
-        } else if (parts[0] === 'c_min') {
-          // The value is in bytes, convert to KB
-          const arcCminBytes = parseInt(parts[2]) || 0;
-          root.zfsArcCminKb = Math.floor(arcCminBytes / 1024);
-          foundCmin = true;
-        }
-
-        // If we found both, we can return early
-        if (foundSize && foundCmin) {
-          return;
-        }
-      }
-    }
-
-    // If fields not found, set to 0
-    if (!foundSize) {
-      root.zfsArcSizeKb = 0;
-    }
-    if (!foundCmin) {
-      root.zfsArcCminKb = 0;
-    }
-  }
-
-  // -------------------------------------------------------
-  // Parse load average from /proc/loadavg
   function parseLoadAverage(text) {
     if (!text)
       return;
@@ -1032,12 +694,8 @@ Singleton {
     }
 
     if (memTotal > 0) {
-      // Calculate usage, adjusting for ZFS ARC cache if present
       let usageKb = memTotal - memAvailable;
-      if (root.zfsArcSizeKb > 0) {
-        usageKb = Math.max(0, usageKb - root.zfsArcSizeKb + root.zfsArcCminKb);
-      }
-      root.memGb = (usageKb / 1048576).toFixed(1); // 1024*1024 = 1048576
+      root.memGb = (usageKb / 1048576).toFixed(1);
       root.memPercent = Math.round((usageKb / memTotal) * 100);
       root.memTotalGb = (memTotal / 1048576).toFixed(1);
       root.pushMemHistory();
@@ -1300,11 +958,6 @@ Singleton {
       root.intelTempValues = [];
       root.intelTempFilesChecked = 0;
       checkNextIntelTemp();
-    } // For thermal_zone fallback (ARM SoCs, SCMI, etc.), read all CPU zones and take max
-    else if (root.cpuTempSensorName === "thermal_zone") {
-      cpuThermalZoneReader.currentZoneIndex = 0;
-      cpuThermalZoneReader.collectedTemps = [];
-      readNextCpuThermalZone();
     }
   }
 
@@ -1360,14 +1013,7 @@ Singleton {
   // Priority (when dGPU monitoring enabled): NVIDIA > AMD dGPU > Intel Arc > AMD iGPU
   // Priority (when dGPU monitoring disabled): AMD iGPU only (discrete GPUs skipped to preserve D3cold)
   function selectBestGpu() {
-    const dgpuEnabled = Settings.data.systemMonitor.enableDgpuMonitoring;
-
     if (root.foundGpuSensors.length === 0) {
-      // No hwmon GPU sensors found, try thermal_zone fallback
-      if (dgpuEnabled && root.gpuThermalZonePath === "" && root.gpuThermalZonePaths.length === 0) {
-        // Thermal zone scanner hasn't found GPU zones yet; start a scan
-        thermalZoneScanner.startScan();
-      }
       return;
     }
 
@@ -1375,34 +1021,6 @@ Singleton {
 
     for (var i = 0; i < root.foundGpuSensors.length; i++) {
       const gpu = root.foundGpuSensors[i];
-
-      // NVIDIA is always highest priority (always discrete) - skip if dGPU monitoring disabled
-      if (gpu.type === "nvidia") {
-        if (dgpuEnabled) {
-          best = gpu;
-          break;
-        }
-        continue;
-      }
-
-      // AMD dGPU is second priority - skip if dGPU monitoring disabled (preserves D3cold power state)
-      if (gpu.type === "amd" && gpu.hasDedicatedVram) {
-        if (dgpuEnabled) {
-          best = gpu;
-          break;
-        }
-        continue;
-      }
-
-      // Intel Arc is third priority (always discrete) - skip if dGPU monitoring disabled
-      if (gpu.type === "intel" && !best) {
-        if (dgpuEnabled) {
-          best = gpu;
-        }
-        continue;
-      }
-
-      // AMD iGPU is lowest priority (fallback) - always allowed (no D3cold issue)
       if (gpu.type === "amd" && !gpu.hasDedicatedVram && !best) {
         best = gpu;
       }
@@ -1413,32 +1031,18 @@ Singleton {
       root.gpuType = best.type;
       root.gpuAvailable = true;
 
-      const gpuDesc = best.type === "nvidia" ? "NVIDIA" : (best.type === "intel" ? "Intel Arc" : (best.hasDedicatedVram ? "AMD dGPU" : "AMD iGPU"));
-      Logger.i("SystemStat", `Selected ${gpuDesc} for temperature monitoring at ${best.hwmonPath || "nvidia-smi"}`);
-    } else if (!dgpuEnabled) {
-      Logger.d("SystemStat", "No iGPU found and dGPU monitoring is disabled");
+      Logger.i("SystemStat", `Selected AMD iGPU for temperature monitoring at ${best.hwmonPath}`);
+    } else {
+      Logger.d("SystemStat", "No iGPU found.");
     }
   }
 
   // -------------------------------------------------------
   // Function to update GPU temperature
   function updateGpuTemperature() {
-    if (root.gpuType === "nvidia") {
-      nvidiaTempProcess.running = true;
-    } else if (root.gpuType === "amd" || root.gpuType === "intel") {
+    if (root.gpuType === "amd") {
       gpuTempReader.path = `${root.gpuTempHwmonPath}/temp1_input`;
       gpuTempReader.reload();
-    } else if (root.gpuType === "thermal_zone") {
-      if (root.gpuThermalZonePaths && root.gpuThermalZonePaths.length > 0) {
-        // Multiple GPU zones (no gpu-avg), read all and take max
-        gpuThermalZoneReader.currentZoneIndex = 0;
-        gpuThermalZoneReader.collectedTemps = [];
-        readNextGpuThermalZone();
-      } else {
-        // Single gpu-avg-thermal zone
-        gpuThermalZoneReader.path = root.gpuThermalZonePath;
-        gpuThermalZoneReader.reload();
-      }
     }
   }
 }

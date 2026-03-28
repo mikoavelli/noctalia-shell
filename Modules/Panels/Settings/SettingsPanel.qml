@@ -70,7 +70,6 @@ SmartPanel {
 
   // Tabs enumeration, order is NOT relevant
   enum Tab {
-    About,
     Audio,
     Bar,
     LockScreen,
@@ -78,7 +77,6 @@ SmartPanel {
     Display,
     Dock,
     General,
-    Location,
     Connections,
     Notifications,
     Plugins,

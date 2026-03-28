@@ -11,20 +11,6 @@ ColumnLayout {
 
   property var screen
 
-  NToggle {
-    Layout.fillWidth: true
-    Layout.topMargin: Style.marginM
-    label: I18n.tr("panels.system-monitor.enable-dgpu-monitoring-label")
-    description: I18n.tr("panels.system-monitor.enable-dgpu-monitoring-description")
-    checked: Settings.data.systemMonitor.enableDgpuMonitoring
-    defaultValue: Settings.getDefaultValue("systemMonitor.enableDgpuMonitoring")
-    onToggled: checked => Settings.data.systemMonitor.enableDgpuMonitoring = checked
-  }
-
-  NDivider {
-    Layout.fillWidth: true
-  }
-
   NTextInput {
     label: I18n.tr("panels.system-monitor.external-monitor-label")
     description: I18n.tr("panels.system-monitor.external-monitor-description")
