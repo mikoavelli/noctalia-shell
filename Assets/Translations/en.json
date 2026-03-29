@@ -30,7 +30,9 @@
   "bar": {
     "active-window": {
       "colorize-icons-description": "Apply theme colors to active window icon.",
+      "hide-mode-label": "Hiding mode",
       "hide-mode-description": "Controls how the widget behaves when no window is active.",
+      "max-width-label": "Maximum width",
       "max-width-description": "Sets the maximum horizontal size of the widget. The widget will shrink to fit shorter content.",
       "use-fixed-width-description": "When enabled, the widget will always use the maximum width instead of dynamically adjusting to content.",
       "use-fixed-width-label": "Use fixed width",
@@ -203,29 +205,6 @@
       "use-padding-description-disabled-vertical": "Vertical taskbar does not support padding text.",
       "use-padding-label": "Pad text"
     },
-    "taskbar": {
-      "colorize-icons-description": "Apply theme colors to taskbar icons.",
-      "hide-mode-description": "Controls how the widget behaves when there are no matching windows.",
-      "hide-mode-label": "Hiding mode",
-      "icon-scale-description": "Sets the scaling factor for taskbar icons.",
-      "icon-scale-label": "Icon scaling",
-      "max-width-description": "Maximum width of the taskbar as a percentage of screen width.",
-      "max-width-label": "Maximum width",
-      "only-active-workspaces-description": "Show only apps from active workspaces.",
-      "only-active-workspaces-label": "Only from active workspaces",
-      "only-same-monitor-description": "Show only apps from the monitor where the bar is located.",
-      "only-same-monitor-label": "Only from same monitor",
-      "show-pinned-apps-description": "Show pinned apps from the dock in the taskbar.",
-      "show-pinned-apps-label": "Show pinned apps",
-      "show-title-description": "Display window titles in the taskbar.",
-      "show-title-description-disabled": "Vertical taskbar does not support showing titles.",
-      "show-title-label": "Show title",
-      "smart-width-description": "Automatically adjust entry width based on the number of entries.",
-      "smart-width-label": "Smart width",
-      "title-width-description": "Set the width of window titles in the taskbar (in pixels).",
-      "title-width-label": "Title width",
-      "title-width-reset-tooltip": "Reset title width"
-    },
     "tray": {
       "chevron-color-description": "Apply theme colors to the drawer chevron icon.",
       "chevron-color-label": "Chevron color",
@@ -252,6 +231,8 @@
       "follow-focused-screen-label": "Follow focused screen",
       "grouped-border-opacity-description": "Set the opacity level for workspace container borders.",
       "grouped-border-opacity-label": "Border opacity",
+      "icon-scale-description": "Sets the scaling factor for icons.",
+      "icon-scale-label": "Icon scaling",
       "hide-unoccupied-description": "Don't display workspaces without windows.",
       "hide-unoccupied-label": "Hide unoccupied",
       "label-mode-description": "Choose how workspace labels are displayed.",

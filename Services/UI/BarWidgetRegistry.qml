@@ -30,7 +30,6 @@ Singleton {
                            "SessionMenu": sessionMenuComponent,
                            "Spacer": spacerComponent,
                            "SystemMonitor": systemMonitorComponent,
-                           "Taskbar": taskbarComponent,
                            "Tray": trayComponent,
                            "Volume": volumeComponent,
                            "VPN": vpnComponent,
@@ -56,7 +55,6 @@ Singleton {
                                      "SessionMenu": "WidgetSettings/SessionMenuSettings.qml",
                                      "Spacer": "WidgetSettings/SpacerSettings.qml",
                                      "SystemMonitor": "WidgetSettings/SystemMonitorSettings.qml",
-                                     "Taskbar": "WidgetSettings/TaskbarSettings.qml",
                                      "Tray": "WidgetSettings/TraySettings.qml",
                                      "Volume": "WidgetSettings/VolumeSettings.qml",
                                      "VPN": "WidgetSettings/VPNSettings.qml",
@@ -191,18 +189,6 @@ Singleton {
                                     "showDiskAvailable": false,
                                     "diskPath": "/"
                                   },
-                                  "Taskbar": {
-                                    "onlySameOutput": true,
-                                    "onlyActiveWorkspaces": true,
-                                    "hideMode": "hidden",
-                                    "colorizeIcons": false,
-                                    "showTitle": false,
-                                    "titleWidth": 120,
-                                    "showPinnedApps": true,
-                                    "smartWidth": true,
-                                    "maxTaskbarWidth": 40,
-                                    "iconScale": 0.8
-                                  },
                                   "Tray": {
                                     "blacklist": [],
                                     "colorizeIcons": false,
@@ -322,9 +308,6 @@ Singleton {
   }
   property Component workspaceComponent: Component {
     Workspace {}
-  }
-  property Component taskbarComponent: Component {
-    Taskbar {}
   }
   function init() {
     Logger.i("BarWidgetRegistry", "Service started");

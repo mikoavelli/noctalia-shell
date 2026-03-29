@@ -220,8 +220,8 @@ ColumnLayout {
   }
 
   NValueSlider {
-    label: I18n.tr("bar.taskbar.icon-scale-label")
-    description: I18n.tr("bar.taskbar.icon-scale-description")
+    label: I18n.tr("bar.workspace.icon-scale-label")
+    description: I18n.tr("bar.workspace.icon-scale-description")
     from: 0.5
     to: 1
     stepSize: 0.01
