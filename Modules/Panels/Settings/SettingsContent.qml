@@ -9,7 +9,6 @@ import qs.Modules.Panels.Settings.Tabs.Audio
 import qs.Modules.Panels.Settings.Tabs.Bar
 import qs.Modules.Panels.Settings.Tabs.Connections
 import qs.Modules.Panels.Settings.Tabs.Display
-import qs.Modules.Panels.Settings.Tabs.Dock
 import qs.Modules.Panels.Settings.Tabs.LockScreen
 import qs.Modules.Panels.Settings.Tabs.Notifications
 import qs.Modules.Panels.Settings.Tabs.Osd
@@ -421,10 +420,6 @@ Item {
     WallpaperTab {}
   }
   Component {
-    id: dockTab
-    DockTab {}
-  }
-  Component {
     id: notificationsTab
     NotificationsTab {}
   }
@@ -474,12 +469,6 @@ Item {
             "label": "panels.bar.title",
             "icon": "settings-bar",
             "source": barTab
-          },
-          {
-            "id": SettingsPanel.Tab.Dock,
-            "label": "panels.dock.title",
-            "icon": "settings-dock",
-            "source": dockTab
           },
           {
             "id": SettingsPanel.Tab.Notifications,

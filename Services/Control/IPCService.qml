@@ -70,7 +70,6 @@ Singleton {
                                             "lockscreen": SettingsPanel.Tab.LockScreen,
                                             "osd": SettingsPanel.Tab.OSD,
                                             "display": SettingsPanel.Tab.Display,
-                                            "dock": SettingsPanel.Tab.Dock,
                                             "general": SettingsPanel.Tab.General,
                                             "connections": SettingsPanel.Tab.Connections,
                                             "notifications": SettingsPanel.Tab.Notifications,
@@ -299,13 +298,6 @@ Singleton {
 
     function lockAndSuspend() {
       CompositorService.lockAndSuspend();
-    }
-  }
-
-  IpcHandler {
-    target: "dock"
-    function toggle() {
-      Settings.data.dock.enabled = !Settings.data.dock.enabled;
     }
   }
 

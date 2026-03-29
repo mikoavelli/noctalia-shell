@@ -313,28 +313,6 @@ Singleton {
       property string externalMonitor: "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor"
     }
 
-    // dock
-    property JsonObject dock: JsonObject {
-      property bool enabled: true
-      property string position: "bottom" // "top", "bottom", "left", "right"
-      property string displayMode: "auto_hide" // "always_visible", "auto_hide", "exclusive"
-      property string dockType: "floating" // "floating", "static"
-      property real backgroundOpacity: 1.0
-      property real floatingRatio: 1.0
-      property real size: 1
-      property bool onlySameOutput: true
-      property list<string> monitors: [] // holds dock visibility per monitor
-      property list<string> pinnedApps: [] // Desktop entry IDs pinned to the dock (e.g., "org.kde.konsole", "firefox.desktop")
-      property bool colorizeIcons: false
-
-      property bool pinnedStatic: false
-      property bool inactiveIndicators: false
-      property double deadOpacity: 0.6
-      property real animationSpeed: 1.0 // Speed multiplier for hide/show animations (0.1 = slowest, 2.0 = fastest)
-      property bool sitOnFrame: false
-      property bool showFrameIndicator: true
-    }
-
     // network
     property JsonObject network: JsonObject {
       property bool wifiEnabled: true

@@ -75,7 +75,6 @@ SmartPanel {
     LockScreen,
     OSD,
     Display,
-    Dock,
     General,
     Connections,
     Notifications,

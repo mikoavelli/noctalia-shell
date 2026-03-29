@@ -192,11 +192,6 @@ Singleton {
     }
   }
 
-  // Function for the Dock to check if the bar is ready
-  function isBarReady(screenName) {
-    return readyBars[screenName] || false;
-  }
-
   // Register a widget instance
   function registerWidget(screenName, section, widgetId, index, instance) {
     const key = [screenName, section, widgetId, index].join("|");
