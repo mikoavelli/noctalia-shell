@@ -556,7 +556,6 @@ SmartPanel {
       } else {
         var screen = Settings.data.wallpaper.setWallpaperOnAllMonitors ? undefined : targetScreen.name;
         WallpaperService.changeWallpaper(path, screen);
-        WallpaperService.applyFavoriteTheme(path, screen);
       }
     }
 

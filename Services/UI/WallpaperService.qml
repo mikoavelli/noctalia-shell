@@ -285,8 +285,6 @@ Singleton {
     }
 
     // Save current favorite color schemes before switching away.
-    // This must happen before applyFavoriteTheme (called by the UI)
-    // overwrites the settings that _createFavoriteEntry reads.
     _saveOutgoingFavorites(path, screenName);
 
     if (screenName !== undefined) {
