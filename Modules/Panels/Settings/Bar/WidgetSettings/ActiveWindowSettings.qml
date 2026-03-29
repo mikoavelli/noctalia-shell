@@ -15,13 +15,10 @@ ColumnLayout {
 
   signal settingsChanged(var settings)
 
-  // Local state
-  property bool valueShowIcon: widgetData.showIcon !== undefined ? widgetData.showIcon : widgetMetadata.showIcon
-  property string valueHideMode: "hidden" // Default to 'Hide When Empty'
+  property string valueHideMode: "hidden"
   property string valueScrollingMode: widgetData.scrollingMode || widgetMetadata.scrollingMode
   property int valueMaxWidth: widgetData.maxWidth !== undefined ? widgetData.maxWidth : widgetMetadata.maxWidth
   property bool valueUseFixedWidth: widgetData.useFixedWidth !== undefined ? widgetData.useFixedWidth : widgetMetadata.useFixedWidth
-  property bool valueColorizeIcons: widgetData.colorizeIcons !== undefined ? widgetData.colorizeIcons : widgetMetadata.colorizeIcons
   property string valueTextColor: widgetData.textColor !== undefined ? widgetData.textColor : widgetMetadata.textColor
 
   Component.onCompleted: {
@@ -33,11 +30,9 @@ ColumnLayout {
   function saveSettings() {
     var settings = Object.assign({}, widgetData || {});
     settings.hideMode = valueHideMode;
-    settings.showIcon = valueShowIcon;
     settings.scrollingMode = valueScrollingMode;
     settings.maxWidth = parseInt(widthInput.text) || widgetMetadata.maxWidth;
     settings.useFixedWidth = valueUseFixedWidth;
-    settings.colorizeIcons = valueColorizeIcons;
     settings.textColor = valueTextColor;
     settingsChanged(settings);
   }
@@ -74,29 +69,6 @@ ColumnLayout {
                   valueTextColor = key;
                   saveSettings();
                 }
-  }
-
-  NToggle {
-    Layout.fillWidth: true
-    label: I18n.tr("bar.active-window.show-app-icon-label")
-    description: I18n.tr("bar.active-window.show-app-icon-description")
-    checked: root.valueShowIcon
-    onToggled: checked => {
-                 root.valueShowIcon = checked;
-                 saveSettings();
-               }
-  }
-
-  NToggle {
-    Layout.fillWidth: true
-    label: I18n.tr("bar.tray.colorize-icons-label")
-    description: I18n.tr("bar.active-window.colorize-icons-description")
-    checked: root.valueColorizeIcons
-    onToggled: checked => {
-                 root.valueColorizeIcons = checked;
-                 saveSettings();
-               }
-    visible: root.valueShowIcon
   }
 
   NTextInput {

@@ -63,12 +63,10 @@ Singleton {
 
   property var widgetMetadata: ({
                                   "ActiveWindow": {
-                                    "showIcon": true,
                                     "hideMode": "hidden",
                                     "scrollingMode": "hover",
                                     "maxWidth": 145,
                                     "useFixedWidth": false,
-                                    "colorizeIcons": false,
                                     "textColor": "none"
                                   },
                                   "Battery": {

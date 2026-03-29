@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Widgets
 import qs.Commons
 import qs.Modules.Bar.Extras
 import qs.Services.Compositor
@@ -39,7 +38,6 @@ Item {
   }
 
   // Widget settings
-  readonly property bool showIcon: (widgetSettings.showIcon !== undefined) ? widgetSettings.showIcon : (widgetMetadata.showIcon || false)
   readonly property string hideMode: (widgetSettings.hideMode !== undefined) ? widgetSettings.hideMode : (widgetMetadata.hideMode || "hidden")
   readonly property string scrollingMode: (widgetSettings.scrollingMode !== undefined) ? widgetSettings.scrollingMode : (widgetMetadata.scrollingMode || "hover")
 
@@ -56,9 +54,7 @@ Item {
   readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
   readonly property bool hasFocusedWindow: CompositorService.getFocusedWindow() !== null
   readonly property string windowTitle: CompositorService.getFocusedWindowTitle() || "No active window"
-  readonly property string fallbackIcon: "user-desktop"
 
-  readonly property int iconSize: Style.toOdd(capsuleHeight * 0.75)
   readonly property int verticalSize: Style.toOdd(capsuleHeight * 0.85)
 
   // For horizontal bars, height is always barHeight (no animation needed)
@@ -93,13 +89,7 @@ Item {
   function calculateContentWidth() {
     // Calculate the actual content width based on visible elements
     var contentWidth = 0;
-    var margins = Style.marginS * 2; // Left and right margins
-
-    // Icon width (if visible)
-    if (showIcon) {
-      contentWidth += iconSize;
-      contentWidth += Style.marginS; // Spacing after icon
-    }
+    var margins = Style.marginS * 2;
 
     // Text width (use the measured width)
     contentWidth += titleContainer.measuredWidth;
@@ -125,30 +115,6 @@ Item {
     }
     // Use content width but don't exceed user-set maximum width
     return Math.min(calculateContentWidth(), maxWidth);
-  }
-
-  function getAppIcon() {
-    try {
-      // Try CompositorService first
-      const focusedWindow = CompositorService.getFocusedWindow();
-      if (focusedWindow && focusedWindow.appId) {
-        try {
-          const idValue = focusedWindow.appId;
-          const normalizedId = (typeof idValue === 'string') ? idValue : String(idValue);
-          const iconResult = ThemeIcons.iconForAppId(normalizedId.toLowerCase());
-          if (iconResult && iconResult !== "") {
-            return iconResult;
-          }
-        } catch (iconError) {
-          Logger.w("ActiveWindow", "Error getting icon from CompositorService:", iconError);
-        }
-      }
-
-      return ThemeIcons.iconFromName(fallbackIcon);
-    } catch (e) {
-      Logger.w("ActiveWindow", "Error in getAppIcon:", e);
-      return ThemeIcons.iconFromName(fallbackIcon);
-    }
   }
 
   NPopupContextMenu {
@@ -201,47 +167,19 @@ Item {
       // Horizontal layout for top/bottom bars
       RowLayout {
         id: rowLayout
-        height: iconSize
+        height: capsuleHeight
         y: Style.pixelAlignCenter(parent.height, height)
         spacing: Style.marginS
         visible: !isVerticalBar
         z: 1
-
-        // Window icon
-        Item {
-          Layout.preferredWidth: iconSize
-          Layout.preferredHeight: iconSize
-          Layout.alignment: Qt.AlignVCenter
-          visible: showIcon
-
-          IconImage {
-            id: windowIcon
-            anchors.fill: parent
-            source: getAppIcon()
-            asynchronous: true
-            smooth: true
-            visible: source !== ""
-
-            // Apply dock shader to active window icon (always themed)
-            layer.enabled: widgetSettings.colorizeIcons !== false
-            layer.effect: ShaderEffect {
-              property color targetColor: Color.mOnSurface
-              property real colorizeMode: 0.0 // Dock mode (grayscale)
-
-              fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
-            }
-          }
-        }
 
         NScrollText {
           id: titleContainer
           text: windowTitle
           Layout.alignment: Qt.AlignVCenter
           maxWidth: {
-            // Calculate available width based on other elements
-            var iconWidth = (showIcon && windowIcon.visible ? (iconSize + Style.marginS) : 0);
             var totalMargins = Style.marginXS;
-            var availableWidth = mainContainer.width - iconWidth - totalMargins;
+            var availableWidth = mainContainer.width - totalMargins;
             return Math.max(20, availableWidth);
           }
           scrollMode: {
@@ -266,7 +204,7 @@ Item {
         }
       }
 
-      // Vertical layout for left/right bars - icon only
+      // Vertical layout for left/right bars
       Item {
         id: verticalLayout
         width: parent.width - Style.marginXL
@@ -276,36 +214,16 @@ Item {
         visible: isVerticalBar
         z: 1
 
-        // Window icon
-        Item {
-          id: verticalIconContainer
-          width: root.iconSize
-          height: width
-          x: Style.pixelAlignCenter(parent.width, width)
-          y: Style.pixelAlignCenter(parent.height, height)
+        NText {
+          anchors.centerIn: parent
+          text: windowTitle.length > 0 ? windowTitle.charAt(0).toUpperCase() : ""
+          pointSize: barFontSize
+          applyUiScale: false
+          font.weight: Style.fontWeightBold
+          color: root.textColor
           visible: windowTitle !== ""
-
-          IconImage {
-            id: windowIconVertical
-            anchors.fill: parent
-            source: getAppIcon()
-            asynchronous: true
-            smooth: true
-            visible: source !== ""
-
-            // Apply dock shader to active window icon (always themed)
-            layer.enabled: widgetSettings.colorizeIcons !== false
-            layer.effect: ShaderEffect {
-              property color targetColor: Color.mOnSurface
-              property real colorizeMode: 0.0 // Dock mode (grayscale)
-
-              fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
-            }
-          }
         }
       }
-
-      // Mouse area moved to root
     }
   }
 
@@ -336,25 +254,5 @@ Item {
                    PanelService.showContextMenu(contextMenu, root, screen);
                  }
                }
-  }
-
-  Connections {
-    target: CompositorService
-    function onActiveWindowChanged() {
-      try {
-        windowIcon.source = Qt.binding(getAppIcon);
-        windowIconVertical.source = Qt.binding(getAppIcon);
-      } catch (e) {
-        Logger.w("ActiveWindow", "Error in onActiveWindowChanged:", e);
-      }
-    }
-    function onWindowListChanged() {
-      try {
-        windowIcon.source = Qt.binding(getAppIcon);
-        windowIconVertical.source = Qt.binding(getAppIcon);
-      } catch (e) {
-        Logger.w("ActiveWindow", "Error in onWindowListChanged:", e);
-      }
-    }
   }
 }
