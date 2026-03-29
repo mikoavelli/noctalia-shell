@@ -221,17 +221,11 @@ Singleton {
                                     "followFocusedScreen": false,
                                     "hideUnoccupied": false,
                                     "characterCount": 2,
-                                    "showApplications": false,
                                     "showLabelsOnlyWhenOccupied": true,
-                                    "colorizeIcons": false,
-                                    "unfocusedIconsOpacity": 1.0,
-                                    "groupedBorderOpacity": 1.0,
                                     "enableScrollWheel": true,
-                                    "iconScale": 0.8,
                                     "focusedColor": "primary",
                                     "occupiedColor": "secondary",
                                     "emptyColor": "secondary",
-                                    "showBadge": true,
                                     "pillSize": 0.6
                                   },
                                   "Volume": {

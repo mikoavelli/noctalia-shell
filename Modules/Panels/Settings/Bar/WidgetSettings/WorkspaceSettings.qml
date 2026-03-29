@@ -21,17 +21,11 @@ ColumnLayout {
   property int valueCharacterCount: widgetData.characterCount !== undefined ? widgetData.characterCount : widgetMetadata.characterCount
 
   // Grouped mode settings
-  property bool valueShowApplications: widgetData.showApplications !== undefined ? widgetData.showApplications : widgetMetadata.showApplications
   property bool valueShowLabelsOnlyWhenOccupied: widgetData.showLabelsOnlyWhenOccupied !== undefined ? widgetData.showLabelsOnlyWhenOccupied : widgetMetadata.showLabelsOnlyWhenOccupied
-  property bool valueColorizeIcons: widgetData.colorizeIcons !== undefined ? widgetData.colorizeIcons : widgetMetadata.colorizeIcons
-  property real valueUnfocusedIconsOpacity: widgetData.unfocusedIconsOpacity !== undefined ? widgetData.unfocusedIconsOpacity : widgetMetadata.unfocusedIconsOpacity
-  property real valueGroupedBorderOpacity: widgetData.groupedBorderOpacity !== undefined ? widgetData.groupedBorderOpacity : widgetMetadata.groupedBorderOpacity
   property bool valueEnableScrollWheel: widgetData.enableScrollWheel !== undefined ? widgetData.enableScrollWheel : widgetMetadata.enableScrollWheel
-  property real valueIconScale: widgetData.iconScale !== undefined ? widgetData.iconScale : widgetMetadata.iconScale
   property string valueFocusedColor: widgetData.focusedColor !== undefined ? widgetData.focusedColor : widgetMetadata.focusedColor
   property string valueOccupiedColor: widgetData.occupiedColor !== undefined ? widgetData.occupiedColor : widgetMetadata.occupiedColor
   property string valueEmptyColor: widgetData.emptyColor !== undefined ? widgetData.emptyColor : widgetMetadata.emptyColor
-  property bool valueShowBadge: widgetData.showBadge !== undefined ? widgetData.showBadge : widgetMetadata.showBadge
   property real valuePillSize: widgetData.pillSize !== undefined ? widgetData.pillSize : widgetMetadata.pillSize
 
   function saveSettings() {
@@ -40,17 +34,11 @@ ColumnLayout {
     settings.hideUnoccupied = valueHideUnoccupied;
     settings.characterCount = valueCharacterCount;
     settings.followFocusedScreen = valueFollowFocusedScreen;
-    settings.showApplications = valueShowApplications;
     settings.showLabelsOnlyWhenOccupied = valueShowLabelsOnlyWhenOccupied;
-    settings.colorizeIcons = valueColorizeIcons;
-    settings.unfocusedIconsOpacity = valueUnfocusedIconsOpacity;
-    settings.groupedBorderOpacity = valueGroupedBorderOpacity;
     settings.enableScrollWheel = valueEnableScrollWheel;
-    settings.iconScale = valueIconScale;
     settings.focusedColor = valueFocusedColor;
     settings.occupiedColor = valueOccupiedColor;
     settings.emptyColor = valueEmptyColor;
-    settings.showBadge = valueShowBadge;
     settings.pillSize = valuePillSize;
     settingsChanged(settings);
   }
@@ -110,7 +98,6 @@ ColumnLayout {
                saveSettings();
              }
     text: Math.round(valuePillSize * 100) + "%"
-    visible: !valueShowApplications
   }
 
   NToggle {
@@ -151,87 +138,6 @@ ColumnLayout {
                  valueEnableScrollWheel = checked;
                  saveSettings();
                }
-  }
-
-  NDivider {
-    Layout.fillWidth: true
-  }
-
-  NToggle {
-    label: I18n.tr("bar.workspace.show-applications-label")
-    description: I18n.tr("bar.workspace.show-applications-description")
-    checked: valueShowApplications
-    onToggled: checked => {
-                 valueShowApplications = checked;
-                 saveSettings();
-               }
-  }
-
-  NToggle {
-    label: I18n.tr("bar.workspace.show-badge-label")
-    description: I18n.tr("bar.workspace.show-badge-description")
-    checked: valueShowBadge
-    onToggled: checked => {
-                 valueShowBadge = checked;
-                 saveSettings();
-               }
-    visible: valueShowApplications
-  }
-
-  NToggle {
-    label: I18n.tr("bar.tray.colorize-icons-label")
-    description: I18n.tr("bar.active-window.colorize-icons-description")
-    checked: valueColorizeIcons
-    onToggled: checked => {
-                 valueColorizeIcons = checked;
-                 saveSettings();
-               }
-    visible: valueShowApplications
-  }
-
-  NValueSlider {
-    label: I18n.tr("bar.workspace.unfocused-icons-opacity-label")
-    description: I18n.tr("bar.workspace.unfocused-icons-opacity-description")
-    from: 0
-    to: 1
-    stepSize: 0.01
-    value: valueUnfocusedIconsOpacity
-    onMoved: value => {
-               valueUnfocusedIconsOpacity = value;
-               saveSettings();
-             }
-    text: Math.floor(valueUnfocusedIconsOpacity * 100) + "%"
-    visible: valueShowApplications
-  }
-
-  NValueSlider {
-    label: I18n.tr("bar.workspace.grouped-border-opacity-label")
-    description: I18n.tr("bar.workspace.grouped-border-opacity-description")
-    from: 0
-    to: 1
-    stepSize: 0.01
-    value: valueGroupedBorderOpacity
-    onMoved: value => {
-               valueGroupedBorderOpacity = value;
-               saveSettings();
-             }
-    text: Math.floor(valueGroupedBorderOpacity * 100) + "%"
-    visible: valueShowApplications
-  }
-
-  NValueSlider {
-    label: I18n.tr("bar.workspace.icon-scale-label")
-    description: I18n.tr("bar.workspace.icon-scale-description")
-    from: 0.5
-    to: 1
-    stepSize: 0.01
-    value: valueIconScale
-    onMoved: value => {
-               valueIconScale = value;
-               saveSettings();
-             }
-    text: Math.round(valueIconScale * 100) + "%"
-    visible: valueShowApplications
   }
 
   NDivider {
