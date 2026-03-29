@@ -809,8 +809,6 @@
       "auto-update-description": "Automatically update all plugins when the shell starts.",
       "available-description": "Browse and install plugins from configured sources.",
       "available-label": "Available plugins",
-      "available-no-plugins-description": "Check your plugin sources or refresh the list.",
-      "available-no-plugins-label": "No plugins available",
       "check-for-updates": "Check for updates",
       "checking-for-updates": "Checking for updates...",
       "collision-already-installed": "This plugin is already installed",

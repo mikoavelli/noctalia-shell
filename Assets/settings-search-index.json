@@ -731,14 +731,6 @@
     "subTabLabel": "common.general"
   },
   {
-    "labelKey": "panels.plugins.installed-no-plugins-label",
-    "descriptionKey": "panels.plugins.installed-no-plugins-description",
-    "widget": "NLabel",
-    "tab": 12,
-    "tabLabel": "panels.plugins.title",
-    "subTab": null
-  },
-  {
     "labelKey": "panels.session-menu.large-buttons-style-label",
     "descriptionKey": "panels.session-menu.large-buttons-style-description",
     "widget": "NToggle",

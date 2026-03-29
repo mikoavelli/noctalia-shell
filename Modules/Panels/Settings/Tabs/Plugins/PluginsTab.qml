@@ -193,13 +193,6 @@ ColumnLayout {
         }
       }
     }
-
-    NLabel {
-      visible: PluginRegistry.getAllInstalledPluginIds().length === 0
-      label: I18n.tr("panels.plugins.installed-no-plugins-label")
-      description: I18n.tr("panels.plugins.installed-no-plugins-description")
-      Layout.fillWidth: true
-    }
   }
 
   // Uninstall confirmation dialog
