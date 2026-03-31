@@ -189,7 +189,6 @@ Singleton {
                                   },
                                   "Tray": {
                                     "blacklist": [],
-                                    "colorizeIcons": false,
                                     "chevronColor": "none",
                                     "pinned": [],
                                     "drawerEnabled": true,

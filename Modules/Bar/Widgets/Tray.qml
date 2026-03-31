@@ -424,14 +424,6 @@ Item {
             return icon;
           }
           opacity: status === Image.Ready ? 1 : 0
-
-          layer.enabled: widgetSettings.colorizeIcons !== false
-          layer.effect: ShaderEffect {
-            property color targetColor: Color.mOnSurface
-            property real colorizeMode: 1.0
-
-            fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
-          }
         }
 
         Rectangle {
