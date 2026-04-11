@@ -16,7 +16,6 @@ import qs.Modules.Panels.Bluetooth
 import qs.Modules.Panels.Brightness
 import qs.Modules.Panels.Clock
 import qs.Modules.Panels.Network
-import qs.Modules.Panels.NotificationHistory
 import qs.Modules.Panels.Plugins
 import qs.Modules.Panels.SessionMenu
 import qs.Modules.Panels.Settings
@@ -250,12 +249,6 @@ PanelWindow {
     ClockPanel {
       id: clockPanel
       objectName: "clockPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    NotificationHistoryPanel {
-      id: notificationHistoryPanel
-      objectName: "notificationHistoryPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 

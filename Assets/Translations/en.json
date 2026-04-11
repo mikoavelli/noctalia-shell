@@ -1,6 +1,5 @@
 {
   "actions": {
-    "clear-history": "Clear history",
     "close-app": "Close {app}",
     "connect-vpn": "Connect to {name}",
     "disable-bluetooth": "Disable Bluetooth",
@@ -152,16 +151,6 @@
       "show-num-lock-label": "Num Lock",
       "show-scroll-lock-description": "Display Scroll Lock status.",
       "show-scroll-lock-label": "Scroll Lock"
-    },
-    "notification-history": {
-      "hide-widget-when-zero-description": "Hide the notification icon when there are no notifications.",
-      "hide-widget-when-zero-label": "Hide icon when no notifications",
-      "hide-widget-when-zero-unread-description": "Hide the notification icon when there are no unread notifications.",
-      "hide-widget-when-zero-unread-label": "Hide icon when no unread notifications",
-      "show-unread-badge-description": "Display a badge showing the number of unread notifications.",
-      "show-unread-badge-label": "Show unread badge",
-      "unread-badge-color-description": "Select the color for the unread notification badge.",
-      "unread-badge-color-label": "Unread badge color"
     },
     "section-editor": {
       "placeholder": "Select a widget to add...",
@@ -741,15 +730,6 @@
       "duration-respect-expire-description": "Use the expire timeout set in the notification.",
       "duration-respect-expire-label": "Respect expire timeout",
       "duration-title": "Notification duration",
-      "history-clear-dismiss-description": "Clear notification from history when dismissed.",
-      "history-clear-dismiss-label": "Clear on dismissed",
-      "history-critical-urgency-description": "Save critical priority notifications to history.",
-      "history-critical-urgency-label": "Save critical urgency to history",
-      "history-desc": "Control which notifications are saved to history based on their urgency level.",
-      "history-low-urgency-description": "Save low priority notifications to history.",
-      "history-low-urgency-label": "Save low urgency to history",
-      "history-normal-urgency-description": "Save normal priority notifications to history.",
-      "history-normal-urgency-label": "Save normal urgency to history",
       "monitors-desc": "Show notification on specific monitors. Defaults to all if none are chosen.",
       "settings-always-on-top-description": "Display notifications above fullscreen windows and other layers.",
       "settings-background-opacity-description": "Adjust the opacity of notification backgrounds.",
@@ -760,8 +740,6 @@
       "settings-enabled-description": "Enable or disable the notification daemon, requires a restart of Noctalia shell.",
       "settings-enabled-label": "Enable notifications",
       "settings-location-description": "Where notifications appear on screen.",
-      "settings-markdown-description": "Render notification content using Markdown formatting.",
-      "settings-markdown-label": "Enable Markdown",
       "sounds-desc": "Configure notification sound effects and volume.",
       "sounds-title": "Sound settings",
       "toast-battery-description": "Show a warning when the battery level falls below this percentage.",
@@ -1183,7 +1161,6 @@
     "night-light-not-installed": "Night Light (not available)",
     "noctalia-performance-enabled": "Noctalia Performance Mode",
     "open-annotation-tool": "Open with annotation tool",
-    "open-notification-history-enable-dnd": "Notification history",
     "open-settings": "Settings",
     "open-tray-dropdown": "System tray",
     "output-muted": "Toggle output mute",

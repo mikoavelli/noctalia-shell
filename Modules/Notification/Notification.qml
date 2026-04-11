@@ -374,9 +374,6 @@ Variants {
               onReleased: mouse => {
                             if (mouse.button === Qt.RightButton) {
                               card.animateOut();
-                              if (Settings.data.notifications.clearDismissed) {
-                                NotificationService.removeFromHistory(notificationId);
-                              }
                               return;
                             }
 
@@ -388,9 +385,6 @@ Variants {
                               const threshold = card.useVerticalSwipe ? card.verticalSwipeDismissThreshold : card.swipeDismissThreshold;
                               if (dismissDistance >= threshold) {
                                 card.dismissBySwipe();
-                                if (Settings.data.notifications.clearDismissed) {
-                                  NotificationService.removeFromHistory(notificationId);
-                                }
                               } else {
                                 card.swipeOffset = 0;
                                 card.swipeOffsetY = 0;
@@ -501,8 +495,6 @@ Variants {
               if (Style.animationSlow <= 0) {
                 if (!isDismissed) {
                   NotificationService.invokeAction(notificationId, actionId);
-                } else if (Settings.data.notifications.clearDismissed) {
-                  NotificationService.removeFromHistory(notificationId);
                 }
                 card.animateOut();
                 return;
@@ -533,8 +525,6 @@ Variants {
               onTriggered: {
                 if (!isDismissed) {
                   NotificationService.invokeAction(notificationId, actionId);
-                } else if (Settings.data.notifications.clearDismissed) {
-                  NotificationService.removeFromHistory(notificationId);
                 }
               }
             }

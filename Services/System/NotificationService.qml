@@ -16,8 +16,6 @@ Singleton {
 
   // Configuration
   property int maxVisible: 5
-  property int maxHistory: 100
-  property string historyFile: Quickshell.env("NOCTALIA_NOTIF_HISTORY_FILE") || (Settings.cacheDir + "notifications.json")
 
   // State
   property real lastSeenTs: 0
@@ -26,7 +24,6 @@ Singleton {
 
   // Models
   property ListModel activeList: ListModel {}
-  property ListModel historyList: ListModel {}
 
   // Internal state
   property var activeNotifications: ({}) // Maps internal ID to {notification, watcher, metadata}
@@ -137,29 +134,6 @@ Singleton {
     const quickshellId = notification.id;
     const data = createData(notification);
 
-    // Check if we should save to history based on urgency
-    const saveToHistorySettings = Settings.data.notifications?.saveToHistory;
-    if (saveToHistorySettings && !notification.transient) {
-      let shouldSave = true;
-      switch (data.urgency) {
-      case 0: // low
-        shouldSave = saveToHistorySettings.low !== false;
-        break;
-      case 1: // normal
-        shouldSave = saveToHistorySettings.normal !== false;
-        break;
-      case 2: // critical
-        shouldSave = saveToHistorySettings.critical !== false;
-        break;
-      }
-      if (shouldSave) {
-        addToHistory(data);
-      }
-    } else if (!notification.transient) {
-      // Default behavior: save all if settings not configured
-      addToHistory(data);
-    }
-
     if (root.doNotDisturb || PowerProfileService.noctaliaPerformanceMode)
       return;
 
@@ -190,9 +164,7 @@ Singleton {
 
     // Update properties (keeping original timestamp and progress)
     activeList.setProperty(index, "summary", data.summary);
-    activeList.setProperty(index, "summaryMarkdown", data.summaryMarkdown);
     activeList.setProperty(index, "body", data.body);
-    activeList.setProperty(index, "bodyMarkdown", data.bodyMarkdown);
     activeList.setProperty(index, "appName", data.appName);
     activeList.setProperty(index, "urgency", data.urgency);
     activeList.setProperty(index, "expireTimeout", data.expireTimeout);
@@ -284,10 +256,8 @@ Singleton {
     // Remove overflow
     while (activeList.count > maxVisible) {
       const last = activeList.get(activeList.count - 1);
-      // Overflow only removes from ACTIVE view, but keeps it for history
-      activeNotifications[last.id]?.notification?.dismiss(); // Visually dismiss
-      activeList.remove(activeList.count - 1);
-      // DO NOT call cleanupNotification here, we want to keep it for history actions
+      activeNotifications[last.id]?.notification?.dismiss();
+      removeNotification(last.id);
     }
   }
 
@@ -333,9 +303,7 @@ Singleton {
     return {
       "id": id,
       "summary": processNotificationText(n.summary || ""),
-      "summaryMarkdown": processNotificationMarkdown(n.summary || ""),
       "body": processNotificationText(n.body || ""),
-      "bodyMarkdown": processNotificationMarkdown(n.body || ""),
       "appName": getAppName(n.appName || n.desktopEntry || ""),
       "urgency": n.urgency < 0 || n.urgency > 2 ? 1 : n.urgency,
       "expireTimeout": n.expireTimeout,
@@ -374,9 +342,7 @@ Singleton {
 
     // Update properties (keeping timestamp and progress)
     activeList.setProperty(index, "summary", data.summary);
-    activeList.setProperty(index, "summaryMarkdown", data.summaryMarkdown);
     activeList.setProperty(index, "body", data.body);
-    activeList.setProperty(index, "bodyMarkdown", data.bodyMarkdown);
     activeList.setProperty(index, "appName", data.appName);
     activeList.setProperty(index, "urgency", data.urgency);
     activeList.setProperty(index, "expireTimeout", data.expireTimeout);
@@ -462,8 +428,6 @@ Singleton {
 
   function updateImagePath(notificationId, path) {
     updateModel(activeList, notificationId, "cachedImage", path);
-    updateModel(historyList, notificationId, "cachedImage", path);
-    saveHistory();
   }
 
   function updateModel(model, notificationId, prop, value) {
@@ -472,95 +436,6 @@ Singleton {
         model.setProperty(i, prop, value);
         break;
       }
-    }
-  }
-
-  // History management
-  function addToHistory(data) {
-    historyList.insert(0, data);
-
-    while (historyList.count > maxHistory) {
-      const old = historyList.get(historyList.count - 1);
-      // Only delete cached images that are in our cache directory
-      const cachedPath = old.cachedImage ? old.cachedImage.replace(/^file:\/\//, "") : "";
-      if (cachedPath && cachedPath.startsWith(ImageCacheService.notificationsDir)) {
-        Quickshell.execDetached(["rm", "-f", cachedPath]);
-      }
-      historyList.remove(historyList.count - 1);
-    }
-    saveHistory();
-  }
-
-  // Persistence - History
-  FileView {
-    id: historyFileView
-    path: historyFile
-    printErrors: false
-    onLoaded: loadHistory()
-    onLoadFailed: error => {
-      if (error === 2)
-      writeAdapter();
-    }
-
-    JsonAdapter {
-      id: adapter
-      property var notifications: []
-    }
-  }
-
-  Timer {
-    id: saveTimer
-    interval: 200
-    onTriggered: performSaveHistory()
-  }
-
-  function saveHistory() {
-    saveTimer.restart();
-  }
-
-  function performSaveHistory() {
-    try {
-      const items = [];
-      for (var i = 0; i < historyList.count; i++) {
-        const n = historyList.get(i);
-        const copy = Object.assign({}, n);
-        copy.timestamp = n.timestamp.getTime();
-        items.push(copy);
-      }
-      adapter.notifications = items;
-      historyFileView.writeAdapter();
-    } catch (e) {
-      Logger.e("Notifications", "Save history failed:", e);
-    }
-  }
-
-  function loadHistory() {
-    try {
-      historyList.clear();
-      for (const item of adapter.notifications || []) {
-        const time = new Date(item.timestamp);
-
-        // Use the cached image if it exists and starts with file://, otherwise use originalImage
-        let cachedImage = item.cachedImage || "";
-        if (!cachedImage || (!cachedImage.startsWith("file://") && !cachedImage.startsWith("/"))) {
-          cachedImage = item.originalImage || "";
-        }
-
-        historyList.append({
-                             "id": item.id || "",
-                             "summary": item.summary || "",
-                             "summaryMarkdown": processNotificationMarkdown(item.summary || ""),
-                             "body": item.body || "",
-                             "bodyMarkdown": processNotificationMarkdown(item.body || ""),
-                             "appName": item.appName || "",
-                             "urgency": item.urgency < 0 || item.urgency > 2 ? 1 : item.urgency,
-                             "timestamp": time,
-                             "originalImage": item.originalImage || "",
-                             "cachedImage": cachedImage
-                           });
-      }
-    } catch (e) {
-      Logger.e("Notifications", "Load failed:", e);
     }
   }
 
@@ -654,59 +529,6 @@ Singleton {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  function sanitizeMarkdownUrl(url) {
-    if (!url)
-      return "";
-    const trimmed = url.trim();
-    if (trimmed === "")
-      return "";
-    const lower = trimmed.toLowerCase();
-    if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:")) {
-      return encodeURI(trimmed);
-    }
-    return "";
-  }
-
-  function sanitizeMarkdown(text) {
-    if (!text)
-      return "";
-
-    let input = String(text);
-
-    // Strip images entirely
-    input = input.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (match, alt) {
-      return alt ? alt : "";
-    });
-
-    // Extract links into placeholders
-    const links = [];
-    input = input.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, label, urlAndTitle) {
-      const urlPart = (urlAndTitle || "").trim().split(/\s+/)[0] || "";
-      const safeUrl = sanitizeMarkdownUrl(urlPart);
-      const safeLabel = escapeHtml(label);
-      if (!safeUrl)
-        return safeLabel;
-      const token = "__MDLINK_" + links.length + "__";
-      links.push({
-                   "label": safeLabel,
-                   "url": safeUrl
-                 });
-      return token;
-    });
-
-    // Escape any remaining HTML
-    input = escapeHtml(input);
-
-    // Restore sanitized links
-    for (let i = 0; i < links.length; i++) {
-      const token = "__MDLINK_" + i + "__";
-      const link = links[i];
-      input = input.split(token).join("[" + link.label + "](" + link.url + ")");
-    }
-
-    return input;
-  }
-
   function processNotificationText(text) {
     if (!text)
       return "";
@@ -735,10 +557,6 @@ Singleton {
       }
     }
     return result;
-  }
-
-  function processNotificationMarkdown(text) {
-    return sanitizeMarkdown(text);
   }
 
   function generateImageId(notification, image) {
@@ -773,30 +591,8 @@ Singleton {
     userDismissNotification(id);
   }
 
-  // User dismissed from active view (e.g. clicked close, or swipe)
-  // This behaves like "overflow" - removes from active list but KEEPS data for history
   function userDismissNotification(id) {
-    const index = findNotificationIndex(id);
-    if (index >= 0) {
-      activeList.remove(index);
-    }
-  }
-
-  function dismissOldestActive() {
-    if (activeList.count > 0) {
-      const lastNotif = activeList.get(activeList.count - 1);
-      dismissActiveNotification(lastNotif.id);
-    }
-  }
-
-  function dismissAllActive() {
-    for (const id in activeNotifications) {
-      activeNotifications[id].notification?.dismiss();
-      activeNotifications[id].watcher?.destroy();
-    }
-    activeList.clear();
-    activeNotifications = {};
-    quickshellIdToInternalId = {};
+    removeNotification(id);
   }
 
   function invokeAction(id, actionId) {
@@ -841,10 +637,7 @@ Singleton {
       return false;
     }
 
-    // Clear actions after use
     updateModel(activeList, id, "actionsJson", "[]");
-    updateModel(historyList, id, "actionsJson", "[]");
-    saveHistory();
 
     return true;
   }
@@ -865,67 +658,6 @@ Singleton {
       Logger.e("NotificationService", "Manual invoke failed: " + e);
       return false;
     }
-  }
-
-  function removeFromHistory(notificationId) {
-    for (var i = 0; i < historyList.count; i++) {
-      const notif = historyList.get(i);
-      if (notif.id === notificationId) {
-        // Only delete cached images that are in our cache directory
-        const cachedPath = notif.cachedImage ? notif.cachedImage.replace(/^file:\/\//, "") : "";
-        if (cachedPath && cachedPath.startsWith(ImageCacheService.notificationsDir)) {
-          Quickshell.execDetached(["rm", "-f", cachedPath]);
-        }
-        historyList.remove(i);
-        saveHistory();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  function removeOldestHistory() {
-    if (historyList.count > 0) {
-      const oldest = historyList.get(historyList.count - 1);
-      // Only delete cached images that are in our cache directory
-      const cachedPath = oldest.cachedImage ? oldest.cachedImage.replace(/^file:\/\//, "") : "";
-      if (cachedPath && cachedPath.startsWith(ImageCacheService.notificationsDir)) {
-        Quickshell.execDetached(["rm", "-f", cachedPath]);
-      }
-      historyList.remove(historyList.count - 1);
-      saveHistory();
-      return true;
-    }
-    return false;
-  }
-
-  function clearHistory() {
-    try {
-      Quickshell.execDetached(["sh", "-c", `rm -rf "${ImageCacheService.notificationsDir}"*`]);
-    } catch (e) {
-      Logger.e("Notifications", "Failed to clear cache directory:", e);
-    }
-
-    historyList.clear();
-    saveHistory();
-  }
-
-  function getHistorySnapshot() {
-    const items = [];
-    for (var i = 0; i < historyList.count; i++) {
-      const entry = historyList.get(i);
-      items.push({
-                   "id": entry.id,
-                   "summary": entry.summary,
-                   "body": entry.body,
-                   "appName": entry.appName,
-                   "urgency": entry.urgency,
-                   "timestamp": entry.timestamp instanceof Date ? entry.timestamp.getTime() : entry.timestamp,
-                   "originalImage": entry.originalImage,
-                   "cachedImage": entry.cachedImage
-                 });
-    }
-    return items;
   }
 
   // Signals

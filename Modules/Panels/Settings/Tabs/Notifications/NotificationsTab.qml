@@ -40,14 +40,9 @@ ColumnLayout {
       checked: subTabBar.currentIndex === 1
     }
     NTabButton {
-      text: I18n.tr("common.history")
+      text: I18n.tr("common.toast")
       tabIndex: 2
       checked: subTabBar.currentIndex === 2
-    }
-    NTabButton {
-      text: I18n.tr("common.toast")
-      tabIndex: 3
-      checked: subTabBar.currentIndex === 3
     }
   }
 
@@ -65,7 +60,6 @@ ColumnLayout {
       removeMonitor: root.removeMonitor
     }
     DurationSubTab {}
-    HistorySubTab {}
     ToastSubTab {}
   }
 }

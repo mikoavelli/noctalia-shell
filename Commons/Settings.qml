@@ -174,9 +174,6 @@ Singleton {
             "id": "Tray"
           },
           {
-            "id": "NotificationHistory"
-          },
-          {
             "id": "Battery"
           },
           {
@@ -371,7 +368,6 @@ Singleton {
     // notifications
     property JsonObject notifications: JsonObject {
       property bool enabled: true
-      property bool enableMarkdown: false
       property string density: "default" // "default", "compact"
       property list<string> monitors: [] // holds notifications visibility per monitor
       property string location: "top_right"
@@ -381,12 +377,6 @@ Singleton {
       property int lowUrgencyDuration: 3
       property int normalUrgencyDuration: 8
       property int criticalUrgencyDuration: 15
-      property bool clearDismissed: true
-      property JsonObject saveToHistory: JsonObject {
-        property bool low: true
-        property bool normal: true
-        property bool critical: true
-      }
       property bool enableMediaToast: false
       property bool enableKeyboardLayoutToast: true
       property bool enableBatteryToast: true

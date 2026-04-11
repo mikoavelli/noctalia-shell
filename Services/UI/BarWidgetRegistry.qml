@@ -25,7 +25,6 @@ Singleton {
                            "Network": networkComponent,
                            "NightLight": nightLightComponent,
                            "NoctaliaPerformance": noctaliaPerformanceComponent,
-                           "NotificationHistory": notificationHistoryComponent,
                            "PowerProfile": powerProfileComponent,
                            "SessionMenu": sessionMenuComponent,
                            "Spacer": spacerComponent,
@@ -50,7 +49,6 @@ Singleton {
                                      "Network": "WidgetSettings/NetworkSettings.qml",
                                      "NightLight": "WidgetSettings/NightLightSettings.qml",
                                      "NoctaliaPerformance": "WidgetSettings/NoctaliaPerformanceSettings.qml",
-                                     "NotificationHistory": "WidgetSettings/NotificationHistorySettings.qml",
                                      "PowerProfile": "WidgetSettings/PowerProfileSettings.qml",
                                      "SessionMenu": "WidgetSettings/SessionMenuSettings.qml",
                                      "Spacer": "WidgetSettings/SpacerSettings.qml",
@@ -153,13 +151,6 @@ Singleton {
                                     "middleClickCommand": "pwvucontrol || pavucontrol",
                                     "iconColor": "none",
                                     "textColor": "none"
-                                  },
-                                  "NotificationHistory": {
-                                    "showUnreadBadge": true,
-                                    "hideWhenZero": false,
-                                    "hideWhenZeroUnread": false,
-                                    "unreadBadgeColor": "primary",
-                                    "iconColor": "none"
                                   },
                                   "SessionMenu": {
                                     "iconColor": "error"
@@ -269,9 +260,6 @@ Singleton {
   }
   property Component noctaliaPerformanceComponent: Component {
     NoctaliaPerformance {}
-  }
-  property Component notificationHistoryComponent: Component {
-    NotificationHistory {}
   }
   property Component powerProfileComponent: Component {
     PowerProfile {}

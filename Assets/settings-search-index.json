@@ -641,57 +641,12 @@
     "subTabLabel": "common.appearance"
   },
   {
-    "labelKey": "panels.notifications.history-clear-dismiss-label",
-    "descriptionKey": "panels.notifications.history-clear-dismiss-description",
-    "widget": "NToggle",
-    "tab": 4,
-    "tabLabel": "common.notifications",
-    "subTab": 2,
-    "subTabLabel": "common.history"
-  },
-  {
-    "labelKey": "panels.notifications.settings-markdown-label",
-    "descriptionKey": "panels.notifications.settings-markdown-description",
-    "widget": "NToggle",
-    "tab": 4,
-    "tabLabel": "common.notifications",
-    "subTab": 2,
-    "subTabLabel": "common.history"
-  },
-  {
-    "labelKey": "panels.notifications.history-low-urgency-label",
-    "descriptionKey": "panels.notifications.history-low-urgency-description",
-    "widget": "NToggle",
-    "tab": 4,
-    "tabLabel": "common.notifications",
-    "subTab": 2,
-    "subTabLabel": "common.history"
-  },
-  {
-    "labelKey": "panels.notifications.history-normal-urgency-label",
-    "descriptionKey": "panels.notifications.history-normal-urgency-description",
-    "widget": "NToggle",
-    "tab": 4,
-    "tabLabel": "common.notifications",
-    "subTab": 2,
-    "subTabLabel": "common.history"
-  },
-  {
-    "labelKey": "panels.notifications.history-critical-urgency-label",
-    "descriptionKey": "panels.notifications.history-critical-urgency-description",
-    "widget": "NToggle",
-    "tab": 4,
-    "tabLabel": "common.notifications",
-    "subTab": 2,
-    "subTabLabel": "common.history"
-  },
-  {
     "labelKey": "panels.notifications.toast-media-label",
     "descriptionKey": "panels.notifications.toast-media-description",
     "widget": "NCheckbox",
     "tab": 4,
     "tabLabel": "common.notifications",
-    "subTab": 3,
+    "subTab": 2,
     "subTabLabel": "common.toast"
   },
   {
@@ -700,7 +655,7 @@
     "widget": "NCheckbox",
     "tab": 4,
     "tabLabel": "common.notifications",
-    "subTab": 3,
+    "subTab": 2,
     "subTabLabel": "common.toast"
   },
   {
@@ -709,7 +664,7 @@
     "widget": "NCheckbox",
     "tab": 4,
     "tabLabel": "common.notifications",
-    "subTab": 3,
+    "subTab": 2,
     "subTabLabel": "common.toast"
   },
   {

@@ -146,13 +146,6 @@ Singleton {
 
   IpcHandler {
     target: "notifications"
-    function toggleHistory() {
-      // Will attempt to open the panel next to the bar button if any.
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var notificationHistoryPanel = PanelService.getPanel("notificationHistoryPanel", screen);
-                                              notificationHistoryPanel.toggle(null, "NotificationHistory");
-                                            });
-    }
     function toggleDND() {
       NotificationService.doNotDisturb = !NotificationService.doNotDisturb;
     }
@@ -161,29 +154,6 @@ Singleton {
     }
     function disableDND() {
       NotificationService.doNotDisturb = false;
-    }
-    function clear() {
-      NotificationService.clearHistory();
-    }
-
-    function dismissOldest() {
-      NotificationService.dismissOldestActive();
-    }
-
-    function removeOldestHistory() {
-      NotificationService.removeOldestHistory();
-    }
-
-    function dismissAll() {
-      NotificationService.dismissAllActive();
-    }
-
-    function getHistory(): string {
-      return JSON.stringify(NotificationService.getHistorySnapshot(), null, 2);
-    }
-
-    function removeFromHistory(id: string): bool {
-      return NotificationService.removeFromHistory(id);
     }
   }
 
