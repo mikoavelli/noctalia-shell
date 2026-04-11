@@ -533,7 +533,7 @@ Singleton {
       root.setScanActive(false);
     }
 
-    const scriptPath = Quickshell.shellDir + "/Scripts/python/src/network/bluetooth-pair.py";
+    const scriptPath = Quickshell.shellDir + "/Scripts/bluetooth-pair.py";
     pairingProcess.command = ["python3", scriptPath, String(addr), String(pairWait), String(attempts), String(intervalSec)];
     pairingProcess.running = true;
   }
