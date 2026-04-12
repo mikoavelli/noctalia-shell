@@ -51,7 +51,7 @@ Item {
                    });
       } else {
         items.push({
-                     "label": "Connect Windscribe (No Vampires)",
+                     "label": "Connect Windscribe (Seine)",
                      "action": "connect",
                      "icon": "shield-lock"
                    });

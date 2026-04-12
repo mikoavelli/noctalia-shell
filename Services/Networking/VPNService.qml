@@ -139,7 +139,7 @@ Singleton {
 
   Process {
     id: connectProcess
-    command: ["windscribe-cli", "connect", "No Vampires", "udp"]
+    command: ["windscribe-cli", "connect", "Seine", "protocol", "stealth", "ip", "rotate"]
     running: false
 
     stdout: StdioCollector {
