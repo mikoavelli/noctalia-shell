@@ -927,10 +927,7 @@ Item {
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     hoverEnabled: true
     onClicked: mouse => {
-                 if (mouse.button === Qt.LeftButton) {
-                   PanelService.getPanel("systemStatsPanel", screen)?.toggle(root);
-                   TooltipService.hide();
-                 } else if (mouse.button === Qt.RightButton) {
+                 if (mouse.button === Qt.RightButton) {
                    TooltipService.hide();
                    PanelService.showContextMenu(contextMenu, root, screen);
                  } else if (mouse.button === Qt.MiddleButton) {

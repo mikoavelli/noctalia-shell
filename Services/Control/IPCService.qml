@@ -429,16 +429,6 @@ Singleton {
   }
 
   IpcHandler {
-    target: "systemMonitor"
-    function toggle() {
-      root.screenDetector.withCurrentScreen(screen => {
-                                              var panel = PanelService.getPanel("systemStatsPanel", screen);
-                                              panel?.toggle(null, "SystemMonitor");
-                                            });
-    }
-  }
-
-  IpcHandler {
     target: "plugin"
     function openSettings(key: string) {
       var manifest = PluginRegistry.getPluginManifest(key);

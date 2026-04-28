@@ -64,117 +64,9 @@ Singleton {
   property real loadAvg15: 0
   property int nproc: 0 // Number of cpu cores
 
-  // History arrays (2 minutes of data, length computed from polling interval)
-  // Pre-filled with zeros so the graph scrolls smoothly from the start
-  readonly property int historyDurationMs: (1 * 60 * 1000) // 1 minute
-
-  // Computed history lengths based on polling intervals
-  readonly property int cpuHistoryLength: Math.ceil(historyDurationMs / cpuIntervalMs)
-  readonly property int gpuHistoryLength: Math.ceil(historyDurationMs / gpuIntervalMs)
-  readonly property int memHistoryLength: Math.ceil(historyDurationMs / memIntervalMs)
-  readonly property int diskHistoryLength: Math.ceil(historyDurationMs / diskIntervalMs)
-  readonly property int networkHistoryLength: Math.ceil(historyDurationMs / networkIntervalMs)
-
-  property var cpuHistory: new Array(cpuHistoryLength).fill(0)
-  property var cpuTempHistory: new Array(cpuHistoryLength).fill(40)  // Reasonable default temp
-  property var gpuTempHistory: new Array(gpuHistoryLength).fill(40)  // Reasonable default temp
-  property var memHistory: new Array(memHistoryLength).fill(0)
-  property var diskHistories: ({}) // Keyed by mount path, initialized on first update
-  property var rxSpeedHistory: new Array(networkHistoryLength).fill(0)
-  property var txSpeedHistory: new Array(networkHistoryLength).fill(0)
-
-  // Historical min/max tracking (since shell started) for consistent graph scaling
-  // Temperature defaults create a valid 30-80°C range that expands as real data comes in
-  property real cpuTempHistoryMin: 30
-  property real cpuTempHistoryMax: 80
-  property real gpuTempHistoryMin: 30
-  property real gpuTempHistoryMax: 80
-  // Network uses autoscaling from current history window
-  // Disk is always 0-100%
-
-  // History management - called from update functions, not change handlers
-  // (change handlers don't fire when value stays the same)
-  function pushCpuHistory() {
-    let h = cpuHistory.slice();
-    h.push(cpuUsage);
-    if (h.length > cpuHistoryLength)
-      h.shift();
-    cpuHistory = h;
-  }
-
-  function pushCpuTempHistory() {
-    if (cpuTemp > 0) {
-      if (cpuTemp < cpuTempHistoryMin)
-        cpuTempHistoryMin = cpuTemp;
-      if (cpuTemp > cpuTempHistoryMax)
-        cpuTempHistoryMax = cpuTemp;
-    }
-    let h = cpuTempHistory.slice();
-    h.push(cpuTemp);
-    if (h.length > cpuHistoryLength)
-      h.shift();
-    cpuTempHistory = h;
-  }
-
-  function pushGpuHistory() {
-    if (gpuTemp > 0) {
-      if (gpuTemp < gpuTempHistoryMin)
-        gpuTempHistoryMin = gpuTemp;
-      if (gpuTemp > gpuTempHistoryMax)
-        gpuTempHistoryMax = gpuTemp;
-    }
-    let h = gpuTempHistory.slice();
-    h.push(gpuTemp);
-    if (h.length > gpuHistoryLength)
-      h.shift();
-    gpuTempHistory = h;
-  }
-
-  function pushMemHistory() {
-    let h = memHistory.slice();
-    h.push(memPercent);
-    if (h.length > memHistoryLength)
-      h.shift();
-    memHistory = h;
-  }
-
-  function pushDiskHistory() {
-    let newHistories = {};
-    for (let path in diskPercents) {
-      // Pre-fill with zeros if this is a new path
-      let h = diskHistories[path] ? diskHistories[path].slice() : new Array(diskHistoryLength).fill(0);
-      h.push(diskPercents[path]);
-      if (h.length > diskHistoryLength)
-        h.shift();
-      newHistories[path] = h;
-    }
-    diskHistories = newHistories;
-  }
-
-  function pushNetworkHistory() {
-    let rxH = rxSpeedHistory.slice();
-    rxH.push(rxSpeed);
-    if (rxH.length > networkHistoryLength)
-      rxH.shift();
-    rxSpeedHistory = rxH;
-
-    let txH = txSpeedHistory.slice();
-    txH.push(txSpeed);
-    if (txH.length > networkHistoryLength)
-      txH.shift();
-    txSpeedHistory = txH;
-  }
-
-  // Network max speed tracking (autoscales from current history window)
   // Minimum floor of 1 MB/s so graph doesn't fluctuate at low speeds
-  readonly property real rxMaxSpeed: {
-    const max = Math.max(...rxSpeedHistory);
-    return Math.max(max, 1048576); // 1 MB/s floor
-  }
-  readonly property real txMaxSpeed: {
-    const max = Math.max(...txSpeedHistory);
-    return Math.max(max, 524288); // 512 KB/s floor
-  }
+  property real rxMaxSpeed: 1048576 // 1 MB/s floor
+  property real txMaxSpeed: 524288  // 512 KB/s floor
 
   // Ready-to-use ratios based on current maximums (0..1 range)
   readonly property real rxRatio: rxMaxSpeed > 0 ? Math.min(1, rxSpeed / rxMaxSpeed) : 0
@@ -447,7 +339,6 @@ Singleton {
         root.diskUsedGb = newUsedGb;
         root.diskSizeGb = newSizeGb;
         root.diskAvailableGb = newAvailableGb;
-        root.pushDiskHistory();
       }
     }
   }
@@ -571,7 +462,6 @@ Singleton {
       } else {
         // For AMD sensors (k10temp and zenpower), directly set the temperature
         root.cpuTemp = Math.round(parseInt(data) / 1000.0);
-        root.pushCpuTempHistory();
       }
     }
     onLoadFailed: function (error) {
@@ -629,7 +519,6 @@ Singleton {
     onLoaded: {
       const data = text().trim();
       root.gpuTemp = Math.round(parseInt(data) / 1000.0);
-      root.pushGpuHistory();
     }
   }
 
@@ -698,7 +587,6 @@ Singleton {
       root.memGb = (usageKb / 1048576).toFixed(1);
       root.memPercent = Math.round((usageKb / memTotal) * 100);
       root.memTotalGb = (memTotal / 1048576).toFixed(1);
-      root.pushMemHistory();
     }
 
     // Swap usage
@@ -750,7 +638,6 @@ Singleton {
       if (diffTotal > 0) {
         root.cpuUsage = (((diffTotal - diffIdle) / diffTotal) * 100).toFixed(1);
       }
-      root.pushCpuHistory();
     }
 
     root.prevCpuStats = stats;
@@ -837,8 +724,8 @@ Singleton {
     root.prevTxBytes = totalTx;
     root.prevTime = currentTime;
 
-    // Update network history after speeds are computed
-    root.pushNetworkHistory();
+    root.rxMaxSpeed = Math.max(1048576, Math.max(root.rxMaxSpeed * 0.95, root.rxSpeed));
+    root.txMaxSpeed = Math.max(524288, Math.max(root.txMaxSpeed * 0.95, root.txSpeed));
   }
 
   // -------------------------------------------------------
@@ -972,12 +859,9 @@ Singleton {
           sum += root.intelTempValues[i];
         }
         root.cpuTemp = Math.round(sum / root.intelTempValues.length);
-        root.pushCpuTempHistory();
-        //Logger.i("SystemStat", `Averaged ${root.intelTempValues.length} CPU thermal sensors: ${root.cpuTemp}°C`)
       } else {
         Logger.w("SystemStat", "No temperature sensors found for coretemp");
         root.cpuTemp = 0;
-        root.pushCpuTempHistory();
       }
       return;
     }

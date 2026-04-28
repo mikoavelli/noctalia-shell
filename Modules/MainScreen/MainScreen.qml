@@ -19,7 +19,6 @@ import qs.Modules.Panels.Network
 import qs.Modules.Panels.Plugins
 import qs.Modules.Panels.SessionMenu
 import qs.Modules.Panels.Settings
-import qs.Modules.Panels.SystemStats
 import qs.Modules.Panels.Tray
 import qs.Modules.Panels.Wallpaper
 import qs.Services.Compositor
@@ -279,12 +278,6 @@ PanelWindow {
     NetworkPanel {
       id: networkPanel
       objectName: "networkPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    SystemStatsPanel {
-      id: systemStatsPanel
-      objectName: "systemStatsPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 
