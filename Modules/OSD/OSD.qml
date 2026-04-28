@@ -541,12 +541,6 @@ Variants {
           }
         }
 
-        NDropShadow {
-          anchors.fill: background
-          source: background
-          autoPaddingEnabled: true
-        }
-
         Loader {
           id: contentLoader
           anchors.fill: background

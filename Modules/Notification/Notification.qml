@@ -300,12 +300,6 @@ Variants {
               }
             }
 
-            NDropShadow {
-              anchors.fill: cardBackground
-              source: cardBackground
-              autoPaddingEnabled: true
-            }
-
             // Hover handling
             onHoverCountChanged: {
               if (hoverCount > 0) {

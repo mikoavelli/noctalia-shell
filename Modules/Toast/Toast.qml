@@ -144,12 +144,6 @@ Item {
     }
   }
 
-  NDropShadow {
-    anchors.fill: background
-    source: background
-    autoPaddingEnabled: true
-  }
-
   NumberAnimation {
     id: progressAnimation
     target: root

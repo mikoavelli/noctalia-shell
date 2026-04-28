@@ -87,12 +87,6 @@ Item {
           defaultBackgroundColor: panelBackgroundColor
         }
       }
-
-      // Apply shadow to the unified backgrounds
-      NDropShadow {
-        anchors.fill: parent
-        source: unifiedBackgroundsShape
-      }
     }
 
     // When using separate bar opacity, separate the rendering
@@ -140,12 +134,6 @@ Item {
             defaultBackgroundColor: panelBackgroundColor
           }
         }
-
-        // Apply shadow to the panel backgrounds
-        NDropShadow {
-          anchors.fill: parent
-          source: panelBackgroundsShape
-        }
       }
 
       // Bar background with separate opacity
@@ -167,11 +155,6 @@ Item {
             windowRoot: root.windowRoot
             backgroundColor: panelBackgroundColor
           }
-        }
-
-        NDropShadow {
-          anchors.fill: parent
-          source: barBackgroundShape
         }
       }
     }
